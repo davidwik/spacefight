@@ -4,6 +4,7 @@ CC=g++
 CFLAGS=-c -Wall
 LDFLAGS=-lSDL -lSDL_image -lSDL_ttf
 TARGET=spacefight
+TESTAPP=testapp
 
 main: main.o game.o utils.o
 	 $(CC) game.o main.o utils.o -o $(TARGET) $(LDFLAGS)
@@ -18,4 +19,7 @@ game.o:
 	$(CC) $(CFLAGS) game.cpp
 
 clean:
-	rm spacefight *.o
+	rm -f spacefight testapp *.o
+
+testapp:
+	$(CC) -Wall testapp.cpp -o $(TESTAPP)
