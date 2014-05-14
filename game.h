@@ -1,6 +1,5 @@
 #ifndef __GAME__H__
 #define __GAME__H__
-
 #include "SDL/SDL.h"
 
 class Game {
@@ -17,6 +16,7 @@ private:
     void gameLoop();
     void handleError(int e);
     void waitForQuit(int ms);
+    Uint32 TimeLeft();
 
 
 public:

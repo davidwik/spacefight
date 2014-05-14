@@ -5,6 +5,7 @@
 #include "game.h"
 #include "errorcodes.h"
 
+#define FRAMERATE 60
 
 void Game::run(){
     try {
@@ -66,10 +67,12 @@ void Game::handleError(int e){
 
 void Game::gameLoop(){
     bool quit = false;
+
     while(quit == false){
         if(SDL_Flip(screen) == -1){
             throw(SDL_SCREEN_ERROR);
         }
+
 
 
         while(SDL_PollEvent(&event)){
@@ -87,4 +90,17 @@ void Game::gameLoop(){
 
     SDL_Quit();
     exit(0);
+}
+
+Uint32 TimeLeft(){
+    static Uint32 nextTick = 0;
+    Uint32 currentTick = SDL_GetTicks();
+
+    if(nextTick <= currentTick){
+        nextTick = currentTick + FRAMERATE;
+        return 0;
+    }
+    else {
+        return (nextTick-currentTick);
+    }
 }

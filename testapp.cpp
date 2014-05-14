@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "SDL/SDL.h"
-
+#include "gameobject.h"
 using namespace std;
 
 SDL_Event event;
@@ -10,7 +10,7 @@ SDL_Event event;
  * This file is for trying out some c/c++ specifics
  *
  */
-
+/*
 Uint32 timeLeft(void){
     static Uint32 nextTick = 0;
     Uint32 currentTick = SDL_GetTicks();
@@ -22,9 +22,12 @@ Uint32 timeLeft(void){
         return (nextTick-currentTick);
     }
 }
+*/
+
+
 
 int main (int argc, char *argv[]){
-
+/*
     Uint32 tickDelay = 0;
     bool loop = true;
     Uint32 randDelay = 0;
@@ -37,7 +40,13 @@ int main (int argc, char *argv[]){
         printf("%d\n", tickDelay);
         SDL_Delay(tickDelay);
     }
+*/
 
-    SDL_Quit();
+    GameObject go;
+
+    go.setXY(230,40);
+
+    printf("Y is: %d", go.getY());
+    printf("X is: %d", go.getPosition().x);
     return 0;
 }
