@@ -18,10 +18,8 @@ private:
     void waitForQuit(int ms);
     Uint32 TimeLeft();
 
-
 public:
     void run();
-
 };
 
 #endif /* __GAME__H__ */

@@ -1,26 +1,23 @@
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
+#include <string>
 #include "SDL/SDL.h"
+#include "gameobject.h"
+using namespace std;
 
-class Player {
-protected:
-    struct pos {
-        int x;
-        int y;
-    } p;
+class Player: public GameObject {
+private:
+    int score;
+    string name;
 
 public:
-    /*  pos getPos(void){
-        return pos;
-    }
-    */
-    int getX(){ return p.x;}
-    int getY(){ return p.y;}
-    void setX(int x){ p.x = x;}
-    void setY(int y){ p.y = y;}
+    void addScore(int sc){ score += sc;}
+    int getScore(){return score;}
+    Player(void){ score = 0; name = "Uknown player";}
+    Player(string n){ score = 0; name = n;}
+    string getName(){ return name;}
+    ~Player(){ printf("Goodbye..\n");}
+
 };
-
-
-
 
 #endif /* __PLAYER_H__ */

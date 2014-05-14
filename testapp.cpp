@@ -1,8 +1,7 @@
 #define TICK_INTERVAL 1000
-#include <iostream>
 #include <cstdlib>
 #include "SDL/SDL.h"
-#include "gameobject.h"
+#include "player.h"
 using namespace std;
 
 SDL_Event event;
@@ -42,11 +41,15 @@ int main (int argc, char *argv[]){
     }
 */
 
-    GameObject go;
-
-    go.setXY(230,40);
-
-    printf("Y is: %d", go.getY());
-    printf("X is: %d", go.getPosition().x);
+    // Use new when you really need it!
+    Player* player = new Player("David");
+    player->setXY(23,42);
+    player->addScore(20);
+    player->addScore(40);
+    printf("Player score: %dpt\n", player->getScore());
+    printf("Player position X: %d,Y: %d\n", player->getX(), player->getY());
+    printf("Player name is: %s\n", player->getName().c_str());
+    //cout << "Player name is: " << player.getName() << endl;
+    delete player;
     return 0;
 }
