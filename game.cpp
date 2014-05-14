@@ -5,6 +5,7 @@
 #include "game.h"
 #include "errorcodes.h"
 
+
 void Game::run(){
     try {
         init();
@@ -14,6 +15,7 @@ void Game::run(){
     } catch(int e){
         handleError(e);
     }
+    SDL_Quit();
 }
 
 void Game::init(){
@@ -63,7 +65,26 @@ void Game::handleError(int e){
 
 
 void Game::gameLoop(){
-    if(SDL_Flip(screen) == -1){
-        throw(SDL_SCREEN_ERROR);
+    bool quit = false;
+    while(quit == false){
+        if(SDL_Flip(screen) == -1){
+            throw(SDL_SCREEN_ERROR);
+        }
+
+
+        while(SDL_PollEvent(&event)){
+            if(event.type == SDL_QUIT){
+                printf("Quit received\n");
+                quit = true;
+            }
+            if(event.key.keysym.sym == 27){
+                printf("Escape press - qutting\n");
+                quit = true;
+            }
+        }
+        SDL_Delay(20);
     }
+
+    SDL_Quit();
+    exit(0);
 }

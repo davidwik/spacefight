@@ -11,7 +11,7 @@ private:
 
     SDL_Surface* screen = NULL;
     SDL_Surface* background = NULL;
-
+    SDL_Event event;
     void init();
     void setBackground();
     void gameLoop();
