@@ -9,6 +9,8 @@ void Game::run(){
     try {
         init();
         setBackground();
+        gameLoop();
+        waitForQuit(3000);
     } catch(int e){
         handleError(e);
     }
@@ -27,20 +29,16 @@ void Game::init(){
         throw SDL_SCREEN_ERROR;
     }
     SDL_WM_SetCaption("Spaaace Fight!", NULL);
-
-
 }
 
-
 void Game::setBackground(){
-
     background = loadImage("gfx/background.jpg");
     applySurface(0, 0, background, screen, NULL);
 }
 
 
-void Game::waitForQuit(){
-    SDL_Delay(3000);
+void Game::waitForQuit(int ms){
+    SDL_Delay(ms);
 }
 
 void Game::handleError(int e){
@@ -65,5 +63,7 @@ void Game::handleError(int e){
 
 
 void Game::gameLoop(){
-
+    if(SDL_Flip(screen) == -1){
+        throw(SDL_SCREEN_ERROR);
+    }
 }

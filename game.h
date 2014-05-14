@@ -16,7 +16,7 @@ private:
     void setBackground();
     void gameLoop();
     void handleError(int e);
-    void waitForQuit();
+    void waitForQuit(int ms);
 
 
 public:

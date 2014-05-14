@@ -5,7 +5,7 @@
 
 SDL_Surface* loadImage(std::string filename, bool alpha = true);
 
-void apply_surface(
+void applySurface(
     int x,
     int y,
     SDL_Surface* source,
