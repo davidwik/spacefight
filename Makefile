@@ -22,4 +22,4 @@ clean:
 	rm -f spacefight testapp *.o
 
 testapp:
-	$(CC) -Wall testapp.cpp -o $(TESTAPP)
+	$(CC) -Wall testapp.cpp -o $(TESTAPP) $(LDFLAGS)
