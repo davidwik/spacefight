@@ -23,8 +23,6 @@ public:
     void setY(int y){position.y = y;}
     virtual void listen(SDL_Event event) = 0;
     virtual void init(void) = 0;
-
-
     int getX(){ return position.x;}
     int getY(){ return position.y;}
     pos getPosition(){return position;}

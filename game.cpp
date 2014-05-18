@@ -27,13 +27,14 @@ void Game::init(){
     screen = SDL_SetVideoMode(SCREEN_WIDTH,
                               SCREEN_HEIGHT,
                               SCREEN_BPP,
-                              SDL_SWSURFACE);
+                              SDL_HWSURFACE);
     if(screen == NULL){
         throw SDL_SCREEN_ERROR;
     }
 
-    Player player = Player(200, 300);
-
+    player = new Player(200, 300);
+    player->init();
+    printf("Player X: %d",player->getX());
     SDL_WM_SetCaption("Spaaace Fight!", NULL);
 }
 
@@ -68,31 +69,42 @@ void Game::handleError(int e){
 }
 
 
+void Game::cleanUp(){
+    delete player;
+    SDL_FreeSurface(screen);
+    SDL_Quit();
+
+}
+
 void Game::gameLoop(){
     bool quit = false;
-
+    player->setX(30);
+    player->setY(40);
     while(quit == false){
 
-
+        applySurface(0, 0, background, screen, NULL);
         while(SDL_PollEvent(&event)){
             if(event.type == SDL_QUIT){
                 printf("Quit received\n");
                 quit = true;
             }
-            player->listen(event);
+            //player->listen(event);
             if(event.key.keysym.sym == 27){
                 printf("Escape press - qutting\n");
                 quit = true;
             }
+
         }
-        //player->update(screen);
+        player->listen(event);
+        player->update(screen);
         SDL_Delay(20);
         if(SDL_Flip(screen) == -1){
             throw(SDL_SCREEN_ERROR);
         }
-    }
+        //SDL_UpdateRect(screen, 0, 0, 0, 0);
 
-    SDL_Quit();
+    }
+    cleanUp();
     exit(0);
 }
 

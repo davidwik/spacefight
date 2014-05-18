@@ -2,7 +2,7 @@
 #define __GAME__H__
 #include "SDL/SDL.h"
 #include "player.h"
-
+#include "gameobject.h"
 class Game {
 private:
     static const int SCREEN_WIDTH = 800;
@@ -11,16 +11,18 @@ private:
 
     SDL_Surface* screen = NULL;
     SDL_Surface* background = NULL;
-    SDL_Event event;
+
     void init();
     Player* player = NULL;
     void setBackground();
     void gameLoop();
+    void cleanUp();
     void handleError(int e);
     void waitForQuit(int ms);
     Uint32 TimeLeft();
 
 public:
+    SDL_Event event;
     void run();
 };
 
