@@ -31,6 +31,9 @@ void Game::init(){
     if(screen == NULL){
         throw SDL_SCREEN_ERROR;
     }
+
+    Player player = Player(200, 300);
+
     SDL_WM_SetCaption("Spaaace Fight!", NULL);
 }
 
@@ -69,10 +72,6 @@ void Game::gameLoop(){
     bool quit = false;
 
     while(quit == false){
-        if(SDL_Flip(screen) == -1){
-            throw(SDL_SCREEN_ERROR);
-        }
-
 
 
         while(SDL_PollEvent(&event)){
@@ -80,12 +79,17 @@ void Game::gameLoop(){
                 printf("Quit received\n");
                 quit = true;
             }
+            player->listen(event);
             if(event.key.keysym.sym == 27){
                 printf("Escape press - qutting\n");
                 quit = true;
             }
         }
+        //player->update(screen);
         SDL_Delay(20);
+        if(SDL_Flip(screen) == -1){
+            throw(SDL_SCREEN_ERROR);
+        }
     }
 
     SDL_Quit();

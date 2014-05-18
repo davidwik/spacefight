@@ -1,13 +1,13 @@
 all: main
 
 CC=g++
-CFLAGS=-c -Wall
+CFLAGS=-c -Wall -g
 LDFLAGS=-lSDL -lSDL_image -lSDL_ttf
 TARGET=spacefight
 TESTAPP=testapp
 
-main: main.o game.o utils.o
-	 $(CC) game.o main.o utils.o -o $(TARGET) $(LDFLAGS)
+main: main.o game.o gameobject.o player.o utils.o
+	 $(CC) game.o main.o gameobject.o player.o utils.o -o $(TARGET) $(LDFLAGS)
 
 main.o:
 	$(CC) $(CFLAGS) main.cpp
@@ -18,8 +18,17 @@ utils.o:
 game.o:
 	$(CC) $(CFLAGS) game.cpp
 
+gameobject.o:
+	$(CC) $(CFLAGS) gameobject.cpp
+
+player.o:
+	$(CC) $(CFLAGS) player.cpp
+
 clean:
 	rm -f spacefight testapp *.o
 
-testapp:
-	$(CC) -Wall testapp.cpp -o $(TESTAPP) $(LDFLAGS)
+testapp.o:
+	$(CC) $(CFLAGS) testapp.cpp
+
+testapp: testapp.o player.o gameobject.o
+	$(CC) testapp.o player.o gameobject.o -o $(TESTAPP) $(LDFLAGS)

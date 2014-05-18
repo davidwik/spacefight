@@ -1,6 +1,7 @@
 #ifndef __GAME__H__
 #define __GAME__H__
 #include "SDL/SDL.h"
+#include "player.h"
 
 class Game {
 private:
@@ -12,6 +13,7 @@ private:
     SDL_Surface* background = NULL;
     SDL_Event event;
     void init();
+    Player* player = NULL;
     void setBackground();
     void gameLoop();
     void handleError(int e);

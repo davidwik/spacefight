@@ -1,4 +1,4 @@
-#define TICK_INTERVAL 1000
+#define FRAMERATE 60
 #include <cstdlib>
 #include "SDL/SDL.h"
 #include "player.h"
@@ -22,10 +22,51 @@ Uint32 timeLeft(void){
     }
 }
 */
+Uint32 timeLeft(){
+    static Uint32 nextTick = 0;
+    Uint32 currentTick = SDL_GetTicks();
 
+    if(nextTick <= currentTick){
+        nextTick = currentTick + FRAMERATE;
+        return 0;
+    }
+    else {
+        return (nextTick-currentTick);
+    }
+}
 
+SDL_Surface *screen = NULL;
 
 int main (int argc, char *argv[]){
+
+    if(SDL_Init(SDL_INIT_EVERYTHING) == -1){
+        printf("Error");
+    }
+
+    screen = SDL_SetVideoMode(800, 600, 32, SDL_SWSURFACE);
+    //SDL_WM_SetCaption("TESTAPP");
+
+    Player player = Player(200, 300);
+    player.init();
+    Uint32 tickDelay = 0;
+    bool loop = true;
+    while(loop){
+        while(SDL_PollEvent(&event)){
+            if(event.type == SDL_QUIT){
+                loop = false;
+            }
+            if(event.type == SDL_KEYDOWN){
+                player.listen(event);
+            }
+
+        }
+        tickDelay = timeLeft();
+        SDL_Delay(tickDelay);
+    }
+
+    return 0;
+}
+
 /*
     Uint32 tickDelay = 0;
     bool loop = true;
@@ -39,17 +80,10 @@ int main (int argc, char *argv[]){
         printf("%d\n", tickDelay);
         SDL_Delay(tickDelay);
     }
-*/
 
-    // Use new when you really need it!
-    Player* player = new Player("David");
-    player->setXY(23,42);
-    player->addScore(20);
-    player->addScore(40);
-    printf("Player score: %dpt\n", player->getScore());
-    printf("Player position X: %d,Y: %d\n", player->getX(), player->getY());
-    printf("Player name is: %s\n", player->getName().c_str());
-    //cout << "Player name is: " << player.getName() << endl;
-    delete player;
+    Player player = Player(200, 300);
+    player.init();
+
     return 0;
 }
+*/
