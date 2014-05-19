@@ -11,19 +11,27 @@ class Animation {
 protected:
     unsigned int fps;
     unsigned int fps_ms;
+    short status;
     bool trans;
     Uint32 lastSeen;
     vector <SDL_Surface *> frames;
+    vector <float> frame_multiplier;
     vector <SDL_Surface *>::iterator frameIterator;
     unsigned int currentFrame;
 
 public:
+    static const short STATUS_STOP = 0;
+    static const short STATUS_PLAY = 1;
+    static const short STATUS_PAUSE = 2;
+
     Animation(int framesPerSecond, bool transparent);
     ~Animation();
     void flipHorizontal();
     void flipVertical();
+    void setStatus(short status);
+    short getStatus();
 
-    void addFrame(string imageFile);
+    void addFrame(string imageFile, float multiplier=1.0);
     SDL_Surface* getFrame();
 };
 #endif /* __ANIMATION_H__ */
