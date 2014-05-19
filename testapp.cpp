@@ -1,89 +1,85 @@
-#define FRAMERATE 60
-#include <cstdlib>
-#include "SDL/SDL.h"
-#include "player.h"
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+#include <vector>
+#include <string>
+#include "utils.h"
+
+
 using namespace std;
 
-SDL_Event event;
-/**
- * This file is for trying out some c/c++ specifics
- *
- */
-/*
-Uint32 timeLeft(void){
-    static Uint32 nextTick = 0;
-    Uint32 currentTick = SDL_GetTicks();
-    if(nextTick <= currentTick){
-        nextTick = currentTick + TICK_INTERVAL;
-        return 0;
-    }
-    else {
-        return (nextTick-currentTick);
-    }
-}
-*/
-Uint32 timeLeft(){
-    static Uint32 nextTick = 0;
-    Uint32 currentTick = SDL_GetTicks();
+class Animation {
+    vector <SDL_Surface *> imageList;
+    int fps;
+    bool trans;
+public:
+    void loadImageIntoList(string imageURL);
+    void show(unsigned int index);
+    void setTransparent(bool t){ trans = t;}
+    SDL_Surface* getFrame(unsigned int i);
+    Animation(int framesPerSecond, bool transparent);
+    ~Animation();
+};
 
-    if(nextTick <= currentTick){
-        nextTick = currentTick + FRAMERATE;
-        return 0;
-    }
-    else {
-        return (nextTick-currentTick);
-    }
+
+Animation::Animation(int framesPerSecond, bool transparent = false){
+    fps = framesPerSecond;
+    trans = transparent;
+
 }
 
-SDL_Surface *screen = NULL;
+SDL_Surface* Animation::getFrame(unsigned int i){
+    if((unsigned) i >= imageList.size()){
+        printf("\nOut of index showing last image..\n");
+        return imageList.at(imageList.size()-1);
+    }
+    else {
+        printf("\nShowing image %d of %lu", i+1, imageList.size());
+        return imageList.at(i);
+    }
+}
 
-int main (int argc, char *argv[]){
+Animation::~Animation(){
+    printf("Deleted");
+}
 
+void Animation::loadImageIntoList(string imageURL){
+    printf("Loading: %s", imageURL.c_str());
+    imageList.push_back(loadImage(imageURL, trans));
+}
+
+int main (int argc, char* argv[]){
     if(SDL_Init(SDL_INIT_EVERYTHING) == -1){
-        printf("Error");
+        printf("Test fail\n");
+        return 1;
+    }
+    SDL_Surface* screen;
+    screen = SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE);
+    if(!screen){
+        printf("Screen fail\n");
+        return 1;
     }
 
-    screen = SDL_SetVideoMode(800, 600, 32, SDL_SWSURFACE);
-    //SDL_WM_SetCaption("TESTAPP");
 
-    Player player = Player(200, 300);
-    player.init();
-    Uint32 tickDelay = 0;
-    bool loop = true;
-    while(loop){
-        while(SDL_PollEvent(&event)){
-            if(event.type == SDL_QUIT){
-                loop = false;
-            }
-            if(event.type == SDL_KEYDOWN){
-                player.listen(event);
-            }
 
-        }
-        tickDelay = timeLeft();
-        SDL_Delay(tickDelay);
-    }
+   Animation anim = Animation(2, false);
+   anim.loadImageIntoList("gfx/1.jpg");
+   anim.loadImageIntoList("gfx/2.jpg");
+   anim.loadImageIntoList("gfx/3.jpg");
+   anim.loadImageIntoList("gfx/4.jpg");
+   anim.loadImageIntoList("gfx/5.jpg");
 
-    return 0;
+   applySurface(0, 10, anim.getFrame(0), screen, NULL);
+   applySurface(100, 10, anim.getFrame(1), screen, NULL);
+   applySurface(200, 10, anim.getFrame(2), screen, NULL);
+   applySurface(300, 10, anim.getFrame(3), screen, NULL);
+   applySurface(400, 10, anim.getFrame(4), screen, NULL);
+   applySurface(500, 10, anim.getFrame(5), screen, NULL);
+   if(SDL_Flip(screen) == -1){
+       printf("Error flipping\n");
+       return 1;
+   }
+
+   SDL_Delay(3000);
+   SDL_Quit();
+   return 0;
 }
-
-/*
-    Uint32 tickDelay = 0;
-    bool loop = true;
-    Uint32 randDelay = 0;
-    while(loop){
-        randDelay = rand() % 400;
-        SDL_Delay(randDelay);
-        printf("Delay: %d\n", randDelay);
-        tickDelay = timeLeft();
-
-        printf("%d\n", tickDelay);
-        SDL_Delay(tickDelay);
-    }
-
-    Player player = Player(200, 300);
-    player.init();
-
-    return 0;
-}
-*/

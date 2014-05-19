@@ -25,6 +25,7 @@ void Player::listen(SDL_Event event){
 }
 
 Player::~Player(){
+    SDL_FreeSurface(image);
     printf("Killing player..\n");
 }
 

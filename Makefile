@@ -30,5 +30,5 @@ clean:
 testapp.o:
 	$(CC) $(CFLAGS) testapp.cpp
 
-testapp: testapp.o player.o gameobject.o
-	$(CC) testapp.o player.o gameobject.o -o $(TESTAPP) $(LDFLAGS)
+testapp: utils.o testapp.o
+	$(CC) utils.o testapp.o -o $(TESTAPP) $(LDFLAGS)
