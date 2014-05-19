@@ -20,6 +20,9 @@ protected:
 public:
     Animation(int framesPerSecond, bool transparent);
     ~Animation();
+    void flipHorizontal();
+    void flipVertical();
+
     void addFrame(string imageFile);
     SDL_Surface* getFrame();
 };

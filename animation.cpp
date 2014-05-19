@@ -1,7 +1,7 @@
 #include "animation.h"
 #include "utils.h"
-#include <iostream>
 using namespace std;
+
 Animation::Animation(int framesPerSecond, bool transparent=false){
     fps = framesPerSecond;
     fps_ms = (int) 1000/fps;
@@ -18,6 +18,22 @@ Animation::~Animation() {
     }
 }
 
+void Animation::flipHorizontal(){
+    for(frameIterator = frames.begin();
+        frameIterator != frames.end();
+        frameIterator++){
+        *frameIterator = flipImage(*frameIterator, FLIP_HORIZONTAL);
+    }
+}
+
+void Animation::flipVertical(){
+    for(frameIterator = frames.begin();
+        frameIterator != frames.end();
+        frameIterator++){
+        *frameIterator = flipImage(*frameIterator, FLIP_VERTICAL);
+    }
+}
+
 SDL_Surface* Animation::getFrame(){
     Uint32 currTick = SDL_GetTicks();
     if((currTick-lastSeen) > fps_ms){
@@ -28,9 +44,7 @@ SDL_Surface* Animation::getFrame(){
     if(currentFrame >= frames.size()){
         currentFrame = 0;
     }
-
     return frames.at(currentFrame);
-
 }
 
 void Animation::addFrame(string imageFile){
