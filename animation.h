@@ -14,6 +14,8 @@ protected:
     short status;
     bool trans;
     Uint32 lastSeen;
+    bool vFlip;
+    bool hFlip;
     vector <SDL_Surface *> frames;
     vector <float> frame_multiplier;
     vector <SDL_Surface *>::iterator frameIterator;
@@ -30,7 +32,8 @@ public:
     void flipVertical();
     void setStatus(short status);
     short getStatus();
-
+    bool isFlippedV();
+    bool isFlippedH();
     void addFrame(string imageFile, float multiplier=1.0);
     SDL_Surface* getFrame();
 };

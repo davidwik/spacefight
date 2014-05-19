@@ -8,6 +8,8 @@ Animation::Animation(int framesPerSecond, bool transparent=false){
     trans = transparent;
     lastSeen = 0;
     status = Animation::STATUS_PLAY;
+    vFlip = false;
+    hFlip = false;
 }
 
 Animation::~Animation() {
@@ -19,13 +21,7 @@ Animation::~Animation() {
     }
 }
 
-void Animation::flipHorizontal(){
-    for(frameIterator = frames.begin();
-        frameIterator != frames.end();
-        frameIterator++){
-        *frameIterator = flipImage(*frameIterator, FLIP_HORIZONTAL);
-    }
-}
+
 
 void Animation::setStatus(short st){
     switch(st){
@@ -47,8 +43,18 @@ short Animation::getStatus(){
     return status;
 }
 
+void Animation::flipHorizontal(){
+    hFlip = (hFlip == false) ? true : false;
+    for(frameIterator = frames.begin();
+        frameIterator != frames.end();
+        frameIterator++){
+        *frameIterator = flipImage(*frameIterator, FLIP_HORIZONTAL);
+    }
+}
+
 void Animation::flipVertical(){
-     for(frameIterator = frames.begin();
+    vFlip = (vFlip == false) ? true : false;
+    for(frameIterator = frames.begin();
          frameIterator != frames.end();
          frameIterator++){
          *frameIterator = flipImage(*frameIterator, FLIP_VERTICAL);
@@ -90,4 +96,12 @@ void Animation::addFrame(string imageFile, float multiplier){
     frames.push_back(loadImage(imageFile, trans));
     frame_multiplier.push_back(multiplier);
     printf("%s loaded!\n", imageFile.c_str());
+}
+
+bool Animation::isFlippedV(){
+    return vFlip;
+}
+
+bool Animation::isFlippedH(){
+    return hFlip;
 }
