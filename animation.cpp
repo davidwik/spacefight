@@ -62,6 +62,11 @@ void Animation::flipVertical(){
 }
 
 SDL_Surface* Animation::getFrame(){
+    // if lastseen is null get the time now, so
+    // the first frame can be shown
+    if(!lastSeen){
+        lastSeen = SDL_GetTicks();
+    }
     Uint32 currTick = SDL_GetTicks();
     // IF STATUS IS STOPPED
     if(status == Animation::STATUS_STOP){
@@ -104,4 +109,15 @@ bool Animation::isFlippedV(){
 
 bool Animation::isFlippedH(){
     return hFlip;
+}
+
+void Animation::reset(){
+    if(hFlip){
+        flipHorizontal();
+    }
+    if(vFlip){
+        flipVertical();
+    }
+    currentFrame = 0;
+    lastSeen = 0;
 }

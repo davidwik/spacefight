@@ -30,6 +30,7 @@ public:
     ~Animation();
     void flipHorizontal();
     void flipVertical();
+    void reset();
     void setStatus(short status);
     short getStatus();
     bool isFlippedV();
