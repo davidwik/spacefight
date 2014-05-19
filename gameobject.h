@@ -8,8 +8,6 @@ protected:
         int x, y;
     } position;
 
-
-
 public:
     void setXY(int x, int y) {
         position.x =x;
@@ -26,6 +24,7 @@ public:
     int getX(){ return position.x;}
     int getY(){ return position.y;}
     pos getPosition(){return position;}
+    ~GameObject();
 };
 
 #endif /* __GAMEOBJECT_H__ */

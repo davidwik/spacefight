@@ -14,7 +14,7 @@ private:
 
 public:
     Player(int x, int y) : GameObject(x, y){}
-    ~Player();
+    virtual ~Player();
     void addScore(int sc){ score += sc;}
     int getScore(){return score;}
     void update(SDL_Surface* surface);

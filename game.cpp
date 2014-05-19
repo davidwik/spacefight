@@ -16,7 +16,17 @@ void Game::run(){
     } catch(int e){
         handleError(e);
     }
+
+}
+
+Game::~Game(){
+    delete player;
+    printf("Freeing surfaces!\n");
+    SDL_FreeSurface(screen);
+    SDL_FreeSurface(background);
+    printf("Destroyed Game\n");
     SDL_Quit();
+    printf("Running SDL Quit!\n");
 }
 
 void Game::init(){
@@ -52,27 +62,24 @@ void Game::handleError(int e){
     switch(e){
     case SDL_INIT_ERROR:
         printf("Error intializing SDL!\n");
-        exit(1);
+        break;
 
     case SDL_SCREEN_ERROR:
         printf("Error setting screen mode\n");
-        exit(1);
+        break;
 
     case SDL_IMAGE_LOAD_ERROR:
         printf("Error loading image resource\n");
-        exit(1);
+        break;
 
     case UNKNOWN_ERROR:
         printf("Unknown error!\n");
-        exit(1);
+        break;
     }
 }
 
 
 void Game::cleanUp(){
-    delete player;
-    SDL_FreeSurface(screen);
-    SDL_Quit();
 
 }
 
@@ -104,8 +111,8 @@ void Game::gameLoop(){
         //SDL_UpdateRect(screen, 0, 0, 0, 0);
 
     }
+    printf("Out of gameloop!\n");
     cleanUp();
-    exit(0);
 }
 
 Uint32 TimeLeft(){

@@ -22,6 +22,7 @@ private:
     Uint32 TimeLeft();
 
 public:
+    ~Game();
     SDL_Event event;
     void run();
 };
