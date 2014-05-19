@@ -60,7 +60,7 @@ SDL_Surface* flipImage(SDL_Surface* surface, int flags){
     //If the image is color keyed
     if( surface->flags & SDL_SRCCOLORKEY ) {
         flipped = SDL_CreateRGBSurface(
-            SDL_SWSURFACE,
+            SDL_HWSURFACE,
             surface->w,
             surface->h,
             surface->format->BitsPerPixel,
@@ -71,7 +71,7 @@ SDL_Surface* flipImage(SDL_Surface* surface, int flags){
     } //Otherwise
     else {
         flipped = SDL_CreateRGBSurface(
-            SDL_SWSURFACE,
+            SDL_HWSURFACE,
             surface->w,
             surface->h,
             surface->format->BitsPerPixel,
@@ -110,6 +110,7 @@ SDL_Surface* flipImage(SDL_Surface* surface, int flags){
     if(surface->flags && SDL_SRCCOLORKEY){
         SDL_SetColorKey(flipped, SDL_RLEACCEL | SDL_SRCCOLORKEY, surface->format->colorkey);
     }
+    SDL_FreeSurface(surface);
     return flipped;
 
 }
