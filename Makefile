@@ -6,8 +6,8 @@ LDFLAGS=-lSDL -lSDL_image -lSDL_ttf
 TARGET=spacefight
 TESTAPP=testapp
 
-main: main.o game.o gameobject.o player.o utils.o
-	 $(CC) game.o main.o gameobject.o player.o utils.o -o $(TARGET) $(LDFLAGS)
+main: clean main.o game.o gameobject.o player.o utils.o animation.o
+	 $(CC) game.o main.o gameobject.o player.o utils.o animation.o -o $(TARGET) $(LDFLAGS)
 
 main.o:
 	$(CC) $(CFLAGS) main.cpp
@@ -29,6 +29,9 @@ clean:
 
 testapp.o:
 	$(CC) $(CFLAGS) testapp.cpp
+
+animation.o:
+	$(CC) $(CFLAGS) animation.cpp
 
 testapp: utils.o testapp.o
 	$(CC) utils.o testapp.o -o $(TESTAPP) $(LDFLAGS)

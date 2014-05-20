@@ -13,7 +13,7 @@ Animation::Animation(int framesPerSecond, bool transparent=false){
 }
 
 Animation::~Animation() {
-    printf("Freeing images in animation");
+    printf("Freeing images in animation..\n");
     for( frameIterator = frames.begin();
          frameIterator != frames.end();
          frameIterator++){

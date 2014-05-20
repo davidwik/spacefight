@@ -1,10 +1,15 @@
 #include "player.h"
 #include "utils.h"
+#include "animation.h"
 void Player::init(){
-    image = loadImage("gfx/player.png", true);
-    if(image == NULL){
-        printf("GAIL !");
-    }
+    animName = "PLAY";
+    animations[animName] = new Animation(2, false);
+    animations[animName]->addFrame("gfx/1.jpg");
+    animations[animName]->addFrame("gfx/2.jpg");
+    animations[animName]->addFrame("gfx/3.jpg");
+
+    animations["SHIP"] = new Animation(1, true);
+    animations["SHIP"]->addFrame("gfx/player.png");
 }
 
 void Player::listen(SDL_Event event){
@@ -16,22 +21,21 @@ void Player::listen(SDL_Event event){
         moveLeft();
     }
     if(keystates[SDLK_DOWN]){
+        animName = "PLAY";
         moveDown();
     }
     if(keystates[SDLK_UP]){
+        animName = "SHIP";
         moveUp();
     }
-
 }
 
 Player::~Player(){
-    SDL_FreeSurface(image);
     printf("Killing player..\n");
 }
 
 void Player::update(SDL_Surface *screen){
-    applySurface(getX(), getY(), image, screen, NULL);
-    //SDL_Flip(screen);
+    applySurface(getX(), getY(), animations[animName]->getFrame(), screen, NULL);
 }
 
 void Player::moveLeft(){

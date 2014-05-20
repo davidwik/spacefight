@@ -1,13 +1,17 @@
 #ifndef __GAMEOBJECT_H__
 #define __GAMEOBJECT_H__
 #include <SDL/SDL.h>
-
+#include <map>
+#include "animation.h"
 class GameObject {
 protected:
     struct pos {
         int x, y;
     } position;
 
+    std::map <string, Animation*> animations;
+    std::map <string, Animation*>::iterator animMapIter;
+    string animName;
 public:
     void setXY(int x, int y) {
         position.x =x;
@@ -19,6 +23,7 @@ public:
     }
     void setX(int x){position.x = x;}
     void setY(int y){position.y = y;}
+    void addAnimation(Animation* anim, string name);
     virtual void listen(SDL_Event event) = 0;
     virtual void init(void) = 0;
     int getX(){ return position.x;}
