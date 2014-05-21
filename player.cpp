@@ -2,37 +2,50 @@
 #include "utils.h"
 #include "animation.h"
 void Player::init(){
-    animName = "PLAY";
-    animations[animName] = new Animation(2, true);
-    animations[animName]->addFrame("gfx/1.jpg");
-    animations[animName]->addFrame("gfx/2.jpg");
-    animations[animName]->addFrame("gfx/3.jpg");
+    animName = "WAIT";
+    animations[animName] = new Animation(4, true);
+    animations[animName]->addFrame("gfx/shipanim/ship-still01.png");
+    animations[animName]->addFrame("gfx/shipanim/ship-still02.png");
 
-    animations["SHIP"] = new Animation(1, true);
-    animations["SHIP"]->addFrame("gfx/player.png");
+
+    animations["THRUST"] = new Animation(6, true);
+    animations["THRUST"]->addFrame("gfx/shipanim/ship-thrust01.png");
+    animations["THRUST"]->addFrame("gfx/shipanim/ship-thrust02.png");
+    animations["THRUST"]->addFrame("gfx/shipanim/ship-thrust03.png");
+    animations["THRUST"]->addFrame("gfx/shipanim/ship-thrust04.png");
 }
 
 void Player::listen(SDL_Event event){
     Uint8 *keystates = SDL_GetKeyState(NULL);
     if(keystates[SDLK_RIGHT]){
+        animName = "THRUST";
         moveRight();
     }
     if(keystates[SDLK_LEFT]){
+        animName = "THRUST";
         moveLeft();
     }
     if(keystates[SDLK_DOWN]){
-        animName = "PLAY";
-        moveDown();
+        animName = "THRUST";
+        if(!keystates[SDLK_LCTRL]){
+            moveDown();
+        }
+
     }
     if(keystates[SDLK_UP]){
-        animName = "SHIP";
-        moveUp();
-    }
-    if(event.type == SDL_KEYDOWN){
-        if(event.key.keysym.sym == SDLK_SPACE){
-            animations[animName]->flipVertical();
+        animName = "THRUST";
+        if(!keystates[SDLK_LCTRL]){
+            moveUp();
         }
     }
+    if(!keystates[SDLK_UP] &&
+       !keystates[SDLK_DOWN] &&
+       !keystates[SDLK_LEFT] &&
+       !keystates[SDLK_RIGHT]){
+        animName = "WAIT";
+        }
+
+
 }
 
 Player::~Player(){
