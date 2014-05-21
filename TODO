@@ -1,0 +1,12 @@
+* Fix player animation, three animations 
+  in total - still, moving forward, moving backward.
+  
+* Come up with a smart way of sharing all the animations for sprites
+  and enemies. Right now, gameobject creates new animations every time
+  which is a waste of memory.
+  
+* Make some enemies
+
+* Make enemies move around. Fairly randomly.
+
+* Implement restrictions on Gameobject from screen. Screen collision.

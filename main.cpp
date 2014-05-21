@@ -1,8 +1,9 @@
 #include "game.h"
-
+#include <SDL/SDL.h>
 int main (int argc, char* argv[]){
     Game game;
     game.run();
-    printf("I'm quitting\n'");
+    SDL_Quit();
+    printf("SDL_Quit\n");
     return 0;
 }

@@ -3,7 +3,7 @@
 #include "animation.h"
 void Player::init(){
     animName = "PLAY";
-    animations[animName] = new Animation(2, false);
+    animations[animName] = new Animation(2, true);
     animations[animName]->addFrame("gfx/1.jpg");
     animations[animName]->addFrame("gfx/2.jpg");
     animations[animName]->addFrame("gfx/3.jpg");
@@ -27,6 +27,11 @@ void Player::listen(SDL_Event event){
     if(keystates[SDLK_UP]){
         animName = "SHIP";
         moveUp();
+    }
+    if(event.type == SDL_KEYDOWN){
+        if(event.key.keysym.sym == SDLK_SPACE){
+            animations[animName]->flipVertical();
+        }
     }
 }
 

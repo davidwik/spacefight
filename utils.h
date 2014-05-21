@@ -13,14 +13,9 @@ void applySurface(
     SDL_Surface *dest,
     SDL_Rect* clip = NULL
 );
-
+SDL_Surface* copySurface(SDL_Surface* image);
 Uint32 getPixel32(SDL_Surface* surface, int x, int y);
 void putPixel32(SDL_Surface* surface, int x, int y, Uint32 pixel);
 SDL_Surface* flipImage(SDL_Surface* surface, int flags);
-
-
-
-
-
 
 #endif /* __UTILS_H__ */

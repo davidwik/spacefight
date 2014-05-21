@@ -32,6 +32,13 @@ void applySurface(int x,
 }
 
 
+SDL_Surface* copySurface(SDL_Surface* image){
+    return SDL_ConvertSurface(image,
+                              image->format,
+                              image->flags);
+
+}
+
 /**
  * Get pixel value in Uint32
  *
@@ -57,29 +64,16 @@ void putPixel32(SDL_Surface* surface, int x, int y, Uint32 pixel){
 
 SDL_Surface* flipImage(SDL_Surface* surface, int flags){
     SDL_Surface *flipped = NULL;
-    //If the image is color keyed
-    if( surface->flags & SDL_SRCCOLORKEY ) {
-        flipped = SDL_CreateRGBSurface(
-            SDL_HWSURFACE,
-            surface->w,
-            surface->h,
-            surface->format->BitsPerPixel,
-            surface->format->Rmask,
-            surface->format->Gmask,
-            surface->format->Bmask, 0 );
-
-    } //Otherwise
-    else {
-        flipped = SDL_CreateRGBSurface(
-            SDL_HWSURFACE,
-            surface->w,
-            surface->h,
-            surface->format->BitsPerPixel,
-            surface->format->Rmask,
-            surface->format->Gmask,
-            surface->format->Bmask,
-            surface->format->Amask );
-    }
+    flipped = SDL_CreateRGBSurface(
+        SDL_HWSURFACE | SDL_SRCALPHA,
+        surface->w,
+        surface->h,
+        surface->format->BitsPerPixel,
+        surface->format->Rmask,
+        surface->format->Gmask,
+        surface->format->Bmask,
+        surface->format->Amask
+    );
 
     //If the surface must be locked
     if(SDL_MUSTLOCK(surface)){ //Lock the surface
@@ -88,7 +82,9 @@ SDL_Surface* flipImage(SDL_Surface* surface, int flags){
 
     for(int x = 0, rx = flipped->w - 1;
         x < flipped->w; x++, rx-- ){ //Go through rows
-        for( int y = 0, ry = flipped->h - 1; y < flipped->h; y++, ry-- ) {
+        for( int y = 0, ry = flipped->h - 1;
+             y < flipped->h;
+             y++, ry-- ) {
             Uint32 pixel = getPixel32( surface, x, y );
             if((flags & FLIP_VERTICAL) && (flags & FLIP_HORIZONTAL)) {
                 putPixel32(flipped, rx, ry, pixel);
@@ -112,5 +108,4 @@ SDL_Surface* flipImage(SDL_Surface* surface, int flags){
     }
     SDL_FreeSurface(surface);
     return flipped;
-
 }

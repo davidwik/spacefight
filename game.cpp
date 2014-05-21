@@ -22,11 +22,9 @@ void Game::run(){
 Game::~Game(){
     delete player;
     printf("Freeing surfaces!\n");
-    SDL_FreeSurface(screen);
     SDL_FreeSurface(background);
     printf("Destroyed Game\n");
-    SDL_Quit();
-    printf("Running SDL Quit!\n");
+    printf("Returning to main!\n");
 }
 
 void Game::init(){

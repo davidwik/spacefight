@@ -48,7 +48,12 @@ void Animation::flipHorizontal(){
     for(frameIterator = frames.begin();
         frameIterator != frames.end();
         frameIterator++){
-        *frameIterator = flipImage(*frameIterator, FLIP_HORIZONTAL);
+        SDL_Surface* tmp = NULL;
+        tmp = copySurface(*frameIterator);
+        SDL_FreeSurface(*frameIterator);
+        *frameIterator = flipImage(copySurface(tmp), FLIP_HORIZONTAL);
+        SDL_FreeSurface(tmp);
+
     }
 }
 
@@ -57,7 +62,11 @@ void Animation::flipVertical(){
     for(frameIterator = frames.begin();
          frameIterator != frames.end();
          frameIterator++){
-         *frameIterator = flipImage(*frameIterator, FLIP_VERTICAL);
+        SDL_Surface* tmp = NULL;
+        tmp = copySurface(*frameIterator);
+        SDL_FreeSurface(*frameIterator);
+        *frameIterator = flipImage(copySurface(tmp), FLIP_VERTICAL);
+        SDL_FreeSurface(tmp);
     }
 }
 
