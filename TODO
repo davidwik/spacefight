@@ -1,10 +1,11 @@
 * Fix player animation, three animations 
   in total - still, moving forward, moving backward.
-  
+  [SOLVED] 
 * Come up with a smart way of sharing all the animations for sprites
   and enemies. Right now, gameobject creates new animations every time
-  which is a waste of memory.
-  
+  which is a waste of memory. 
+  [SOLVED] Created a animationlibrary for the gameobject. 
+
 * Make some enemies
 
 * Make enemies move around. Fairly randomly.
