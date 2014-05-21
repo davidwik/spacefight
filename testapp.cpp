@@ -1,103 +1,110 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
-#include <vector>
-#include <map>
-#include <string>
 #include "utils.h"
-
-
+#include "animation.h"
+#include "animationlibrary.h"
+#include <map>
+#include <iostream>
 using namespace std;
 
-class Animation {
-    vector <SDL_Surface *> imageList;
-    vector <SDL_Surface *>::iterator listIterator;
-    int fps;
-    bool trans;
-public:
-    void loadImageIntoList(string imageURL);
-    void show(unsigned int index);
-    void setTransparent(bool t){ trans = t;}
-    SDL_Surface* getFrame(unsigned int i);
-    Animation(int framesPerSecond, bool transparent);
-    ~Animation();
-};
+SDL_Event event;
+SDL_Surface* screen;
 
-
-
-Animation::Animation(int framesPerSecond, bool transparent = false){
-    fps = framesPerSecond;
-    trans = transparent;
-
+void init(AnimationLibrary *a){
+    Animation* anim = new Animation(10, true);
+    anim->addFrame("gfx/1.jpg");
+    anim->addFrame("gfx/2.jpg");
+    anim->addFrame("gfx/3.jpg");
+    anim->addFrame("gfx/4.jpg");
+    anim->addFrame("gfx/5.jpg");
+    a->add("DEF", anim);
 }
 
-SDL_Surface* Animation::getFrame(unsigned int i){
-    if((unsigned) i >= imageList.size()){
-        printf("\nOut of index showing last image..\n");
-        return imageList.at(imageList.size()-1);
-    }
-    else {
-        printf("\nShowing image %d of %lu", i+1, imageList.size());
-        return imageList.at(i);
-    }
+
+void addMore(AnimationLibrary *a){
+    Animation* anim = new Animation(60, true);
+    anim->addFrame("gfx/shipanim/ship-thrust01.png");
+    anim->addFrame("gfx/shipanim/ship-thrust02.png");
+    anim->addFrame("gfx/shipanim/ship-thrust03.png");
+    anim->addFrame("gfx/shipanim/ship-thrust04.png");
+    a->add("SHIP", anim);
 }
 
-Animation::~Animation(){
-    // Free resources??
-    printf("Killing all images!\n");
-    for(listIterator = imageList.begin();
-        listIterator != imageList.end();
-        listIterator++){
-        SDL_FreeSurface(*listIterator);
-    }
+void loop(AnimationLibrary *a){
+
+   bool quit = false;
+   string anim = "DEF";
+   while (quit == false){
+       SDL_FillRect(screen, NULL, 0x000000);
+       while(SDL_PollEvent(&event)){
+            if(event.type == SDL_QUIT){
+                printf("QUIT received!");
+                quit = true;
+            }
+            if(event.type == SDL_KEYDOWN){
+                switch(event.key.keysym.sym){
+                case SDLK_ESCAPE:
+                    quit = true;
+                    break;
+
+                default:
+                    break;
+                }
+            }
+            if(event.type == SDL_KEYUP){
+                switch(event.key.keysym.sym){
+                case SDLK_LCTRL:
+                    anim = "SHIP";
+                    break;
+                case SDLK_RCTRL:
+                    anim = "DEF";
+                    break;
+                default:
+                    break;
+                }
+            }
+       }
+
+       for(int x = 0; x < 800; x += 100){
+           for(int y = 0; y < 600; y += 100){
+               applySurface(x, y, a->get(anim)->getFrame(), screen, NULL);
+           }
+       }
+
+
+       if(SDL_Flip(screen) == -1){
+           quit = true;
+           printf("ERROR!");
+       }
+       SDL_Delay(16);
+   }
 }
 
-map <string, Animation*> animationList;
-map <string, Animation*>::iterator mapIter;
-
-void Animation::loadImageIntoList(string imageURL){
-    printf("Loading: %s", imageURL.c_str());
-    imageList.push_back(loadImage(imageURL, trans));
-}
 
 int main (int argc, char* argv[]){
+
     if(SDL_Init(SDL_INIT_EVERYTHING) == -1){
         printf("Test fail\n");
         return 1;
     }
-    SDL_Surface* screen;
-    screen = SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE);
-    if(!screen){
-        printf("Screen fail\n");
-        return 1;
+
+    screen = SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
+    if(screen == NULL){
+        printf("Failed to set screen");
     }
 
-    animationList["WALK"] = new Animation(4);
-    animationList["WALK"]->loadImageIntoList("gfx/1.jpg");
-    animationList["WALK"]->loadImageIntoList("gfx/2.jpg");
-    animationList["WALK"]->loadImageIntoList("gfx/3.jpg");
-    animationList["WALK"]->loadImageIntoList("gfx/4.jpg");
-    animationList["WALK"]->loadImageIntoList("gfx/5.jpg");
-
-    animationList["RUN"] = new Animation(4);
-    animationList["RUN"]->loadImageIntoList("gfx/1.jpg");
-    animationList["RUN"]->loadImageIntoList("gfx/2.jpg");
-    animationList["RUN"]->loadImageIntoList("gfx/3.jpg");
-    animationList["RUN"]->loadImageIntoList("gfx/4.jpg");
-    animationList["RUN"]->loadImageIntoList("gfx/5.jpg");
+    AnimationLibrary* a = new AnimationLibrary();
+    init(a);
+    addMore(a);
+    loop(a);
+    //apurge();
+    //loop(a);
+    delete a;
+    SDL_Quit();
 
 
+/*
 
-    applySurface(0, 10, animationList["WALK"]->getFrame(0), screen, NULL);
-    applySurface(100, 10, animationList["WALK"]->getFrame(1), screen, NULL);
-    applySurface(200, 10, animationList["WALK"]->getFrame(2), screen, NULL);
-    applySurface(300, 10, animationList["WALK"]->getFrame(3), screen, NULL);
-    applySurface(400, 10, animationList["WALK"]->getFrame(4), screen, NULL);
-
-    applySurface(0, 120, animationList["RUN"]->getFrame(0), screen, NULL);
-    applySurface(100, 120, animationList["RUN"]->getFrame(1), screen, NULL);
-    applySurface(200, 120, animationList["RUN"]->getFrame(2), screen, NULL);
-    applySurface(300, 120, animationList["RUN"]->getFrame(3), screen, NULL);
-    applySurface(400, 120, animationList["RUN"]->getFrame(4), screen, NULL);
 
 
     if(SDL_Flip(screen) == -1){
@@ -105,19 +112,20 @@ int main (int argc, char* argv[]){
         return 1;
     }
 
+    Animation* myAnim = new Animation(8, false);
+    myAnim->addFrame("gfx/1.jpg");
+    myAnim->addFrame("gfx/2.jpg", 2);
+    myAnim->addFrame("gfx/3.jpg", 3);
+    myAnim->addFrame("gfx/4.jpg", 4);
+    myAnim->addFrame("gfx/5.jpg", 5);
+
+    myAnim->setStatus(Animation::STATUS_PLAY);
+    printf("Status: %d", myAnim->getStatus());
 
 
-    SDL_Delay(3000);
 
-    for(std::map<string, Animation*>::iterator mapIter=animationList.begin();
-        mapIter!=animationList.end();
-        mapIter++){
-        delete mapIter->second;
-    }
-
-    //delete animationList["WALK"];
-    //delete animationList["RUN"];
-
-    SDL_Quit();
+    delete myAnim;
+    */
+    //SDL_Quit();
     return 0;
 }

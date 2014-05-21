@@ -24,14 +24,20 @@ gameobject.o:
 player.o:
 	$(CC) $(CFLAGS) player.cpp
 
-clean:
-	rm -f spacefight testapp *.o
-
 testapp.o:
 	$(CC) $(CFLAGS) testapp.cpp
 
 animation.o:
 	$(CC) $(CFLAGS) animation.cpp
 
-testapp: utils.o testapp.o
-	$(CC) utils.o testapp.o -o $(TESTAPP) $(LDFLAGS)
+animationlibrary.o:
+	$(CC) $(CFLAGS) animationlibrary.cpp
+
+testapp: clean utils.o animation.o animationlibrary.o testapp.o
+	$(CC) animationlibrary.o animation.o utils.o testapp.o -o $(TESTAPP) $(LDFLAGS)
+
+clean:
+	rm -f spacefight testapp *.o
+
+run:
+	./testapp

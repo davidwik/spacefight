@@ -13,12 +13,15 @@ Animation::Animation(int framesPerSecond, bool transparent=false){
 }
 
 Animation::~Animation() {
-    printf("Freeing images in animation..\n");
+    int i = 0;
+
     for( frameIterator = frames.begin();
          frameIterator != frames.end();
          frameIterator++){
         SDL_FreeSurface(*frameIterator);
+        i++;
     }
+    printf("Freed: %d images in animation..\n", i);
 }
 
 
