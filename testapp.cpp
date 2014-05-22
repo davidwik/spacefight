@@ -11,7 +11,7 @@ SDL_Event event;
 SDL_Surface* screen;
 
 void init(AnimationLibrary *a){
-    Animation* anim = new Animation(10, true);
+    Animation* anim = new Animation(60, true);
     anim->addFrame("gfx/1.jpg");
     anim->addFrame("gfx/2.jpg");
     anim->addFrame("gfx/3.jpg");
@@ -34,6 +34,8 @@ void loop(AnimationLibrary *a){
 
    bool quit = false;
    string anim = "DEF";
+   SDL_Delay(2000);
+
    while (quit == false){
        SDL_FillRect(screen, NULL, 0x000000);
        while(SDL_PollEvent(&event)){
@@ -54,7 +56,7 @@ void loop(AnimationLibrary *a){
             if(event.type == SDL_KEYUP){
                 switch(event.key.keysym.sym){
                 case SDLK_LCTRL:
-                    anim = "SHIP";
+                    anim = "SH2IP";
                     break;
                 case SDLK_RCTRL:
                     anim = "DEF";
@@ -67,7 +69,14 @@ void loop(AnimationLibrary *a){
 
        for(int x = 0; x < 800; x += 100){
            for(int y = 0; y < 600; y += 100){
-               applySurface(x, y, a->get(anim)->getFrame(), screen, NULL);
+               try {
+                   applySurface(x, y, a->get(anim)->getFrame(), screen, NULL);
+               } catch(int e){
+                   if(e == ANIMATION_EXCEPTION){
+                       printf("Missing animation! Cannot contiue...\n");
+                       quit = true;
+                   }
+               }
            }
        }
 
@@ -97,8 +106,6 @@ int main (int argc, char* argv[]){
     init(a);
     addMore(a);
     loop(a);
-    //apurge();
-    //loop(a);
     delete a;
     SDL_Quit();
 

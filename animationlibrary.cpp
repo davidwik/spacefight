@@ -29,11 +29,24 @@ void AnimationLibrary::purge(){
 }
 
 bool AnimationLibrary::has(string key){
-    return (library.find(key) == library.end()) ? false : true;
+    return (library.count(key) > 0) ? true : false;
 }
 
 Animation* AnimationLibrary::get(string key){
+    if(!has(key)){
+        throw ANIMATION_EXCEPTION;
+    }
     return library[key];
+}
+
+void AnimationLibrary::remove(string key){
+    if(has(key)){
+        map <string, Animation*>::iterator it;
+        it = library.find(key);
+        printf("Freeing animation \"%s\"\n", it->first.c_str());
+        delete (it->second);
+        library.erase(it);
+    }
 }
 
 void AnimationLibrary::add(string key, Animation* animation){

@@ -3,7 +3,7 @@
 #include "animation.h"
 #include <map>
 #include <string>
-
+#include "errorcodes.h"
 using namespace std;
 class AnimationLibrary {
 private:
@@ -17,7 +17,7 @@ public:
     void add(string key, Animation* animation);
     Animation* get(string key);
     void purge();
-    void removeAnimation(string key);
+    void remove(string key);
 };
 
 #endif /*  __ANIMATION_LIBRARY_H__ */

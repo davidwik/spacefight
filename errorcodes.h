@@ -10,4 +10,8 @@
 #define SDL_IMAGE_LOAD_ERROR 30
 #define UNKNOWN_ERROR 99
 
+// Exceptions
+#define ANIMATION_EXCEPTION 101
+
+
 #endif /* __ERRORCODES_H__ */
