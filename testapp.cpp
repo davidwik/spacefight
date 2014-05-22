@@ -10,23 +10,31 @@ SDL_Event event;
 SDL_Surface* screen;
 
 void init(AnimationLibrary *a){
-    Animation* anim = new Animation(60, true);
+    Animation* anim = new Animation(40);
     anim->addFrame("gfx/1.jpg");
     anim->addFrame("gfx/2.jpg");
     anim->addFrame("gfx/3.jpg");
     anim->addFrame("gfx/4.jpg");
     anim->addFrame("gfx/5.jpg");
     a->add("DEF", anim);
+    Animation* b = anim->clone();
+    b->flipHorizontal();
+    a->add("FED", b);
+
 }
 
 
 void addMore(AnimationLibrary *a){
-    Animation* anim = new Animation(60, true);
-    anim->addFrame("gfx/shipanim/ship-thrust01.png");
-    anim->addFrame("gfx/shipanim/ship-thrust02.png");
-    anim->addFrame("gfx/shipanim/ship-thrust03.png");
-    anim->addFrame("gfx/shipanim/ship-thrust04.png");
-    a->add("SHIP", anim);
+   Animation* anim = new Animation(40);
+   anim->addFrame("gfx/shipanim/ship-thrust01.png");
+   anim->addFrame("gfx/shipanim/ship-thrust02.png");
+   anim->addFrame("gfx/shipanim/ship-thrust03.png");
+   anim->addFrame("gfx/shipanim/ship-thrust04.png");
+   a->add("SHIP_UP", anim);
+   Animation* b = anim->clone();
+   b->flipVertical();
+   a->add("SHIP_DOWN", b);
+
 }
 
 void loop(AnimationLibrary *a){
@@ -55,11 +63,16 @@ void loop(AnimationLibrary *a){
             if(event.type == SDL_KEYUP){
                 switch(event.key.keysym.sym){
                 case SDLK_LCTRL:
-                    anim = "SH2IP";
+                    anim = "FED";
                     break;
-                case SDLK_RCTRL:
+                case SDLK_SPACE:
                     anim = "DEF";
                     break;
+                case SDLK_UP:
+                    anim = "SHIP_UP";
+                    break;
+                case SDLK_DOWN:
+                    anim = "SHIP_DOWN";
                 default:
                     break;
                 }

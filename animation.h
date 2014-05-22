@@ -26,8 +26,9 @@ public:
     static const short STATUS_PLAY = 1;
     static const short STATUS_PAUSE = 2;
 
-    Animation(int framesPerSecond, bool transparent);
+    Animation(int framesPerSecond = 5, bool transparent = true, unsigned int reserve = 20);
     ~Animation();
+    Animation* clone();
     void flipHorizontal();
     void flipVertical();
     void reset();
@@ -35,6 +36,7 @@ public:
     short getStatus();
     bool isFlippedV();
     bool isFlippedH();
+    unsigned long numberOfFrames();
     void addFrame(string imageFile, float multiplier=1.0);
     SDL_Surface* getFrame();
 };

@@ -2,7 +2,7 @@
 #include "utils.h"
 using namespace std;
 
-Animation::Animation(int framesPerSecond, bool transparent=false){
+Animation::Animation(int framesPerSecond, bool transparent, unsigned int reserve){
     fps = framesPerSecond;
     fps_ms = (int) 1000/fps;
     trans = transparent;
@@ -10,6 +10,7 @@ Animation::Animation(int framesPerSecond, bool transparent=false){
     status = Animation::STATUS_PLAY;
     vFlip = false;
     hFlip = false;
+    frames.reserve(20);
 }
 
 Animation::~Animation() {
@@ -25,6 +26,32 @@ Animation::~Animation() {
 }
 
 
+Animation* Animation::clone(void){
+    Animation* newAnim = new Animation(fps, trans);
+    newAnim->lastSeen = 0;
+    newAnim->vFlip = vFlip;
+    newAnim->hFlip = hFlip;
+    newAnim->currentFrame = 0;
+
+    // Copy and create new frames for the animation
+    for(vector <SDL_Surface* >::iterator it = frames.begin();
+        it != frames.end();
+        it++){
+        SDL_Surface* tmp = NULL;
+        tmp = copySurface(*it);
+        newAnim->frames.push_back(tmp);
+        printf("Adding image\n");
+    }
+
+    // Also copy the frame timing vector
+    for(vector <float>::iterator it = frame_multiplier.begin();
+        it != frame_multiplier.end();
+        it++){
+        newAnim->frame_multiplier.push_back(*it);
+    }
+    printf("vSize: %lu\n", newAnim->frames.size());
+    return newAnim;
+}
 
 void Animation::setStatus(short st){
     switch(st){
@@ -58,6 +85,10 @@ void Animation::flipHorizontal(){
         SDL_FreeSurface(tmp);
 
     }
+}
+
+unsigned long Animation::numberOfFrames(){
+    return frames.size();
 }
 
 void Animation::flipVertical(){
