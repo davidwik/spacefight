@@ -1,21 +1,25 @@
-# WISHLIST 
+# WISHLIST
 
-* Fix player animation, three animations 
+* Fix player animation, three animations
   in total - still, moving forward, moving backward.
-  [SOLVED] 
+  [SOLVED]
 
 * Come up with a smart way of sharing all the animations for sprites
   and enemies. Right now, gameobject creates new animations every time
-  which is a waste of memory. 
-  [SOLVED] Created a animationlibrary for the gameobject. 
+  which is a waste of memory.
+  [SOLVED] Created a animationlibrary for the gameobject.
 
 * If animation not found. It shouldn't CRASH! Rather quit with message.
   Use map.count(key) to check whether a key exists!
-  
+  [SOLVED]
+
 * Implement a purge method to cleanup animationlibrary.
+  [SOLVED]
+
 
 * It could be neat to clone an animation if you want to flip it, and not
   flip all other animations.
+  [SOLVED]
 
 * Make some enemies
 
@@ -23,10 +27,8 @@
 
 * Implement restrictions on Gameobject from screen. Screen collision.
 
-
-
 # Futuristic wish list
 * Make use of PhysFS to pack all resources into a zip.
   http://icculus.org/physfs/
 
-* 
+*
