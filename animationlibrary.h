@@ -1,14 +1,15 @@
 #ifndef __ANIMATION_LIBRARY_H__
 #define __ANIMATION_LIBRARY_H__
 #include "animation.h"
-#include <map>
+#include <unordered_map>
 #include <string>
 #include "errorcodes.h"
 using namespace std;
 class AnimationLibrary {
+
 private:
     string lastKey;
-    map <string, Animation* > library;
+    unordered_map <string, Animation* > library;
 
 public:
     AnimationLibrary();

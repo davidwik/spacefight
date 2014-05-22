@@ -3,7 +3,6 @@
 #include "utils.h"
 #include "animation.h"
 #include "animationlibrary.h"
-#include <map>
 #include <iostream>
 using namespace std;
 
@@ -109,30 +108,5 @@ int main (int argc, char* argv[]){
     delete a;
     SDL_Quit();
 
-
-/*
-
-
-
-    if(SDL_Flip(screen) == -1){
-        printf("Error flipping\n");
-        return 1;
-    }
-
-    Animation* myAnim = new Animation(8, false);
-    myAnim->addFrame("gfx/1.jpg");
-    myAnim->addFrame("gfx/2.jpg", 2);
-    myAnim->addFrame("gfx/3.jpg", 3);
-    myAnim->addFrame("gfx/4.jpg", 4);
-    myAnim->addFrame("gfx/5.jpg", 5);
-
-    myAnim->setStatus(Animation::STATUS_PLAY);
-    printf("Status: %d", myAnim->getStatus());
-
-
-
-    delete myAnim;
-    */
-    //SDL_Quit();
     return 0;
 }

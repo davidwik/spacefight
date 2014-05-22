@@ -1,7 +1,7 @@
 all: main
 
 CC=g++
-CFLAGS=-c -Wall -g
+CFLAGS=-c -Wall -g -std=c++11
 LDFLAGS=-lSDL -lSDL_image -lSDL_ttf
 TARGET=spacefight
 TESTAPP=testapp
