@@ -1,3 +1,5 @@
+# WISHLIST 
+
 * Fix player animation, three animations 
   in total - still, moving forward, moving backward.
   [SOLVED] 
@@ -6,8 +8,23 @@
   which is a waste of memory. 
   [SOLVED] Created a animationlibrary for the gameobject. 
 
+* If animation not found. It shouldn't CRASH! Rather quit with message.
+
+* Implement a purge method to cleanup animationlibrary.
+
+* It could be neat to clone an animation if you want to flip it, and not
+  flip all other animations.
+
 * Make some enemies
 
 * Make enemies move around. Fairly randomly.
 
 * Implement restrictions on Gameobject from screen. Screen collision.
+
+
+
+# Futuristic wish list
+* Make use of PhysFS to pack all resources into a zip.
+  http://icculus.org/physfs/
+
+* 
