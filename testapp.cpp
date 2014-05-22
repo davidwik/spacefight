@@ -10,12 +10,21 @@ SDL_Event event;
 SDL_Surface* screen;
 
 void init(AnimationLibrary *a){
-    Animation* anim = new Animation(40);
-    anim->addFrame("gfx/1.jpg");
-    anim->addFrame("gfx/2.jpg");
-    anim->addFrame("gfx/3.jpg");
-    anim->addFrame("gfx/4.jpg");
-    anim->addFrame("gfx/5.jpg");
+    Animation* anim = new Animation(15);
+    anim->addFrame("gfx/enemies/ball01.png", 2);
+    anim->addFrame("gfx/enemies/ball02.png", 2);
+    anim->addFrame("gfx/enemies/ball01.png", 2);
+    anim->addFrame("gfx/enemies/ball02.png", 2);
+    anim->addFrame("gfx/enemies/ball01.png",2);
+    anim->addFrame("gfx/enemies/ball02.png", 2);
+    anim->addFrame("gfx/enemies/ball01.png", 2);
+    anim->addFrame("gfx/enemies/ball02.png");
+    anim->addFrame("gfx/enemies/ball03.png");
+    anim->addFrame("gfx/enemies/ball04.png");
+    anim->addFrame("gfx/enemies/ball05.png");
+    anim->addFrame("gfx/enemies/ball06.png");
+    anim->addFrame("gfx/enemies/ball07.png");
+    anim->addFrame("gfx/enemies/ball02.png");
     a->add("DEF", anim);
     Animation* b = anim->clone();
     b->flipHorizontal();
@@ -25,11 +34,17 @@ void init(AnimationLibrary *a){
 
 
 void addMore(AnimationLibrary *a){
-   Animation* anim = new Animation(40);
-   anim->addFrame("gfx/shipanim/ship-thrust01.png");
-   anim->addFrame("gfx/shipanim/ship-thrust02.png");
-   anim->addFrame("gfx/shipanim/ship-thrust03.png");
-   anim->addFrame("gfx/shipanim/ship-thrust04.png");
+   Animation* anim = new Animation(10);
+   anim->addFrame("gfx/enemies/drunk01.png");
+   anim->addFrame("gfx/enemies/drunk02.png");
+   anim->addFrame("gfx/enemies/drunk03.png");
+   anim->addFrame("gfx/enemies/drunk04.png");
+   anim->addFrame("gfx/enemies/drunk05.png");
+   anim->addFrame("gfx/enemies/drunk06.png");
+   anim->addFrame("gfx/enemies/drunk07.png");
+   anim->addFrame("gfx/enemies/drunk08.png");
+   anim->addFrame("gfx/enemies/drunk09.png");
+
    a->add("SHIP_UP", anim);
    Animation* b = anim->clone();
    b->flipVertical();

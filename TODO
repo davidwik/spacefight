@@ -21,14 +21,23 @@
   flip all other animations.
   [SOLVED]
 
-* Make some enemies
+* Make some enemies GFX
+  [SOLVED]
+
+* Merge an animation. explain?
+
+
+* Make a monster factory! Which takes a map of animations as argument. or better.
+
+
 
 * Make enemies move around. Fairly randomly.
 
 * Implement restrictions on Gameobject from screen. Screen collision.
 
-# Futuristic wish list
+
+
+# FUTURISTIC WISH LIST
+
 * Make use of PhysFS to pack all resources into a zip.
   http://icculus.org/physfs/
-
-*
