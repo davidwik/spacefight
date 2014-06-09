@@ -12,7 +12,7 @@ void Game::run(){
         init();
         setBackground();
         gameLoop();
-        waitForQuit(3000);
+        waitForQuit(30);
     } catch(int e){
         handleError(e);
     }
