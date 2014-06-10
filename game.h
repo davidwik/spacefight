@@ -18,7 +18,6 @@ private:
     void gameLoop();
     void cleanUp();
     void handleError(int e);
-    void waitForQuit(int ms);
     Uint32 TimeLeft();
 
 public:
