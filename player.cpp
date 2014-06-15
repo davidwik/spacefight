@@ -2,38 +2,44 @@
 #include "utils.h"
 #include "animation.h"
 void Player::init(){
-    animName = "WAIT";
-    animations[animName] = new Animation(4, true);
-    animations[animName]->addFrame("gfx/shipanim/ship-still01.png");
-    animations[animName]->addFrame("gfx/shipanim/ship-still02.png");
 
+    if(!animLib->has("player-wait")){
+        Animation* waitAnim = new Animation(4, true);
+        waitAnim->addFrame("gfx/shipanim/ship-still01.png");
+        waitAnim->addFrame("gfx/shipanim/ship-still02.png");
+        animLib->add("player-wait", waitAnim);
 
-    animations["THRUST"] = new Animation(6, true);
-    animations["THRUST"]->addFrame("gfx/shipanim/ship-thrust01.png");
-    animations["THRUST"]->addFrame("gfx/shipanim/ship-thrust02.png");
-    animations["THRUST"]->addFrame("gfx/shipanim/ship-thrust03.png");
-    animations["THRUST"]->addFrame("gfx/shipanim/ship-thrust04.png");
+    }
+    if(!animLib->has("player-thrust")){
+        Animation* thrustAnim = new Animation(6, true);
+        thrustAnim->addFrame("gfx/shipanim/ship-thrust01.png");
+        thrustAnim->addFrame("gfx/shipanim/ship-thrust02.png");
+        thrustAnim->addFrame("gfx/shipanim/ship-thrust03.png");
+        thrustAnim->addFrame("gfx/shipanim/ship-thrust04.png");
+        animLib->add("player-thrust", thrustAnim);
+    }
+    animName = "player-wait";
 }
 
 void Player::listen(SDL_Event event){
     Uint8 *keystates = SDL_GetKeyState(NULL);
     if(keystates[SDLK_RIGHT]){
-        animName = "THRUST";
+        animName = "player-thrust";
         moveRight();
     }
     if(keystates[SDLK_LEFT]){
-        animName = "THRUST";
+        animName = "player-thrust";
         moveLeft();
     }
     if(keystates[SDLK_DOWN]){
-        animName = "THRUST";
+        animName = "player-thrust";
         if(!keystates[SDLK_LCTRL]){
             moveDown();
         }
 
     }
     if(keystates[SDLK_UP]){
-        animName = "THRUST";
+        animName = "player-thrust";
         if(!keystates[SDLK_LCTRL]){
             moveUp();
         }
@@ -42,8 +48,8 @@ void Player::listen(SDL_Event event){
        !keystates[SDLK_DOWN] &&
        !keystates[SDLK_LEFT] &&
        !keystates[SDLK_RIGHT]){
-        animName = "WAIT";
-        }
+        animName = "player-wait";
+    }
 
 
 }
@@ -53,7 +59,7 @@ Player::~Player(){
 }
 
 void Player::update(SDL_Surface *screen){
-    applySurface(getX(), getY(), animations[animName]->getFrame(), screen, NULL);
+    applySurface(getX(), getY(), animLib->get(animName)->getFrame(), screen, NULL);
 }
 
 void Player::moveLeft(){

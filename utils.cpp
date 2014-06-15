@@ -1,7 +1,8 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
-#include <string>
 #include "utils.h"
+#include <string>
+
 
 SDL_Surface* loadImage(std::string filename, bool useAlpha){
     SDL_Surface* loadedImage = NULL;
@@ -108,4 +109,9 @@ SDL_Surface* flipImage(SDL_Surface* surface, int flags){
     }
     SDL_FreeSurface(surface);
     return flipped;
+}
+
+std::string numberToString(int num){
+    std::string s = static_cast<std::ostringstream*>( &(std::ostringstream() << num) )->str();
+    return s;
 }

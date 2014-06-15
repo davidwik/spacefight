@@ -10,10 +10,14 @@ class Player: public GameObject {
 private:
     int score;
     string name;
-    SDL_Surface *image;
 
 public:
-    Player(int x, int y) : GameObject(x, y){}
+    Player(int x, int y, AnimationLibrary* a) : GameObject(x, y, a){
+        position.x = x;
+        position.y = y;
+        animLib = a;
+        objType = "player";
+    }
     virtual ~Player();
     void addScore(int sc){ score += sc;}
     int getScore(){return score;}

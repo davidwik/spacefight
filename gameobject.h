@@ -1,31 +1,37 @@
 #ifndef __GAMEOBJECT_H__
 #define __GAMEOBJECT_H__
 #include <SDL/SDL.h>
-#include <map>
-#include "animation.h"
+#include <string>
+#include "animationlibrary.h"
 class GameObject {
+
 protected:
     struct pos {
         int x, y;
     } position;
-
-    std::map <string, Animation*> animations;
-    std::map <string, Animation*>::iterator animMapIter;
+    string objType;
     string animName;
+    AnimationLibrary* animLib;
+
 public:
+    std::string objectType(void){
+        return objType;
+    };
+
     void setXY(int x, int y) {
         position.x =x;
         position.y=y;
     }
-    GameObject(int startPosX, int startPosY) {
+    GameObject(int startPosX, int startPosY, AnimationLibrary* a){
         position.x = startPosX;
         position.y = startPosY;
+        animLib = a;
     }
     void setX(int x){position.x = x;}
     void setY(int y){position.y = y;}
-    void addAnimation(Animation* anim, string name);
     virtual void listen(SDL_Event event) = 0;
     virtual void init(void) = 0;
+    virtual void update(SDL_Surface* screen) = 0;
     int getX(){ return position.x;}
     int getY(){ return position.y;}
     pos getPosition(){return position;}

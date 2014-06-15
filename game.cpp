@@ -4,7 +4,9 @@
 #include "utils.h"
 #include "game.h"
 #include "errorcodes.h"
-
+#include <typeinfo>
+#include <iostream>
+#include <string>
 #define FRAMERATE 60
 
 void Game::run(){
@@ -20,7 +22,19 @@ void Game::run(){
 }
 
 Game::~Game(){
-    delete player;
+
+    for(vector <GameObject*>::iterator it = gameObjectList.begin();
+        it != gameObjectList.end();
+        it++){
+        if((*it)->objectType() == "player"){
+            delete static_cast<Player*>(*it);
+        }
+        else if((*it)->objectType() == "enemy"){
+            delete static_cast<Enemy*>(*it);
+        }
+
+    }
+    delete animLib;
     printf("Freeing surfaces!\n");
     SDL_FreeSurface(background);
     printf("Destroyed Game\n");
@@ -40,9 +54,16 @@ void Game::init(){
         throw SDL_SCREEN_ERROR;
     }
 
-    player = new Player(200, 300);
-    player->init();
-    printf("Player X: %d",player->getX());
+    animLib = new AnimationLibrary();
+    player = new Player(200, 300, animLib);
+    gameObjectList.push_back(new Enemy(Enemy::Types::DRUNK, animLib, 100, 40));
+    gameObjectList.push_back(new Enemy(Enemy::Types::EATER, animLib, 200, 40));
+    gameObjectList.push_back(player);
+    for(vector <GameObject*>::iterator it = gameObjectList.begin();
+        it != gameObjectList.end();
+        it++){
+        (*it)->init();
+    }
     SDL_WM_SetCaption("Spaaace Fight!", NULL);
 }
 
@@ -100,8 +121,13 @@ void Game::gameLoop(){
             }
 
         }
-        player->listen(event);
-        player->update(screen);
+        for(vector <GameObject*>::iterator it = gameObjectList.begin();
+            it != gameObjectList.end();
+            it++){
+            (*it)->listen(event);
+            (*it)->update(screen);
+        }
+
         SDL_Delay(20);
         if(SDL_Flip(screen) == -1){
             throw(SDL_SCREEN_ERROR);
