@@ -14,7 +14,6 @@ void Game::run(){
         init();
         setBackground();
         gameLoop();
-        waitForQuit(30);
     } catch(int e){
         handleError(e);
     }
@@ -70,11 +69,6 @@ void Game::init(){
 void Game::setBackground(){
     background = loadImage("gfx/background.jpg");
     applySurface(0, 0, background, screen, NULL);
-}
-
-
-void Game::waitForQuit(int ms){
-    SDL_Delay(ms);
 }
 
 void Game::handleError(int e){

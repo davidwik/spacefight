@@ -19,12 +19,10 @@ private:
     void init();
     Player* player = NULL;
     AnimationLibrary* animLib = NULL;
-
     void setBackground();
     void gameLoop();
     void cleanUp();
     void handleError(int e);
-    void waitForQuit(int ms);
     Uint32 TimeLeft();
 
 public:
