@@ -8,26 +8,26 @@
 
 using namespace std;
 
+
 class Enemy: public GameObject {
 
 private:
     int health;
     int t;
+    int dx;
+    int dy;
 
 public:
     enum class Types {EATER, DRUNK };
 
+    Enemy(Enemy::Types type,
+          AnimationLibrary* a,
+          int x=0,
+          int y=0);
 
-    Enemy(Enemy::Types type, AnimationLibrary* a, int x=0, int y=0) : GameObject(x, y, a){
-        position.x = x;
-        position.y = y;
-        animLib = a;
-        objType = "enemy";
-        t = (int) type;
-        printf("EN type: %d", t);
-    }
-
-    void update(SDL_Surface* surface);
+    void update();
+    void draw(SDL_Surface* surface);
+    void collCheck(vector <GameObject*> &gameObjectList);
     void init();
     void listen(SDL_Event event);
 

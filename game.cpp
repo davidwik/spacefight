@@ -64,6 +64,10 @@ void Game::init(){
     player = new Player(200, 300, animLib);
     gameObjectList.push_back(new Enemy(Enemy::Types::DRUNK, animLib, 100, 40));
     gameObjectList.push_back(new Enemy(Enemy::Types::EATER, animLib, 200, 40));
+    gameObjectList.push_back(new Enemy(Enemy::Types::DRUNK, animLib, 100, 40));
+    gameObjectList.push_back(new Enemy(Enemy::Types::EATER, animLib, 200, 40));
+    gameObjectList.push_back(new Enemy(Enemy::Types::DRUNK, animLib, 100, 40));
+    gameObjectList.push_back(new Enemy(Enemy::Types::EATER, animLib, 200, 40));
     gameObjectList.push_back(player);
     for(vector <GameObject*>::iterator it = gameObjectList.begin();
         it != gameObjectList.end();
@@ -120,7 +124,9 @@ void Game::gameLoop(){
             it != gameObjectList.end();
             it++){
             (*it)->listen(event);
-            (*it)->update(screen);
+            (*it)->update();
+            (*it)->collCheck(gameObjectList);
+            (*it)->draw(screen);
         }
 
         SDL_Delay(20);

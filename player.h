@@ -12,21 +12,18 @@ private:
     string name;
 
 public:
-    Player(int x, int y, AnimationLibrary* a) : GameObject(x, y, a){
-        position.x = x;
-        position.y = y;
-        animLib = a;
-        objType = "player";
-    }
+    Player(int x, int y, AnimationLibrary* a);
     virtual ~Player();
     void addScore(int sc){ score += sc;}
     int getScore(){return score;}
-    void update(SDL_Surface* surface);
+    void update();
+    void draw(SDL_Surface* surface);
     void moveLeft();
     void moveRight();
     void moveUp();
     void moveDown();
     void listen(SDL_Event event);
+    void collCheck(vector <GameObject*> &gameObjectList);
     void init();
 };
 

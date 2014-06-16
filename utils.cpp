@@ -115,3 +115,11 @@ std::string numberToString(int num){
     std::string s = static_cast<std::ostringstream*>( &(std::ostringstream() << num) )->str();
     return s;
 }
+
+int floatToInt(float n){
+    return static_cast<int>(floor(n + 0.5f));
+}
+
+int doubleToInt(double n){
+    return static_cast<int>(floor(n+0.5f));
+}

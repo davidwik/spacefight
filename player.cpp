@@ -1,6 +1,18 @@
 #include "player.h"
 #include "utils.h"
 #include "animation.h"
+
+Player::Player(int x,
+               int y,
+               AnimationLibrary* a) : GameObject(x, y, a){
+    position.x = x;
+    position.y = y;
+    animLib = a;
+    objType = "player";
+    printf("ObjectId: %d\n", id);
+}
+
+
 void Player::init(){
 
     if(!animLib->has("player-wait")){
@@ -55,11 +67,17 @@ void Player::listen(SDL_Event event){
 }
 
 Player::~Player(){
-    printf("The player instance was killed..\n");
+    printf("Destroying the player instance - GameObjectId: %d\n", id);
 }
 
-void Player::update(SDL_Surface *screen){
+
+void Player::update(){}
+
+void Player::draw(SDL_Surface *screen){
     applySurface(getX(), getY(), animLib->get(animName)->getFrame(), screen, NULL);
+}
+
+void Player::collCheck(vector <GameObject*> &gameObjectList){
 }
 
 void Player::moveLeft(){

@@ -1,13 +1,62 @@
 #include "enemy.h"
-#include <iostream>
+#include "utils.h"
 #include <string>
-
+#include <cstdlib>
+#include <cmath>
 using namespace std;
+
+Enemy::Enemy(Enemy::Types type,
+      AnimationLibrary* a,
+      int x,
+      int y): GameObject(x, y, a){
+        position.x = x;
+        position.y = y;
+        animLib = a;
+        objType = "enemy";
+        t = (int) type;
+        dx = (rand()%20)+3;
+        dy = 0;
+        printf("EnemyType: %d\n", t);
+        printf("ObjectId: %d\n", id);
+
+}
+
 void Enemy::listen(SDL_Event event){
     ;
 }
 
-void Enemy::update(SDL_Surface* surface){
+void Enemy::update(){
+    if(position.x > SCREEN_W){
+        dx = ~dx+1;
+        position.x = SCREEN_W-1;
+    }
+    else if(position.x < 0){
+        position.x = 1;
+        dx = ~dx+1;
+    }
+    if(dy == 0){
+        dy = doubleToInt(cos((double) position.x*300));
+    }
+
+    if(position.x == 400 || position.y == 200){
+        dy = ~dy+1;
+        dx = ~dx+1;
+    }
+
+    if(position.y > (int) SCREEN_H/2){
+        dy = ~dy+1;
+    }
+    if(position.y < 0){
+        dy = ~dy+1;
+    }
+
+    position.x += dx;
+    position.y += dy;
+}
+
+void Enemy::collCheck(vector <GameObject*> &gameObjectList){}
+
+void Enemy::draw(SDL_Surface* surface){
     applySurface(getX(), getY(), animLib->get(animName)->getFrame(), surface, NULL);
 }
 
@@ -50,5 +99,5 @@ void Enemy::init(){
 
 Enemy::~Enemy(){
     string s = objectType();
-    printf("Destroying instance of %s\n", (const char*) s.c_str());
+    printf("Destroying instance of %s - GameObjectId:%d \n ", (const char*) s.c_str(), id);
 }
