@@ -21,7 +21,6 @@ private:
     AnimationLibrary* animLib = NULL;
     void setBackground();
     void gameLoop();
-    void cleanUp();
     void handleError(int e);
     Uint32 TimeLeft();
 

@@ -49,5 +49,6 @@ void Enemy::init(){
 }
 
 Enemy::~Enemy(){
-    printf("Killing enemy\n");
+    string s = objectType();
+    printf("Destroying instance of %s\n", (const char*) s.c_str());
 }

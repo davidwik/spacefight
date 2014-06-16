@@ -21,7 +21,7 @@ void Game::run(){
 }
 
 Game::~Game(){
-
+    printf("Running Game deconstructor!\n");
     for(vector <GameObject*>::iterator it = gameObjectList.begin();
         it != gameObjectList.end();
         it++){
@@ -34,11 +34,18 @@ Game::~Game(){
 
     }
     delete animLib;
-    printf("Freeing surfaces!\n");
+
     SDL_FreeSurface(background);
-    printf("Destroyed Game\n");
+    SDL_FreeSurface(screen); // Should maybe be removed?
+    gameObjectList.clear();
+    if(player == NULL){
+        printf("Player is surely dead!");
+    }
+    printf("Qutting SDL\n");
+    SDL_Quit();
     printf("Returning to main!\n");
 }
+
 
 void Game::init(){
     if(SDL_Init(SDL_INIT_EVERYTHING) == -1){
@@ -91,11 +98,6 @@ void Game::handleError(int e){
     }
 }
 
-
-void Game::cleanUp(){
-
-}
-
 void Game::gameLoop(){
     bool quit = false;
     player->setX(30);
@@ -108,7 +110,6 @@ void Game::gameLoop(){
                 printf("Quit received\n");
                 quit = true;
             }
-            //player->listen(event);
             if(event.key.keysym.sym == 27){
                 printf("Escape press - qutting\n");
                 quit = true;
@@ -130,7 +131,6 @@ void Game::gameLoop(){
 
     }
     printf("Out of gameloop!\n");
-    cleanUp();
 }
 
 Uint32 TimeLeft(){

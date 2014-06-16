@@ -55,7 +55,7 @@ void Player::listen(SDL_Event event){
 }
 
 Player::~Player(){
-    printf("Killing player..\n");
+    printf("The player instance was killed..\n");
 }
 
 void Player::update(SDL_Surface *screen){
