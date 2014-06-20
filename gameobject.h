@@ -19,6 +19,7 @@ protected:
     string objType;
     string animName;
     int id;
+    int damage;
     bool colliding = false;
     SDL_Rect rect;
     AnimationLibrary* animLib;
@@ -45,6 +46,7 @@ public:
     virtual void listen(SDL_Event event) = 0;
     virtual void init(void) = 0;
     virtual void update() = 0;
+    int getDamage() { return damage;}
     SDL_Rect getRect();
     virtual void handleCollision(vector <GameObject*> gameObjectList) = 0;
     virtual void draw(SDL_Surface* screen) = 0;
