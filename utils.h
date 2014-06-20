@@ -3,13 +3,10 @@
 #include <string>
 #include <sstream>
 #include <cmath>
-#define SCREEN_W 800
-#define SCREEN_H 600
+#include "constants.h"
 
 const int FLIP_VERTICAL = 1;
 const int FLIP_HORIZONTAL = 2;
-
-
 
 SDL_Surface* loadImage(std::string filename, bool alpha = true);
 

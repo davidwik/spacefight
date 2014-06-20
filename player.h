@@ -3,6 +3,7 @@
 #include <string>
 #include "SDL/SDL.h"
 #include "gameobject.h"
+#include "constants.h"
 
 using namespace std;
 

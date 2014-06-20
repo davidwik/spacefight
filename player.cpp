@@ -14,7 +14,7 @@ Player::Player(int x,
 
 
 void Player::init(){
-
+    printf("PPPP: %d\n\n", getWidth());
     if(!animLib->has("player-wait")){
         Animation* waitAnim = new Animation(4, true);
         waitAnim->addFrame("gfx/shipanim/ship-still01.png");
@@ -63,18 +63,19 @@ void Player::listen(SDL_Event event){
         animName = "player-wait";
     }
 
-
 }
 
 Player::~Player(){
     printf("Destroying the player instance - GameObjectId: %d\n", id);
 }
 
-
-void Player::update(){}
+void Player::update(){
+    posUpdate();
+}
 
 void Player::draw(SDL_Surface *screen){
     applySurface(getX(), getY(), animLib->get(animName)->getFrame(), screen, NULL);
+    drawBorder(screen);
 }
 
 void Player::collCheck(vector <GameObject*> &gameObjectList){

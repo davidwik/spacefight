@@ -4,6 +4,7 @@
 #include <SDL/SDL_image.h>
 #include <vector>
 #include <string>
+
 using namespace std;
 
 class Animation {

@@ -26,9 +26,9 @@ void Enemy::listen(SDL_Event event){
 }
 
 void Enemy::update(){
-    if(position.x > SCREEN_W){
+    if(position.x > SCREEN_WIDTH){
         dx = ~dx+1;
-        position.x = SCREEN_W-1;
+        position.x = SCREEN_WIDTH-1;
     }
     else if(position.x < 0){
         position.x = 1;
@@ -43,7 +43,7 @@ void Enemy::update(){
         dx = ~dx+1;
     }
 
-    if(position.y > (int) SCREEN_H/2){
+    if(position.y > (int) SCREEN_HEIGHT/2){
         dy = ~dy+1;
     }
     if(position.y < 0){
@@ -52,12 +52,14 @@ void Enemy::update(){
 
     position.x += dx;
     position.y += dy;
+    posUpdate();
 }
 
 void Enemy::collCheck(vector <GameObject*> &gameObjectList){}
 
 void Enemy::draw(SDL_Surface* surface){
     applySurface(getX(), getY(), animLib->get(animName)->getFrame(), surface, NULL);
+    drawBorder(surface);
 }
 
 void Enemy::init(){

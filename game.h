@@ -2,6 +2,7 @@
 #define __GAME__H__
 #include "SDL/SDL.h"
 #include "player.h"
+#include "constants.h"
 #include "enemy.h"
 #include "gameobject.h"
 #include "animationlibrary.h"
@@ -9,9 +10,6 @@
 
 class Game {
 private:
-    static const int SCREEN_WIDTH = 800;
-    static const int SCREEN_HEIGHT = 600;
-    static const int SCREEN_BPP = 32;
 
     SDL_Surface* screen = NULL;
     SDL_Surface* background = NULL;
