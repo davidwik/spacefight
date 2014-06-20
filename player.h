@@ -22,9 +22,9 @@ public:
     void moveLeft();
     void moveRight();
     void moveUp();
+    void handleCollision(vector <GameObject*> gameObjectList);
     void moveDown();
     void listen(SDL_Event event);
-    void collCheck(vector <GameObject*> &gameObjectList);
     void init();
 };
 

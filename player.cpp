@@ -78,8 +78,10 @@ void Player::draw(SDL_Surface *screen){
     drawBorder(screen);
 }
 
-void Player::collCheck(vector <GameObject*> &gameObjectList){
+void Player::handleCollision(vector <GameObject*> gameObjectList){
+
 }
+
 
 void Player::moveLeft(){
     setX(getX()-10);

@@ -55,7 +55,7 @@ void Enemy::update(){
     posUpdate();
 }
 
-void Enemy::collCheck(vector <GameObject*> &gameObjectList){}
+void Enemy::handleCollision(vector <GameObject*> gameObjectList){}
 
 void Enemy::draw(SDL_Surface* surface){
     applySurface(getX(), getY(), animLib->get(animName)->getFrame(), surface, NULL);

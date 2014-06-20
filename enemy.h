@@ -27,13 +27,14 @@ public:
 
     void update();
     void draw(SDL_Surface* surface);
-    void collCheck(vector <GameObject*> &gameObjectList);
+    void handleCollision(vector <GameObject*> gameObjectList);
     void init();
     void listen(SDL_Event event);
 
     Enemy::Types getType(){
         return (Enemy::Types) t;
     }
+
     virtual ~Enemy();
 
 
