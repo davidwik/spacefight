@@ -4,6 +4,7 @@
 #include "utils.h"
 #include "game.h"
 #include "errorcodes.h"
+#include "collision.h"
 #include <typeinfo>
 #include <iostream>
 #include <string>
@@ -125,10 +126,9 @@ void Game::gameLoop(){
             it++){
             (*it)->listen(event);
             (*it)->update();
-            (*it)->collCheck(gameObjectList);
             (*it)->draw(screen);
         }
-
+        Collision::runCollisionCheck(gameObjectList);
         SDL_Delay(20);
         if(SDL_Flip(screen) == -1){
             throw(SDL_SCREEN_ERROR);

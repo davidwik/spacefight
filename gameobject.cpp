@@ -3,11 +3,9 @@
 int GameObject::counter = 0;
 
 GameObject::~GameObject(){
-
 }
 
 GameObject::GameObject(int startPosX, int startPosY, AnimationLibrary* a){
-
     position.x = startPosX;
     position.y = startPosY;
     animLib = a;
@@ -34,8 +32,13 @@ int GameObject::getWidth(){
     return m->w;
 }
 
+
+SDL_Rect GameObject::getRect(){
+    return rect;
+}
+
 void GameObject::drawBorder(SDL_Surface* screen){
-    if(DRAW_BORDERS){
+    if(DRAW_BORDERS && colliding){
         SDL_Rect topBar = {
             static_cast<Sint16>(rect.x),
             static_cast<Sint16>(rect.y),

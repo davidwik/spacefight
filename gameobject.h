@@ -19,6 +19,7 @@ protected:
     string objType;
     string animName;
     int id;
+    bool colliding = false;
     SDL_Rect rect;
     AnimationLibrary* animLib;
 
@@ -38,11 +39,19 @@ public:
     void setY(int y){position.y = y;}
     int getWidth();
     int getHeight();
+    int getId() {
+        return id;
+    }
     virtual void listen(SDL_Event event) = 0;
     virtual void init(void) = 0;
     virtual void update() = 0;
-    virtual void collCheck(vector <GameObject*> &gameObjectList) = 0;
+    SDL_Rect getRect();
+    virtual void handleCollision(vector <GameObject*> gameObjectList) = 0;
     virtual void draw(SDL_Surface* screen) = 0;
+    bool isColliding(){return colliding;}
+    void setCollision(bool val){
+        colliding = val;
+    }
     void drawBorder(SDL_Surface* screen);
     void posUpdate();
     int getX(){ return position.x;}
