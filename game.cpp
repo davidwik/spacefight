@@ -78,7 +78,7 @@ void Game::init(){
 }
 
 void Game::setBackground(){
-    background = loadImage("gfx/background.jpg");
+    background = loadImage("gfx/background2.jpg");
     applySurface(0, 0, background, screen, NULL);
 }
 
