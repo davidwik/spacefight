@@ -8,7 +8,6 @@
 
 using namespace std;
 
-
 class Enemy: public GameObject {
 
 private:
@@ -18,12 +17,13 @@ private:
     int dy;
 
 public:
-    enum class Types {EATER, DRUNK };
+    enum class Types { EATER, DRUNK };
 
     Enemy(Enemy::Types type,
           AnimationLibrary* a,
           int x=0,
-          int y=0);
+          int y=0
+    );
 
     void update();
     void draw(SDL_Surface* surface);
@@ -36,7 +36,6 @@ public:
     }
 
     virtual ~Enemy();
-
 
 };
 

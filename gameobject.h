@@ -1,7 +1,7 @@
 #ifndef __GAMEOBJECT_H__
 #define __GAMEOBJECT_H__
-#define BORDER_COLOR 0xff0000
 #define BORDER_WIDTH 1
+
 #include <SDL/SDL.h>
 #include <string>
 #include <vector>
@@ -20,7 +20,10 @@ protected:
     string animName;
     int id;
     int damage;
+    bool termination = false;
     bool colliding = false;
+    int stopForMs = 0;
+    int parentId = -1;
     SDL_Rect rect;
     AnimationLibrary* animLib;
 
@@ -34,12 +37,15 @@ public:
         position.x = x;
         position.y = y;
     }
+
     GameObject(int startPosX, int startPosY, AnimationLibrary* a);
 
     void setX(int x){position.x = x;}
     void setY(int y){position.y = y;}
+    void terminate(){ termination = true;}
     int getWidth();
     int getHeight();
+    void stopFor(int ms){ stopForMs = ms;}
     int getId() {
         return id;
     }
@@ -58,6 +64,7 @@ public:
     void posUpdate();
     int getX(){ return position.x;}
     int getY(){ return position.y;}
+    int getParentId(){return parentId;}
     pos getPosition(){return position;}
     ~GameObject();
 };

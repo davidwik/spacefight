@@ -34,6 +34,7 @@ void Enemy::update(){
         position.x = 1;
         dx = ~dx+1;
     }
+
     if(dy == 0){
         dy = doubleToInt(cos((double) position.x*300));
     }
