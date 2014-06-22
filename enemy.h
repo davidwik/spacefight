@@ -25,11 +25,11 @@ public:
           int y=0
     );
 
-    void update();
+    void update(vector <GameObject*> &refObjects);
     void draw(SDL_Surface* surface);
     void handleCollision(vector <GameObject*> gameObjectList);
     void init();
-    void listen(SDL_Event event);
+    void listen(SDL_Event &event, vector <GameObject*> &refObjects);
 
     Enemy::Types getType(){
         return (Enemy::Types) t;

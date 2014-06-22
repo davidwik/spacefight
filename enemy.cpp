@@ -21,11 +21,11 @@ Enemy::Enemy(Enemy::Types type,
 
 }
 
-void Enemy::listen(SDL_Event event){
+void Enemy::listen(SDL_Event &event, vector <GameObject*> &refObjects){
     ;
 }
 
-void Enemy::update(){
+void Enemy::update(vector <GameObject*> &refObjects){
     if(position.x > SCREEN_WIDTH){
         dx = ~dx+1;
         position.x = SCREEN_WIDTH-1;
@@ -56,7 +56,22 @@ void Enemy::update(){
     posUpdate();
 }
 
-void Enemy::handleCollision(vector <GameObject*> gameObjectList){}
+void Enemy::handleCollision(vector <GameObject*> gameObjectList){
+
+    for(vector <GameObject*>::iterator it = gameObjectList.begin();
+        it != gameObjectList.end();
+        it++){
+
+        // Check if it's a fire
+        if((*it)->objectType() == "fire" && (*it)->getParentId() == 0){
+            printf("HIT BY FIRE!");
+            (*it)->terminate();
+            terminate();
+        }
+
+    }
+
+}
 
 void Enemy::draw(SDL_Surface* surface){
     applySurface(getX(), getY(), animLib->get(animName)->getFrame(), surface, NULL);

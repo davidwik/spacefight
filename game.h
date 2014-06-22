@@ -24,6 +24,7 @@ private:
 
 public:
     ~Game();
+    void deleteObject(GameObject* go);
     SDL_Event event;
     void run();
 };

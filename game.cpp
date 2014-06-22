@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include "utils.h"
 #include "game.h"
+#include "fire.h"
 #include "errorcodes.h"
 #include "collision.h"
 #include <typeinfo>
@@ -21,19 +22,30 @@ void Game::run(){
 
 }
 
+void Game::deleteObject(GameObject* go){
+    printf("Trying to delete \"%s\" id: %d", go->objectType().c_str(), go->getId());
+    if(go->objectType() == "player"){
+        delete static_cast<Player*>(go);
+    }
+    else if(go->objectType() == "enemy"){
+        delete static_cast<Enemy*>(go);
+    }
+    else if(go->objectType() == "fire"){
+        delete static_cast<Fire*>(go);
+    }
+    else {
+        printf("WHAT?!!!");
+    }
+}
+
 Game::~Game(){
     printf("Running Game deconstructor!\n");
     for(vector <GameObject*>::iterator it = gameObjectList.begin();
         it != gameObjectList.end();
         it++){
-        if((*it)->objectType() == "player"){
-            delete static_cast<Player*>(*it);
-        }
-        else if((*it)->objectType() == "enemy"){
-            delete static_cast<Enemy*>(*it);
-        }
-
+        deleteObject((*it));
     }
+    gameObjectList.empty();
     delete animLib;
 
     SDL_FreeSurface(background);
@@ -60,7 +72,7 @@ void Game::init(){
     if(screen == NULL){
         throw SDL_SCREEN_ERROR;
     }
-
+    gameObjectList.reserve(1000);
     animLib = new AnimationLibrary();
     player = new Player(200, 300, animLib);
     gameObjectList.push_back(new Enemy(Enemy::Types::DRUNK, animLib, 100, 40));
@@ -121,20 +133,26 @@ void Game::gameLoop(){
             }
 
         }
+
+        vector <GameObject*>::iterator it;
         for(vector <GameObject*>::iterator it = gameObjectList.begin();
             it != gameObjectList.end();
             it++){
-            (*it)->listen(event);
-            (*it)->update();
+            (*it)->listen(event, gameObjectList);
+            (*it)->update(gameObjectList);
             (*it)->draw(screen);
+
+            if((*it)->killMe()){
+                deleteObject((*it));
+                it = gameObjectList.erase(it);
+                break; // Break the frame, otherwith it might access the vector again.
+            }
         }
         Collision::runCollisionCheck(gameObjectList);
         SDL_Delay(20);
         if(SDL_Flip(screen) == -1){
             throw(SDL_SCREEN_ERROR);
         }
-        //SDL_UpdateRect(screen, 0, 0, 0, 0);
-
     }
     printf("Out of gameloop!\n");
 }

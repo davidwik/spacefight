@@ -5,7 +5,8 @@
 #include <vector>
 #include "utils.h"
 #include "gameobject.h"
-
+#include "animation.h"
+#include "animationlibrary.h"
 using namespace std;
 
 class Fire: public GameObject {
@@ -38,11 +39,11 @@ public:
         damage = d;
     }
 
-    void update();
+    void update(vector <GameObject*> &refObjects);
     void draw(SDL_Surface* screen);
     void handleCollision(vector <GameObject*> gameObjectList);
     void init();
-    void listen(SDL_Event event);
+    void listen(SDL_Event &event, vector <GameObject*> &refObjects);
 
     Fire::Types getType(){
         return (Fire::Types) t;

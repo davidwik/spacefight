@@ -14,7 +14,6 @@ Player::Player(int x,
 
 
 void Player::init(){
-    printf("PPPP: %d\n\n", getWidth());
     if(!animLib->has("player-wait")){
         Animation* waitAnim = new Animation(4, true);
         waitAnim->addFrame("gfx/shipanim/ship-still01.png");
@@ -31,9 +30,10 @@ void Player::init(){
         animLib->add("player-thrust", thrustAnim);
     }
     animName = "player-wait";
+
 }
 
-void Player::listen(SDL_Event event){
+void Player::listen(SDL_Event &event, vector <GameObject*> &refObjects){
     Uint8 *keystates = SDL_GetKeyState(NULL);
     if(keystates[SDLK_RIGHT]){
         animName = "player-thrust";
@@ -48,7 +48,6 @@ void Player::listen(SDL_Event event){
         if(!keystates[SDLK_LCTRL]){
             moveDown();
         }
-
     }
     if(keystates[SDLK_UP]){
         animName = "player-thrust";
@@ -56,6 +55,7 @@ void Player::listen(SDL_Event event){
             moveUp();
         }
     }
+
     if(!keystates[SDLK_UP] &&
        !keystates[SDLK_DOWN] &&
        !keystates[SDLK_LEFT] &&
@@ -63,13 +63,36 @@ void Player::listen(SDL_Event event){
         animName = "player-wait";
     }
 
+    if(event.key.keysym.sym == SDLK_SPACE && event.type == SDL_KEYDOWN){
+        fire(refObjects);
+    }
+}
+
+void Player::fire(vector <GameObject*> &refObjects){
+    int startX = static_cast<int>(rect.x + (rect.w/2));
+    int startY = static_cast<int>(rect.y + (rect.h/2));
+
+    Uint32 diff = SDL_GetTicks() - lastFired;
+    Uint32 limit = 500;
+
+    if(diff > limit){
+
+        Fire* f = new Fire(Fire::Types::BULLET,
+                           animLib,
+                           startX,
+                           startY,
+                           id);
+        f->init();
+        refObjects.insert(refObjects.begin(),f);
+        lastFired = SDL_GetTicks();
+    }
 }
 
 Player::~Player(){
     printf("Destroying the player instance - GameObjectId: %d\n", id);
 }
 
-void Player::update(){
+void Player::update(vector <GameObject*> &refObjects){
     posUpdate();
 }
 
