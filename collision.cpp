@@ -6,6 +6,7 @@ void Collision::runCollisionCheck(vector <GameObject*> gameObjectList){
         it_one++){
         bool hasCollided = false;
         vector <GameObject*> collisionList;
+        collisionList.reserve(100);
         for(vector <GameObject*>::iterator it_two = gameObjectList.begin();
             it_two != gameObjectList.end();
             it_two++){
@@ -26,14 +27,18 @@ void Collision::runCollisionCheck(vector <GameObject*> gameObjectList){
                     collisionList.push_back((GameObject*) (*it_two));
                     hasCollided = true;
                 }
-                (*it_one)->handleCollision(collisionList);
+
             }
         }
         if(hasCollided){
+            if((*it_one)->isColliding()){
+                (*it_one)->handleCollision(collisionList);
+            }
             (*it_one)->setCollision(true);
         }
         else {
             (*it_one)->setCollision(false);
         }
+        collisionList.empty();
     }
 }

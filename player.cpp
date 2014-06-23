@@ -73,7 +73,7 @@ void Player::fire(vector <GameObject*> &refObjects){
     int startY = static_cast<int>(rect.y + (rect.h/2));
 
     Uint32 diff = SDL_GetTicks() - lastFired;
-    Uint32 limit = 500;
+    Uint32 limit = 200;
 
     if(diff > limit){
 

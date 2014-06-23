@@ -23,15 +23,16 @@ void Fire::update(vector <GameObject*> &refObjects){
     }
 
     setY(getY()+dy);
+    posUpdate();
+}
+
+void Fire::handleCollision(vector <GameObject*> gameObjectList){
 
 }
 
-void Fire::handleCollision(vector <GameObject*> gameObjectList){}
-
 void Fire::draw(SDL_Surface* surface){
-    drawBorder(surface);
     applySurface(getX(), getY(), animLib->get(animName)->getFrame(), surface, NULL);
-
+    drawBorder(surface);
 }
 
 void Fire::init(){
@@ -45,7 +46,7 @@ void Fire::init(){
         }
     }
     dx = 0;
-    dy = -2;
+    dy = -13;
 }
 
 Fire::~Fire(){

@@ -64,7 +64,6 @@ void Enemy::handleCollision(vector <GameObject*> gameObjectList){
 
         // Check if it's a fire
         if((*it)->objectType() == "fire" && (*it)->getParentId() == 0){
-            printf("HIT BY FIRE!");
             (*it)->terminate();
             terminate();
         }
