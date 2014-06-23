@@ -1,40 +1,31 @@
-#ifndef __FIRE_H__
-#define __FIRE_H__
+#ifndef __EXPLOSION_H__
+#define __EXPLOSION_H__
 #include <string>
 #include <SDL/SDL.h>
 #include <vector>
 #include "utils.h"
-#include "explosion.h"
 #include "gameobject.h"
 #include "animation.h"
 #include "animationlibrary.h"
 using namespace std;
 
-class Fire: public GameObject {
+class Explosion: public GameObject {
 
 private:
     int t;
-    int dy;
-    int dx;
-    int damage;
+    GameObject* sticky = NULL;
 
 public:
-    enum class Types { PLAYER_BULLET, ENEMY_BULLET, ROCKET, LASER };
+    enum class Types { BIG, MINI };
 
-    Fire(Fire::Types type,
+    Explosion(Explosion::Types type,
          AnimationLibrary* a,
          int x=0,
-         int y=0,
-         int parent=-1
+         int y=0
     );
 
-    void setDX(int directionX){
-        dx = directionX;
-    }
 
-    void setDY(int directionY){
-        dy = directionY;
-    }
+    void setSticky(GameObject *gameObject);
 
     void setDamage(int d){
         damage = d;
@@ -47,18 +38,15 @@ public:
     }
     void update(vector <GameObject*> &refObjects);
     void draw(SDL_Surface* screen);
-
     void handleCollision(vector <GameObject*> gameObjectList, vector <GameObject*> &refObjects);
     void init();
     void listen(SDL_Event &event, vector <GameObject*> &refObjects);
 
-    void startExplosion(GameObject* go, vector <GameObject*> &refObjects);
-
-    Fire::Types getType(){
-        return (Fire::Types) t;
+    Explosion::Types getType(){
+        return (Explosion::Types) t;
     }
 
-    virtual ~Fire();
+    virtual ~Explosion();
 };
 
-#endif /* __FIRE_H__ */
+#endif /* __EXPLOSION_H__ */

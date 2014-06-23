@@ -11,6 +11,7 @@
 #include <iostream>
 #include <string>
 
+#include "explosion.h"
 
 void Game::run(){
     try {
@@ -33,8 +34,11 @@ void Game::deleteObject(GameObject* go){
     else if(go->objectType() == "fire"){
         delete static_cast<Fire*>(go);
     }
+    else if(go->objectType() == "explosion"){
+        delete static_cast<Explosion*>(go);
+    }
     else {
-        printf("WHAT?!!!");
+        printf("WHAT?!");
     }
 }
 
@@ -68,20 +72,23 @@ void Game::init(){
     screen = SDL_SetVideoMode(SCREEN_WIDTH,
                               SCREEN_HEIGHT,
                               SCREEN_BPP,
-                              SDL_HWSURFACE);
+                              SDL_HWSURFACE | SDL_DOUBLEBUF);
     if(screen == NULL){
         throw SDL_SCREEN_ERROR;
     }
     gameObjectList.reserve(1000);
     animLib = new AnimationLibrary();
     player = new Player(200, 300, animLib);
+    Explosion* ex = new Explosion(Explosion::Types::MINI, animLib, 400, 300);
     gameObjectList.push_back(new Enemy(Enemy::Types::DRUNK, animLib, 100, 40));
     gameObjectList.push_back(new Enemy(Enemy::Types::EATER, animLib, 200, 40));
     gameObjectList.push_back(new Enemy(Enemy::Types::DRUNK, animLib, 100, 40));
     gameObjectList.push_back(new Enemy(Enemy::Types::EATER, animLib, 200, 40));
     gameObjectList.push_back(new Enemy(Enemy::Types::DRUNK, animLib, 100, 40));
     gameObjectList.push_back(new Enemy(Enemy::Types::EATER, animLib, 200, 40));
+    gameObjectList.push_back(ex);
     gameObjectList.push_back(player);
+
     for(vector <GameObject*>::iterator it = gameObjectList.begin();
         it != gameObjectList.end();
         it++){
@@ -119,6 +126,7 @@ void Game::gameLoop(){
     bool quit = false;
     player->setX(30);
     player->setY(40);
+
     while(quit == false){
 
         applySurface(0, 0, background, screen, NULL);
@@ -145,7 +153,7 @@ void Game::gameLoop(){
             if((*it)->killMe()){
                 deleteObject((*it));
                 it = gameObjectList.erase(it);
-                //break; // Break the frame, otherwith it might access the vector again.
+                break;
             }
         }
         Collision::runCollisionCheck(gameObjectList);
