@@ -5,6 +5,8 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
+#define FRAMERATE 50
+
 #define DRAW_BORDERS 0
 
 #endif /* __CONSTANTS_H__ */

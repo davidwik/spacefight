@@ -5,11 +5,12 @@
 #include "game.h"
 #include "fire.h"
 #include "errorcodes.h"
+#include "constants.h"
 #include "collision.h"
 #include <typeinfo>
 #include <iostream>
 #include <string>
-#define FRAMERATE 60
+
 
 void Game::run(){
     try {
@@ -148,7 +149,7 @@ void Game::gameLoop(){
             }
         }
         Collision::runCollisionCheck(gameObjectList);
-        SDL_Delay(20);
+        SDL_Delay(static_cast<int>(1000/FRAMERATE));
         if(SDL_Flip(screen) == -1){
             throw(SDL_SCREEN_ERROR);
         }
