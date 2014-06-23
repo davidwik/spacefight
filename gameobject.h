@@ -19,6 +19,7 @@ protected:
     string objType;
     string animName;
     int id;
+    Uint32 ticksToLive = 0;
     int damage;
     bool termination = false;
     bool colliding = false;
@@ -52,7 +53,12 @@ public:
     }
 
     bool killMe(){
-        return termination;
+        if(ticksToLive != 0 && ticksToLive < SDL_GetTicks()){
+            return true;
+        }
+        else {
+            return termination;
+        }
     }
 
     virtual void listen(SDL_Event &event, vector <GameObject*> &refObjects) = 0;
@@ -62,7 +68,7 @@ public:
     int getDamage() { return damage;}
     SDL_Rect getRect();
 
-    virtual void handleCollision(vector <GameObject*> gameObjectList) = 0;
+    virtual void handleCollision(vector <GameObject*> gameObjectList, vector <GameObject*> &refObjects) = 0;
     virtual void draw(SDL_Surface* screen) = 0;
     bool isColliding(){return colliding;}
     void setCollision(bool val){

@@ -4,6 +4,7 @@
 #include <SDL/SDL.h>
 #include <vector>
 #include "utils.h"
+#include "explosion.h"
 #include "gameobject.h"
 #include "animation.h"
 #include "animationlibrary.h"
@@ -18,7 +19,7 @@ private:
     int damage;
 
 public:
-    enum class Types { BULLET, ROCKET, LASER };
+    enum class Types { PLAYER_BULLET, ENEMY_BULLET, ROCKET, LASER };
 
     Fire(Fire::Types type,
          AnimationLibrary* a,
@@ -46,9 +47,12 @@ public:
     }
     void update(vector <GameObject*> &refObjects);
     void draw(SDL_Surface* screen);
-    void handleCollision(vector <GameObject*> gameObjectList);
+
+    void handleCollision(vector <GameObject*> gameObjectList, vector <GameObject*> &refObjects);
     void init();
     void listen(SDL_Event &event, vector <GameObject*> &refObjects);
+
+    void startExplosion(GameObject* go, vector <GameObject*> &refObjects);
 
     Fire::Types getType(){
         return (Fire::Types) t;

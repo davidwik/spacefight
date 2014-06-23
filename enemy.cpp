@@ -60,7 +60,7 @@ void Enemy::update(vector <GameObject*> &refObjects){
     }
 }
 
-void Enemy::handleCollision(vector <GameObject*> gameObjectList){
+void Enemy::handleCollision(vector <GameObject*> gameObjectList, vector <GameObject*> &refObjects){
 
     for(vector <GameObject*>::iterator it = gameObjectList.begin();
         it != gameObjectList.end();
@@ -69,10 +69,11 @@ void Enemy::handleCollision(vector <GameObject*> gameObjectList){
         // Check if it's a fire
         if((*it)->objectType() == "fire" && (*it)->getParentId() == 0){
             loseHealth(static_cast<Fire*>(*it)->getDamage());
-            (*it)->terminate();
+
             if(health <= 0){
                 terminate();
             }
+            printf("hp: %d\n", health);
         }
     }
 }
@@ -114,7 +115,7 @@ void Enemy::fire(vector <GameObject*> &refObjects){
     Uint32 limit = 400;
 
     if(diff > limit){
-        Fire* f = new Fire(Fire::Types::BULLET,
+        Fire* f = new Fire(Fire::Types::ENEMY_BULLET,
                            animLib,
                            startX,
                            startY,

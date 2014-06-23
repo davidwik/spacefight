@@ -32,7 +32,7 @@ public:
         health -= d;
     }
     void fire(vector <GameObject*> &refObjects);
-    void handleCollision(vector <GameObject*> gameObjectList);
+    void handleCollision(vector <GameObject*> gameObjectList, vector <GameObject*> &refObjects);
     void moveDown();
     void listen(SDL_Event &event, vector <GameObject*> &refObjects);
     void init();

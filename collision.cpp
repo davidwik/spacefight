@@ -1,6 +1,6 @@
 #include "collision.h"
 
-void Collision::runCollisionCheck(vector <GameObject*> gameObjectList){
+void Collision::runCollisionCheck(vector <GameObject*> &gameObjectList){
     for(vector <GameObject*>::iterator it_one = gameObjectList.begin();
         it_one != gameObjectList.end();
         it_one++){
@@ -32,7 +32,7 @@ void Collision::runCollisionCheck(vector <GameObject*> gameObjectList){
         }
         if(hasCollided){
             if((*it_one)->isColliding()){
-                (*it_one)->handleCollision(collisionList);
+                (*it_one)->handleCollision(collisionList, gameObjectList);
             }
             (*it_one)->setCollision(true);
         }

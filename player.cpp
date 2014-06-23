@@ -79,7 +79,7 @@ void Player::fire(vector <GameObject*> &refObjects){
 
     if(diff > limit){
 
-        Fire* f = new Fire(Fire::Types::BULLET,
+        Fire* f = new Fire(Fire::Types::PLAYER_BULLET,
                            animLib,
                            startX,
                            startY,
@@ -120,6 +120,7 @@ void Player::drawHP(SDL_Surface* screen){
         )
     );
     drawRect(screen, barBorder, SDL_MapRGB(screen->format, 0, 255, 0));
+
 }
 
 void Player::draw(SDL_Surface *screen){
@@ -128,7 +129,7 @@ void Player::draw(SDL_Surface *screen){
     drawHP(screen);
 }
 
-void Player::handleCollision(vector <GameObject*> gameObjectList){
+void Player::handleCollision(vector <GameObject*> gameObjectList, vector <GameObject*> &refObjects){
     for(auto it = gameObjectList.begin();
         it != gameObjectList.end();
         it++){
@@ -136,14 +137,10 @@ void Player::handleCollision(vector <GameObject*> gameObjectList){
         // Is it fire?!
         if((*it)->objectType() == "fire" && (*it)->getParentId() != 0){
             loseHealth(static_cast<Fire*>(*it)->getDamage());
-            (*it)->terminate();
             if(health <= 0){
                 health = totalHealth;
             }
         }
-
-
-
     }
 }
 

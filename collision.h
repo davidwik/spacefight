@@ -6,7 +6,7 @@
 
 class Collision {
 public:
-    void static runCollisionCheck(vector <GameObject*> gameObjectList);
+    void static runCollisionCheck(vector <GameObject*> &gameObjectList);
 };
 
 #endif /* __COLLISION_H__ */
