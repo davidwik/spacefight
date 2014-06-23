@@ -50,10 +50,14 @@ void Enemy::update(vector <GameObject*> &refObjects){
     if(position.y < 0){
         dy = ~dy+1;
     }
-
     position.x += dx;
     position.y += dy;
     posUpdate();
+
+    int t = rand()%100;
+    if(t < triggerHappiness){
+        fire(refObjects);
+    }
 }
 
 void Enemy::handleCollision(vector <GameObject*> gameObjectList){
@@ -64,17 +68,61 @@ void Enemy::handleCollision(vector <GameObject*> gameObjectList){
 
         // Check if it's a fire
         if((*it)->objectType() == "fire" && (*it)->getParentId() == 0){
+            loseHealth(static_cast<Fire*>(*it)->getDamage());
             (*it)->terminate();
-            terminate();
+            if(health <= 0){
+                terminate();
+            }
         }
-
     }
+}
+
+void Enemy::drawHealthBar(SDL_Surface* surface){
+    SDL_Rect healthBar;
+
+    healthBar.w = 80;
+    healthBar.h = 5;
+    healthBar.x = getX()+(rect.w/2)-(healthBar.w/2);
+    healthBar.y = getY()-10;
+    SDL_Rect healthBorder = healthBar;
+    float percentHP = ((float) health / (float) totalHealth);
+    int barLenght = static_cast<int>((percentHP*80));
+    healthBar.w = barLenght;
+
+    SDL_FillRect(
+        surface,
+        &healthBar,
+        SDL_MapRGB(
+            surface->format, 180, 0, 0
+        )
+    );
+    drawRect(surface, healthBorder, SDL_MapRGB(surface->format, 200, 200, 200));
 
 }
 
 void Enemy::draw(SDL_Surface* surface){
     applySurface(getX(), getY(), animLib->get(animName)->getFrame(), surface, NULL);
     drawBorder(surface);
+    drawHealthBar(surface);
+}
+
+void Enemy::fire(vector <GameObject*> &refObjects){
+    int startX = static_cast<int>(rect.x+ (rect.w/2));
+    int startY = static_cast<int>(rect.y+(rect.h));
+
+    Uint32 diff = SDL_GetTicks() - lastFired;
+    Uint32 limit = 400;
+
+    if(diff > limit){
+        Fire* f = new Fire(Fire::Types::BULLET,
+                           animLib,
+                           startX,
+                           startY,
+                           id);
+        f->init();
+        refObjects.insert(refObjects.begin(), f);
+        lastFired = SDL_GetTicks();
+    }
 }
 
 void Enemy::init(){
@@ -112,9 +160,23 @@ void Enemy::init(){
             animLib->add(animName, anim);
         }
     }
+
+    switch((Enemy::Types) t){
+    case Enemy::Types::DRUNK:
+        totalHealth = 90;
+        triggerHappiness = 10;
+        break;
+    case Enemy::Types::EATER:
+        totalHealth = 200;
+        triggerHappiness = 5;
+        break;
+    default:
+        totalHealth = 100;
+    };
+    health = totalHealth;
+
 }
 
 Enemy::~Enemy(){
     string s = objectType();
-    printf("Destroying instance of %s - GameObjectId:%d \n ", (const char*) s.c_str(), id);
 }

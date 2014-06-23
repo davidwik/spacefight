@@ -23,7 +23,6 @@ void Game::run(){
 }
 
 void Game::deleteObject(GameObject* go){
-    printf("Trying to delete \"%s\" id: %d", go->objectType().c_str(), go->getId());
     if(go->objectType() == "player"){
         delete static_cast<Player*>(go);
     }
@@ -145,7 +144,7 @@ void Game::gameLoop(){
             if((*it)->killMe()){
                 deleteObject((*it));
                 it = gameObjectList.erase(it);
-                break; // Break the frame, otherwith it might access the vector again.
+                //break; // Break the frame, otherwith it might access the vector again.
             }
         }
         Collision::runCollisionCheck(gameObjectList);

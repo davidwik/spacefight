@@ -31,6 +31,8 @@ void Player::init(){
     }
     animName = "player-wait";
 
+    health = totalHealth;
+
 }
 
 void Player::listen(SDL_Event &event, vector <GameObject*> &refObjects){
@@ -96,13 +98,53 @@ void Player::update(vector <GameObject*> &refObjects){
     posUpdate();
 }
 
+
+void Player::drawHP(SDL_Surface* screen){
+    SDL_Rect healthBar;
+    healthBar.w = 130;
+    healthBar.h = 20;
+    healthBar.x = 10;
+    healthBar.y = screen->h - (healthBar.h+10);
+
+    float percentHP = ((float) health / (float) totalHealth);
+    int barLenght = static_cast<int>(percentHP*healthBar.w);
+    SDL_Rect barBorder = healthBar;
+
+    healthBar.w = barLenght;
+
+    SDL_FillRect(
+        screen,
+        &healthBar,
+        SDL_MapRGB(
+            screen->format, 0, 170, 0
+        )
+    );
+    drawRect(screen, barBorder, SDL_MapRGB(screen->format, 0, 255, 0));
+}
+
 void Player::draw(SDL_Surface *screen){
     applySurface(getX(), getY(), animLib->get(animName)->getFrame(), screen, NULL);
     drawBorder(screen);
+    drawHP(screen);
 }
 
 void Player::handleCollision(vector <GameObject*> gameObjectList){
+    for(auto it = gameObjectList.begin();
+        it != gameObjectList.end();
+        it++){
 
+        // Is it fire?!
+        if((*it)->objectType() == "fire" && (*it)->getParentId() != 0){
+            loseHealth(static_cast<Fire*>(*it)->getDamage());
+            (*it)->terminate();
+            if(health <= 0){
+                health = totalHealth;
+            }
+        }
+
+
+
+    }
 }
 
 

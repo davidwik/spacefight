@@ -12,8 +12,11 @@ class Player: public GameObject {
 private:
     int score;
     string name;
+    int totalHealth = 100;
+    int health;
     bool fired = false;
     Uint32 lastFired = 0;
+    void drawHP(SDL_Surface* surface);
 
 public:
     Player(int x, int y, AnimationLibrary* a);
@@ -25,6 +28,9 @@ public:
     void moveLeft();
     void moveRight();
     void moveUp();
+    void loseHealth(int d){
+        health -= d;
+    }
     void fire(vector <GameObject*> &refObjects);
     void handleCollision(vector <GameObject*> gameObjectList);
     void moveDown();

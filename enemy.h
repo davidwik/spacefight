@@ -4,6 +4,7 @@
 #include "animation.h"
 #include "gameobject.h"
 #include "utils.h"
+#include "fire.h"
 #include <string>
 
 using namespace std;
@@ -11,10 +12,14 @@ using namespace std;
 class Enemy: public GameObject {
 
 private:
+    int totalHealth;
     int health;
     int t;
     int dx;
     int dy;
+    short triggerHappiness = 0;
+    Uint32 lastFired = 0;
+    void drawHealthBar(SDL_Surface* surface);
 
 public:
     enum class Types { EATER, DRUNK };
@@ -25,7 +30,16 @@ public:
           int y=0
     );
 
+    void loseHealth(int h){
+        health -= h;
+        if(health <= 0){
+            terminate();
+        }
+    }
+
     void update(vector <GameObject*> &refObjects);
+    void fire(vector <GameObject*> &refObjects);
+
     void draw(SDL_Surface* surface);
     void handleCollision(vector <GameObject*> gameObjectList);
     void init();

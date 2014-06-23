@@ -39,6 +39,11 @@ public:
         damage = d;
     }
 
+    int getDamage(){
+        int tmp = damage;
+        damage = 0;
+        return tmp;
+    }
     void update(vector <GameObject*> &refObjects);
     void draw(SDL_Surface* screen);
     void handleCollision(vector <GameObject*> gameObjectList);

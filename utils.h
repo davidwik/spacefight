@@ -22,6 +22,8 @@ Uint32 getPixel32(SDL_Surface* surface, int x, int y);
 void putPixel32(SDL_Surface* surface, int x, int y, Uint32 pixel);
 std::string numberToString(int num);
 
+void drawRect(SDL_Surface* surface, SDL_Rect rect, Uint32 color);
+void drawLine(SDL_Surface*, int x1, int x2, int y1, int y2, Uint32 color);
 int floatToInt(float n);
 int doubleToInt(double n);
 SDL_Surface* flipImage(SDL_Surface* surface, int flags);

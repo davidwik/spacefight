@@ -1,6 +1,7 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include "utils.h"
+#include <cstdlib>
 #include <string>
 
 
@@ -33,6 +34,102 @@ void applySurface(int x,
 }
 
 
+void drawRect(SDL_Surface* surface, SDL_Rect rect, Uint32 color){
+    drawLine(surface,
+             rect.x,
+             rect.x+rect.w,
+             rect.y,
+             rect.y,
+             color
+    );
+
+    drawLine(surface,
+             rect.x+rect.w,
+             rect.x+rect.w,
+             rect.y,
+             rect.y+rect.h,
+             color
+    );
+
+    drawLine(surface,
+             rect.x+rect.w,
+             rect.x,
+             rect.y+rect.h,
+             rect.y+rect.h,
+             color
+    );
+
+    drawLine(surface,
+             rect.x,
+             rect.x,
+             rect.y,
+             rect.y+rect.h,
+             color
+    );
+
+}
+
+void drawLine(SDL_Surface* surface,
+              int x1,
+              int x2,
+              int y1,
+              int y2,
+              Uint32 pixel){
+    if(SDL_MUSTLOCK(surface)){
+        SDL_LockSurface(surface);
+    }
+    int delta_x = (x2-x1);
+
+    // if x1 == x2, then it does not matter what we set here
+    signed char const ix((delta_x > 0) - (delta_x < 0));
+    delta_x = std::abs(delta_x) << 1;
+
+    int delta_y(y2 - y1);
+    // if y1 == y2, then it does not matter what we set here
+    signed char const iy((delta_y > 0) - (delta_y < 0));
+    delta_y = std::abs(delta_y) << 1;
+    putPixel32(surface, x1, y1, pixel);
+
+    if (delta_x >= delta_y) {
+        // error may go below zero
+        int error(delta_y - (delta_x >> 1));
+        while (x1 != x2) {
+            if ((error >= 0) && (error || (ix > 0))){
+                error -= delta_x;
+                y1 += iy;
+            }
+            // else do nothing
+
+            error += delta_y;
+            x1 += ix;
+            putPixel32(surface, x1, y1, pixel);
+        }
+    }
+    else
+    {
+        // error may go below zero
+        int error(delta_x - (delta_y >> 1));
+
+        while (y1 != y2)
+        {
+            if ((error >= 0) && (error || (iy > 0)))
+            {
+                error -= delta_y;
+                x1 += ix;
+            }
+            // else do nothing
+
+            error += delta_x;
+            y1 += iy;
+            putPixel32(surface, x1, y1, pixel);
+        }
+    }
+    if(SDL_MUSTLOCK(surface)){
+        SDL_UnlockSurface(surface);
+    }
+}
+
+
 SDL_Surface* copySurface(SDL_Surface* image){
     return SDL_ConvertSurface(image,
                               image->format,
@@ -56,9 +153,11 @@ Uint32 getPixel32(SDL_Surface* surface, int x, int y){
  */
 void putPixel32(SDL_Surface* surface, int x, int y, Uint32 pixel){
     // convert the pixels to Uint32
-    Uint32 *pixels = (Uint32 *)surface->pixels;
-    // Set the pixel
-    pixels[(y*surface->w)+x] = pixel;
+    if(x >= 0 && x < surface->w && y >= 0 && y < surface->h){
+        Uint32 *pixels = (Uint32 *)surface->pixels;
+        // Set the pixel
+        pixels[(y*surface->w)+x] = pixel;
+    }
 }
 
 
