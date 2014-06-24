@@ -16,6 +16,7 @@ private:
     int health;
     bool fired = false;
     Uint32 lastFired = 0;
+    int lives = 5;
     void drawHP(SDL_Surface* surface);
 
 public:
@@ -28,6 +29,9 @@ public:
     void moveLeft();
     void moveRight();
     void moveUp();
+
+    void drawHeartBar(SDL_Surface* surface);
+
     void loseHealth(int d){
         health -= d;
     }

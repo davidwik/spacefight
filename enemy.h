@@ -17,6 +17,7 @@ private:
     int t;
     int dx;
     int dy;
+    int points;
     short triggerHappiness = 0;
     Uint32 lastFired = 0;
     void drawHealthBar(SDL_Surface* surface);
@@ -39,7 +40,9 @@ public:
 
     void update(vector <GameObject*> &refObjects);
     void fire(vector <GameObject*> &refObjects);
-
+    int getPoints(){
+        return points;
+    }
     void draw(SDL_Surface* surface);
     void handleCollision(vector <GameObject*> gameObjectList, vector <GameObject*> &refObjects);
     void init();

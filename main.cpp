@@ -2,6 +2,6 @@
 #include <SDL/SDL.h>
 int main (int argc, char* argv[]){
     Game game;
-    game.run();
+    game.runState(Game::States::MENU);
     return 0;
 }

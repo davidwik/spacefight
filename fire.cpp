@@ -45,18 +45,17 @@ void Fire::handleCollision(
          it != gameObjectList.end();
         it++){
         if((Fire::Types) t == Fire::Types::ENEMY_BULLET){
-            if((*it)->objectType() != "fire" && (*it)->objectType() != "enemy"){
+            if((*it)->objectType() == "player"){
                 startExplosion((*it), refObjects);
                 terminate();
             }
         }
         else if((Fire::Types) t == Fire::Types::PLAYER_BULLET){
-            if((*it)->objectType() != "fire" && (*it)->objectType() != "player"){
-            startExplosion((*it), refObjects);
+            if((*it)->objectType() == "enemy"){
+                startExplosion((*it), refObjects);
             }
         }
     }
-
 }
 
 void Fire::startExplosion(GameObject* go, vector <GameObject*> &refObjects){

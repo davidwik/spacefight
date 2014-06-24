@@ -68,10 +68,19 @@ void Enemy::handleCollision(vector <GameObject*> gameObjectList, vector <GameObj
         it++){
 
         // Check if it's a fire
-        if((*it)->objectType() == "fire" && (*it)->getParentId() == 0){
+        if((*it)->objectType() == "fire" && static_cast<Fire*>(*it)->getType() == Fire::Types::PLAYER_BULLET){
             loseHealth(static_cast<Fire*>(*it)->getDamage());
 
             if(health <= 0){
+                SDL_Rect r = getRect();
+                Explosion* ex = new Explosion(
+                    Explosion::Types::BIG,
+                    animLib,
+                    getX() + (int) (r.w/2),
+                    getY() + (int) (r.h/2)
+                );
+                refObjects.push_back(ex);
+                ex = NULL;
                 terminate();
             }
 
@@ -165,12 +174,14 @@ void Enemy::init(){
 
     switch((Enemy::Types) t){
     case Enemy::Types::DRUNK:
-        totalHealth = 90;
-        triggerHappiness = 10;
+        totalHealth = 40;
+        triggerHappiness = 3;
+        points = 50;
         break;
     case Enemy::Types::EATER:
-        totalHealth = 200;
-        triggerHappiness = 5;
+        totalHealth = 80;
+        triggerHappiness = 8;
+        points = 100;
         break;
     default:
         totalHealth = 100;

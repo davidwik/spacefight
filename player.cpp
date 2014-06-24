@@ -30,6 +30,23 @@ void Player::init(){
         thrustAnim->addFrame("gfx/shipanim/ship-thrust04.png");
         animLib->add("player-thrust", thrustAnim);
     }
+
+    if(!animLib->has("heart-anim")){
+        Animation* heartAnim = new Animation(10, true);
+        heartAnim->addFrame("gfx/shipanim/heart01.png");
+        heartAnim->addFrame("gfx/shipanim/heart02.png");
+        heartAnim->addFrame("gfx/shipanim/heart03.png");
+        heartAnim->addFrame("gfx/shipanim/heart04.png");
+        heartAnim->addFrame("gfx/shipanim/heart05.png");
+        animLib->add("heart-anim", heartAnim);
+    }
+
+    if(!animLib->has("gameover")){
+        Animation* gameOver = new Animation(1, true);
+        gameOver->addFrame("gfx/gameover.png");
+        animLib->add("game-over", gameOver);
+    }
+
     animName = "player-wait";
 
     health = totalHealth;
@@ -97,8 +114,34 @@ Player::~Player(){
 
 void Player::update(vector <GameObject*> &refObjects){
     posUpdate();
+
+    // Make sure the player doesn't leave..
+    if(getX() + rect.w > SCREEN_WIDTH){
+        setX(SCREEN_WIDTH-rect.w);
+    }
+    if(getX() < 0){
+        setX(0);
+    }
+    if(getY() < -10){
+        setY(-10);
+    }
+    if(getY() + (int) (rect.h/2) > SCREEN_HEIGHT){
+        setY(SCREEN_HEIGHT -(int) (rect.h/2));
+    }
+
 }
 
+void Player::drawHeartBar(SDL_Surface* surface){
+    Animation* an = animLib->get("heart-anim");
+    for(int i = 0; i < lives; i++){
+        applySurface(10+(23*i),
+                     surface->h-60,
+                     an->getFrame(),
+                     surface,
+                     NULL);
+    }
+
+}
 
 void Player::drawHP(SDL_Surface* screen){
     SDL_Rect healthBar;
@@ -121,13 +164,14 @@ void Player::drawHP(SDL_Surface* screen){
         )
     );
     drawRect(screen, barBorder, SDL_MapRGB(screen->format, 0, 255, 0));
-
 }
 
 void Player::draw(SDL_Surface *screen){
     applySurface(getX(), getY(), animLib->get(animName)->getFrame(), screen, NULL);
     drawBorder(screen);
     drawHP(screen);
+    drawHeartBar(screen);
+
 }
 
 void Player::handleCollision(vector <GameObject*> gameObjectList, vector <GameObject*> &refObjects){
@@ -136,10 +180,25 @@ void Player::handleCollision(vector <GameObject*> gameObjectList, vector <GameOb
         it++){
 
         // Is it fire?!
-        if((*it)->objectType() == "fire" && (*it)->getParentId() != 0){
+        if((*it)->objectType() == "fire" && static_cast<Fire*>(*it)->getType() == Fire::Types::ENEMY_BULLET){
+
             loseHealth(static_cast<Fire*>(*it)->getDamage());
             if(health <= 0){
-                health = totalHealth;
+                if(lives > 1){
+                    lives--;
+                    health = totalHealth;
+                }
+                else {
+                    SDL_Rect r = getRect();
+                    Explosion* ex = new Explosion(
+                        Explosion::Types::BIG,
+                        animLib,
+                        getX() + (int) (r.w/2),
+                        getY() + (int) (r.h/2)
+                    );
+                    refObjects.push_back(ex);
+                    terminate();
+                }
             }
         }
     }
