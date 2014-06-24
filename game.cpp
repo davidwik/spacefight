@@ -143,20 +143,31 @@ void Game::gameLoop(){
         }
 
         vector <GameObject*>::iterator it;
+        // Check update and draw!
         for(vector <GameObject*>::iterator it = gameObjectList.begin();
             it != gameObjectList.end();
             it++){
             (*it)->listen(event, gameObjectList);
             (*it)->update(gameObjectList);
             (*it)->draw(screen);
+        }
 
-            if((*it)->killMe()){
-                deleteObject((*it));
-                it = gameObjectList.erase(it);
+
+        // Run the collision check
+        Collision::runCollisionCheck(gameObjectList);
+
+        // Remove dying objects.
+
+        for(vector <GameObject*>::iterator iter = gameObjectList.begin();
+            iter != gameObjectList.end();
+            iter++){
+            if((*iter)->killMe()){
+                GameObject* g = (*iter);
+                iter = gameObjectList.erase(iter);
+                deleteObject(g);
                 break;
             }
         }
-        Collision::runCollisionCheck(gameObjectList);
         SDL_Delay(static_cast<int>(1000/FRAMERATE));
         if(SDL_Flip(screen) == -1){
             throw(SDL_SCREEN_ERROR);
