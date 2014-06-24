@@ -3,6 +3,7 @@
 int GameObject::counter = 0;
 
 GameObject::~GameObject(){
+    animLib = NULL;
 }
 
 GameObject::GameObject(int startPosX, int startPosY, AnimationLibrary* a){

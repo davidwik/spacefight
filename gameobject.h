@@ -25,8 +25,9 @@ protected:
     bool colliding = false;
     int stopForMs = 0;
     int parentId = -1;
+    int zIndex = 0;
     SDL_Rect rect;
-    AnimationLibrary* animLib;
+    AnimationLibrary* animLib = NULL;
 
 
 public:
@@ -35,6 +36,10 @@ public:
         return objType;
     };
 
+    bool operator< (const GameObject &other) const {
+        return zIndex > other.zIndex;
+    }
+
     void setXY(int x, int y) {
         position.x = x;
         position.y = y;
@@ -42,6 +47,9 @@ public:
 
     GameObject(int startPosX, int startPosY, AnimationLibrary* a);
 
+    int getZIndex(){
+        return zIndex;
+    }
     void setX(int x){position.x = x;}
     void setY(int y){position.y = y;}
     void terminate(){ termination = true;}

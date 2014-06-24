@@ -10,6 +10,7 @@
 #include <typeinfo>
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 #include "explosion.h"
 
@@ -40,6 +41,7 @@ void Game::deleteObject(GameObject* go){
     else {
         printf("WHAT?!");
     }
+    go = NULL;
 }
 
 Game::~Game(){
@@ -48,6 +50,7 @@ Game::~Game(){
         it != gameObjectList.end();
         it++){
         deleteObject((*it));
+        (*it) = NULL;
     }
     gameObjectList.empty();
     delete animLib;
@@ -79,14 +82,12 @@ void Game::init(){
     gameObjectList.reserve(1000);
     animLib = new AnimationLibrary();
     player = new Player(200, 300, animLib);
-    Explosion* ex = new Explosion(Explosion::Types::MINI, animLib, 400, 300);
     gameObjectList.push_back(new Enemy(Enemy::Types::DRUNK, animLib, 100, 40));
     gameObjectList.push_back(new Enemy(Enemy::Types::EATER, animLib, 200, 40));
     gameObjectList.push_back(new Enemy(Enemy::Types::DRUNK, animLib, 100, 40));
     gameObjectList.push_back(new Enemy(Enemy::Types::EATER, animLib, 200, 40));
     gameObjectList.push_back(new Enemy(Enemy::Types::DRUNK, animLib, 100, 40));
     gameObjectList.push_back(new Enemy(Enemy::Types::EATER, animLib, 200, 40));
-    gameObjectList.push_back(ex);
     gameObjectList.push_back(player);
 
     for(vector <GameObject*>::iterator it = gameObjectList.begin();
@@ -94,6 +95,8 @@ void Game::init(){
         it++){
         (*it)->init();
     }
+    sort(gameObjectList.begin(), gameObjectList.end());
+
     SDL_WM_SetCaption("Spaaace Fight!", NULL);
 }
 
@@ -157,17 +160,30 @@ void Game::gameLoop(){
         Collision::runCollisionCheck(gameObjectList);
 
         // Remove dying objects.
-
-        for(vector <GameObject*>::iterator iter = gameObjectList.begin();
-            iter != gameObjectList.end();
-            iter++){
-            if((*iter)->killMe()){
-                GameObject* g = (*iter);
-                iter = gameObjectList.erase(iter);
-                deleteObject(g);
-                break;
+        int numDying = 0;
+        for(auto it = gameObjectList.begin();
+            it != gameObjectList.end();
+            it++){
+            if((*it)->killMe()){
+                numDying++;
             }
         }
+        // Clean up vector of dying objects
+        while(numDying > 0){
+            for(vector <GameObject*>::iterator iter = gameObjectList.begin();
+                iter != gameObjectList.end();
+                iter++){
+                if((*iter)->killMe()){
+                    deleteObject((*iter));
+                    (*iter) = NULL;
+                    iter = gameObjectList.erase(iter);
+                    numDying--;
+                    break;
+                }
+            }
+        }
+        sort(gameObjectList.begin(), gameObjectList.end());
+
         SDL_Delay(static_cast<int>(1000/FRAMERATE));
         if(SDL_Flip(screen) == -1){
             throw(SDL_SCREEN_ERROR);

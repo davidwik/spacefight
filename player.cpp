@@ -7,6 +7,7 @@ Player::Player(int x,
                AnimationLibrary* a) : GameObject(x, y, a){
     position.x = x;
     position.y = y;
+    zIndex = 0;
     animLib = a;
     objType = "player";
     printf("ObjectId: %d\n", id);

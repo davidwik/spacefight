@@ -41,15 +41,14 @@ void Explosion::draw(SDL_Surface* surface){
 }
 
 void Explosion::setSticky(GameObject *go){
-    sticky = go;
+
 }
 
 void Explosion::update(vector <GameObject*> &refObjects){
-    posUpdate();
+
 }
 
 void Explosion::init(){
-
     if(t == (int) Explosion::Types::MINI){
         if(!animLib->has("mini-explosion-0")){
             Animation* a = new Animation(20, true);
@@ -89,5 +88,6 @@ void Explosion::init(){
 }
 
 Explosion::~Explosion(){
-//    printf("Fire terminated!\n");
+    sticky = NULL;
+    animLib = NULL;
 }

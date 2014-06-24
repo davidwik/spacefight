@@ -71,7 +71,7 @@ void Fire::startExplosion(GameObject* go, vector <GameObject*> &refObjects){
     );
 
     e->init();
-    //e->setSticky(go);
+    e->setSticky(go);
     terminate();
     refObjects.push_back(e);
 }

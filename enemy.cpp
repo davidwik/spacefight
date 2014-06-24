@@ -16,6 +16,7 @@ Enemy::Enemy(Enemy::Types type,
         t = (int) type;
         dx = (rand()%20)+3;
         dy = 0;
+        zIndex = 0;
         printf("EnemyType: %d\n", t);
         printf("ObjectId: %d\n", id);
 
@@ -73,7 +74,7 @@ void Enemy::handleCollision(vector <GameObject*> gameObjectList, vector <GameObj
             if(health <= 0){
                 terminate();
             }
-            printf("hp: %d\n", health);
+
         }
     }
 }
