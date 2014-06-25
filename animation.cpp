@@ -22,7 +22,7 @@ Animation::~Animation() {
         SDL_FreeSurface(*frameIterator);
         i++;
     }
-    printf("Freed: %d images in animation..\n", i);
+
 }
 
 
@@ -40,7 +40,7 @@ Animation* Animation::clone(void){
         SDL_Surface* tmp = NULL;
         tmp = copySurface(*it);
         newAnim->frames.push_back(tmp);
-        printf("Adding image\n");
+
     }
 
     // Also copy the frame timing vector
@@ -49,7 +49,7 @@ Animation* Animation::clone(void){
         it++){
         newAnim->frame_multiplier.push_back(*it);
     }
-    printf("vSize: %lu\n", newAnim->frames.size());
+
     return newAnim;
 }
 
@@ -143,7 +143,6 @@ SDL_Surface* Animation::getFrame(){
 void Animation::addFrame(string imageFile, float multiplier){
     frames.push_back(loadImage(imageFile, trans));
     frame_multiplier.push_back(multiplier);
-    printf("%s loaded!\n", imageFile.c_str());
 }
 
 bool Animation::isFlippedV(){

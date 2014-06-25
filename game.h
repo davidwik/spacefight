@@ -26,7 +26,7 @@ private:
     int score = 0;
     void handleError(int e);
     Uint32 TimeLeft();
-    bool initialized;
+    bool initialized = false;
     int level = 1;
     Uint32 gameQuitsIn = 0;
 
