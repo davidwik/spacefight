@@ -42,6 +42,7 @@ void Game::runState(Game::States t){
 
     default:
         runLevel();
+        break;
 
     }
 }
@@ -73,8 +74,9 @@ Game::~Game(){
         deleteObject((*it));
         (*it) = NULL;
     }
+    delete animLib;
+    TTF_CloseFont(font);
     gameObjectList.empty();
-    SDL_FreeSurface(screen); // Should maybe be removed?
     gameObjectList.clear();
     printf("Qutting SDL\n");
     SDL_Quit();
@@ -370,9 +372,10 @@ void Game::gameLoop(){
         }
         scoreString = "Level: " + numberToString(level) + " Score: " + numberToString(score);
 
-        scoreBoard = TTF_RenderText_Solid(font, scoreString.c_str(), textColor);
 
+        scoreBoard = TTF_RenderText_Solid(font, scoreString.c_str(), textColor);
         applySurface(screen->w-scoreBoard->w - 30, 10, scoreBoard, screen);
+        SDL_FreeSurface(scoreBoard);
 
         sort(gameObjectList.begin(), gameObjectList.end());
 
@@ -387,10 +390,10 @@ void Game::gameLoop(){
         runState(state);
     }
     else {
-        cleanResources();
         if(state == Game::States::MENU){
             player = NULL;
         }
+        cleanResources();
         runState(state);
     }
 
