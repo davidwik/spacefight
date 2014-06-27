@@ -13,9 +13,9 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
-
 #include "explosion.h"
 #include "sound.h"
+#include "soundlibrary.h"
 
 void Game::run(){
     try {
@@ -76,12 +76,11 @@ Game::~Game(){
         (*it) = NULL;
     }
     delete animLib;
+    //delete soundLib;
     TTF_CloseFont(font);
     gameObjectList.empty();
     gameObjectList.clear();
     printf("Qutting SDL\n");
-    Mix_Quit();
-    SDL_CloseAudio();
     SDL_Quit();
     printf("Returning to main!\n");
 }
@@ -91,11 +90,11 @@ void Game::cleanResources(){
         it != gameObjectList.end();
         it++){
         deleteObject((*it));
-        (*it) = NULL;
     }
-    gameObjectList.empty();
     SDL_FreeSurface(background);
-    SDL_FreeSurface(scoreBoard);
+    /*if(scoreBoard != NULL){
+        SDL_FreeSurface(scoreBoard);
+        }*/
     gameObjectList.clear();
 }
 
@@ -105,17 +104,7 @@ void Game::init(){
         throw SDL_INIT_ERROR;
     }
 
-    int flags = MIX_INIT_OGG;
-    Mix_Init(flags);
-    int audio_rate = 22050;
-    Uint16 audio_format = AUDIO_S16; /* 16-bit stereo */
-    int audio_channels = 2;
-    int audio_buffers = 4096;
 
-    if(Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers)) {
-        printf("Unable to open audio!\n");
-        exit(1);
-    }
 
     screen = SDL_SetVideoMode(SCREEN_WIDTH,
                               SCREEN_HEIGHT,
@@ -124,6 +113,7 @@ void Game::init(){
     if(screen == NULL){
         throw SDL_SCREEN_ERROR;
     }
+
 
     // Init font
     if(TTF_Init() == -1){
@@ -139,7 +129,14 @@ void Game::init(){
     SDL_WM_SetCaption("Spaaace Fight!", NULL);
     initialized = true;
     animLib = new AnimationLibrary();
-
+    soundLib = new SoundLibrary();
+    try {
+        soundLib->add("menu-music", new Sound("res/audio/menu.ogg", Sound::Types::MUSIC, 40));
+    }
+    catch(int e){
+        printf("Error loading music...\n");
+        exit(1);
+    }
 }
 
 
@@ -147,8 +144,7 @@ void Game::initLevel(){
     gameObjectList.reserve(1000);
 
     if(player == NULL){
-        player = new Player(400, 300, animLib);
-        gameObjectList.push_back(player);
+        gameObjectList.push_back(new Player(400, 300, animLib));
     }
     // Add all start objects
 
@@ -177,7 +173,7 @@ void Game::runLevel(){
 }
 
 void Game::runMenu(){
-
+    soundLib->play("menu-music", 0);
 
     score = 0;
     level = 1;
@@ -198,22 +194,6 @@ void Game::runMenu(){
     Game::States state = Game::States::MENU;
 
     bool quit = false;
-    /**
-       TESTING SOUND
-     */
-    Sound* sound = NULL;
-    try {
-        sound = new Sound("res/audio/fire.ogg", Sound::Types::EFFECT, 65);
-        sound->play();
-    }
-    catch(int e){
-        printf("FAILED TO LOAD FILE...\n");
-        quit = true;
-        state = Game::States::QUIT;
-    }
-
-
-
 
     while(quit == false){
         while(r.y < 580){
@@ -269,11 +249,10 @@ void Game::runMenu(){
 
         SDL_Delay(static_cast<int>(1000/FRAMERATE));
     }
+    soundLib->stopMusic();
 
     SDL_FreeSurface(jumpBar);
     SDL_FreeSurface(bottomBar);
-
-    delete sound;
 
     if(state == Game::States::LEVEL){
         runState(state);
@@ -385,7 +364,6 @@ void Game::gameLoop(){
 
 
         if(!playerIsAlive){
-            player = NULL;
             if(gameQuitsIn == 0){
                 gameQuitsIn = SDL_GetTicks() + 2000;
             }
@@ -399,7 +377,6 @@ void Game::gameLoop(){
                 iter++){
                 if((*iter)->killMe()){
                     deleteObject((*iter));
-                    (*iter) = NULL;
                     iter = gameObjectList.erase(iter);
                     numDying--;
                     break;
@@ -426,14 +403,9 @@ void Game::gameLoop(){
         runState(state);
     }
     else {
-        if(state == Game::States::MENU){
-            player = NULL;
-        }
         cleanResources();
         runState(state);
     }
-
-
 }
 
 Uint32 TimeLeft(){

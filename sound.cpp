@@ -49,14 +49,31 @@ Sound::~Sound(){
     effect = NULL;
 }
 
-void Sound::play(){
+void Sound::play(int fade){
     if(!loaded){
         printf("Sound not loaded!");
     }
     else {
         if((Sound::Types) type == Sound::Types::EFFECT){
-            int ch = Mix_PlayChannel(-1, effect, 10);
+            int ch = Mix_PlayChannel(-1, effect, 1);
+            if(ch == -1){
+                throw AUDIO_PLAYBACK_ERROR;
+            }
             Mix_Volume(ch, 30);
+        }
+        else if((Sound::Types) type == Sound::Types::MUSIC){
+            int res = 0;
+            if(fade > 0){
+                res = Mix_FadeInMusic(music, -1, fade);
+            }
+            else {
+                res = Mix_PlayMusic(music, -1);
+            }
+
+            if(res == -1){
+                printf("Failed to open playback..\n");
+                throw AUDIO_PLAYBACK_ERROR;
+            }
         }
     }
 }

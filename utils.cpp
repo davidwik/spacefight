@@ -4,7 +4,6 @@
 #include <cstdlib>
 #include <string>
 
-
 SDL_Surface* loadImage(std::string filename, bool useAlpha){
     SDL_Surface* loadedImage = NULL;
     SDL_Surface* optimizedImage = NULL;

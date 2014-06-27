@@ -6,17 +6,17 @@ LDFLAGS=-lSDL -lSDL_image -lSDL_ttf -lSDL_mixer
 TARGET=spacefight
 TESTAPP=testapp
 
-main: main.o game.o gameobject.o player.o utils.o animation.o animationlibrary.o enemy.o collision.o fire.o explosion.o sound.o
-	 $(CC) game.o main.o gameobject.o player.o utils.o animation.o animationlibrary.o explosion.o enemy.o collision.o fire.o sound.o -o $(TARGET) $(LDFLAGS)
+main: main.o game.o gameobject.o player.o utils.o animation.o \
+animationlibrary.o enemy.o collision.o fire.o explosion.o sound.o soundlibrary.o
+	$(CC) game.o main.o gameobject.o player.o utils.o animation.o \
+animationlibrary.o explosion.o enemy.o collision.o fire.o sound.o \
+soundlibrary.o -o $(TARGET) $(LDFLAGS)
 
 main.o:
 	$(CC) $(CFLAGS) main.cpp
 
 enemy.o:
 	$(CC) $(CFLAGS) enemy.cpp
-
-sound.o:
-	$(CC) $(CFLAGS) sound.cpp
 
 utils.o:
 	$(CC) $(CFLAGS) utils.cpp
@@ -26,6 +26,9 @@ game.o:
 
 gameobject.o:
 	$(CC) $(CFLAGS) gameobject.cpp
+
+fire.o:
+	$(CC) $(CFLAGS) fire.cpp
 
 explosion.o:
 	$(CC) $(CFLAGS) explosion.cpp
@@ -45,8 +48,11 @@ animation.o:
 animationlibrary.o:
 	$(CC) $(CFLAGS) animationlibrary.cpp
 
-fire.o:
-	$(CC) $(CFLAGS) fire.cpp
+sound.o:
+	$(CC) $(CFLAGS) sound.cpp
+
+soundlibrary.o:
+	$(CC) $(CFLAGS) soundlibrary.cpp
 
 clean:
 	rm -f spacefight *.o

@@ -7,6 +7,7 @@
 #include "enemy.h"
 #include "gameobject.h"
 #include "animationlibrary.h"
+#include "soundlibrary.h"
 #include <vector>
 
 class Game {
@@ -20,6 +21,8 @@ private:
     void init();
     Player* player = NULL;
     AnimationLibrary* animLib = NULL;
+    SoundLibrary* soundLib = NULL;
+
     void cleanResources();
     void setBackground(std::string s);
     void gameLoop();

@@ -14,15 +14,11 @@ Animation::Animation(int framesPerSecond, bool transparent, unsigned int reserve
 }
 
 Animation::~Animation() {
-    int i = 0;
-
     for( frameIterator = frames.begin();
          frameIterator != frames.end();
          frameIterator++){
         SDL_FreeSurface(*frameIterator);
-        i++;
     }
-
 }
 
 

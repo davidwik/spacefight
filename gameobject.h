@@ -1,7 +1,6 @@
 #ifndef __GAMEOBJECT_H__
 #define __GAMEOBJECT_H__
 #define BORDER_WIDTH 1
-
 #include <SDL/SDL.h>
 #include <string>
 #include <vector>
@@ -9,6 +8,8 @@
 #include "utils.h"
 #include "errorcodes.h"
 #include "animationlibrary.h"
+#include "soundlibrary.h"
+
 using namespace std;
 class GameObject {
 
@@ -28,7 +29,7 @@ protected:
     int zIndex = 0;
     SDL_Rect rect;
     AnimationLibrary* animLib = NULL;
-
+    SoundLibrary* soundLib = NULL;
 
 public:
     static int counter;
@@ -50,6 +51,8 @@ public:
     int getZIndex(){
         return zIndex;
     }
+    void setSoundLibrary(SoundLibrary* snd);
+
     void setX(int x){position.x = x;}
     void setY(int y){position.y = y;}
     void terminate(){ termination = true;}

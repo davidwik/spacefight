@@ -12,7 +12,7 @@
 #define UNKNOWN_ERROR 99
 #define SDL_FILE_LOAD_ERROR 103
 // Exceptions
-#define ANIMATION_EXCEPTION 101
-
+#define MISSING_INDEX 166
+#define AUDIO_PLAYBACK_ERROR 199
 
 #endif /* __ERRORCODES_H__ */

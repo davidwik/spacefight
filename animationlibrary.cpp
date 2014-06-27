@@ -34,7 +34,7 @@ bool AnimationLibrary::has(string key){
 
 Animation* AnimationLibrary::get(string key){
     if(!has(key)){
-        throw ANIMATION_EXCEPTION;
+        throw MISSING_INDEX;
     }
     return library[key];
 }
@@ -52,5 +52,7 @@ void AnimationLibrary::remove(string key){
 void AnimationLibrary::add(string key, Animation* animation){
     // First do a lookup on the map and see
     // whether it's already set.
-    library[key] = animation;
+    if(!has(key)){
+        library[key] = animation;
+    }
 }
