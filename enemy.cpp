@@ -130,6 +130,10 @@ void Enemy::fire(vector <GameObject*> &refObjects){
                            startX,
                            startY,
                            id);
+        if(soundLib != NULL){
+            f->setSoundLibrary(soundLib);
+        }
+
         f->init();
         refObjects.insert(refObjects.begin(), f);
         lastFired = SDL_GetTicks();

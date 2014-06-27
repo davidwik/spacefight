@@ -95,6 +95,18 @@ void Fire::init(){
             animLib->add(an, b);
 
     }
+
+    if(soundLib != NULL){
+        if(soundLib->has("fire")){
+            soundLib->add("fire", new Sound("res/audio/fire.ogg", Sound::Types::EFFECT,60));
+        }
+        try {
+            soundLib->play("fire", 0);
+        } catch(int e){
+            printf("NO SOUND..");
+        }
+    }
+
     setDamage(10);
 }
 

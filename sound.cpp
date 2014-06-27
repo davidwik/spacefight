@@ -55,6 +55,9 @@ void Sound::play(int fade){
     }
     else {
         if((Sound::Types) type == Sound::Types::EFFECT){
+            if(effect == NULL){
+                printf("SERIOUSLY?!\n\n");
+            }
             int ch = Mix_PlayChannel(-1, effect, 1);
             if(ch == -1){
                 throw AUDIO_PLAYBACK_ERROR;
