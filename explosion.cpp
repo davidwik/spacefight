@@ -52,12 +52,12 @@ void Explosion::init(){
     if(t == (int) Explosion::Types::MINI){
         if(!animLib->has("mini-explosion-0")){
             Animation* a = new Animation(20, true);
-            a->addFrame("gfx/explosion-mini01.png");
-            a->addFrame("gfx/explosion-mini02.png");
-            a->addFrame("gfx/explosion-mini03.png");
-            a->addFrame("gfx/explosion-mini04.png");
-            a->addFrame("gfx/explosion-mini05.png");
-            a->addFrame("gfx/explosion-mini06.png");
+            a->addFrame("res/gfx/sprites/explosion-mini01.png");
+            a->addFrame("res/gfx/sprites/explosion-mini02.png");
+            a->addFrame("res/gfx/sprites/explosion-mini03.png");
+            a->addFrame("res/gfx/sprites/explosion-mini04.png");
+            a->addFrame("res/gfx/sprites/explosion-mini05.png");
+            a->addFrame("res/gfx/sprites/explosion-mini06.png");
             animLib->add("mini-explosion-0", a);
 
             Animation* b = a->clone();
@@ -74,13 +74,13 @@ void Explosion::init(){
         }
         if(!animLib->has("big-explosion")){
             Animation* q = new Animation(20, true);
-            q->addFrame("gfx/explosion-big01.png");
-            q->addFrame("gfx/explosion-big02.png");
-            q->addFrame("gfx/explosion-big03.png");
-            q->addFrame("gfx/explosion-big04.png");
-            q->addFrame("gfx/explosion-big05.png");
-            q->addFrame("gfx/explosion-big06.png");
-            q->addFrame("gfx/explosion-big07.png");
+            q->addFrame("res/gfx/sprites/explosion-big01.png");
+            q->addFrame("res/gfx/sprites/explosion-big02.png");
+            q->addFrame("res/gfx/sprites/explosion-big03.png");
+            q->addFrame("res/gfx/sprites/explosion-big04.png");
+            q->addFrame("res/gfx/sprites/explosion-big05.png");
+            q->addFrame("res/gfx/sprites/explosion-big06.png");
+            q->addFrame("res/gfx/sprites/explosion-big07.png");
             animLib->add("big-explosion", q);
         }
 

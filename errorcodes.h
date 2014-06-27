@@ -10,7 +10,7 @@
 #define SDL_FONT_ERROR 29
 #define SDL_IMAGE_LOAD_ERROR 30
 #define UNKNOWN_ERROR 99
-
+#define SDL_FILE_LOAD_ERROR 103
 // Exceptions
 #define ANIMATION_EXCEPTION 101
 

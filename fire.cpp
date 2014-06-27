@@ -85,8 +85,8 @@ void Fire::init(){
     if(!animLib->has(an)){
 
             Animation *anim = new Animation(3, true);
-            anim->addFrame("gfx/bullet01.png");
-            anim->addFrame("gfx/bullet02.png");
+            anim->addFrame("res/gfx/sprites/bullet01.png");
+            anim->addFrame("res/gfx/sprites/bullet02.png");
             animLib->add(an, anim);
 
             Animation *b = anim->clone();

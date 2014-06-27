@@ -17,33 +17,33 @@ Player::Player(int x,
 void Player::init(){
     if(!animLib->has("player-wait")){
         Animation* waitAnim = new Animation(4, true);
-        waitAnim->addFrame("gfx/shipanim/ship-still01.png");
-        waitAnim->addFrame("gfx/shipanim/ship-still02.png");
+        waitAnim->addFrame("res/gfx/sprites/ship-still01.png");
+        waitAnim->addFrame("res/gfx/sprites/ship-still02.png");
         animLib->add("player-wait", waitAnim);
 
     }
     if(!animLib->has("player-thrust")){
         Animation* thrustAnim = new Animation(6, true);
-        thrustAnim->addFrame("gfx/shipanim/ship-thrust01.png");
-        thrustAnim->addFrame("gfx/shipanim/ship-thrust02.png");
-        thrustAnim->addFrame("gfx/shipanim/ship-thrust03.png");
-        thrustAnim->addFrame("gfx/shipanim/ship-thrust04.png");
+        thrustAnim->addFrame("res/gfx/sprites/ship-thrust01.png");
+        thrustAnim->addFrame("res/gfx/sprites/ship-thrust02.png");
+        thrustAnim->addFrame("res/gfx/sprites/ship-thrust03.png");
+        thrustAnim->addFrame("res/gfx/sprites/ship-thrust04.png");
         animLib->add("player-thrust", thrustAnim);
     }
 
     if(!animLib->has("heart-anim")){
         Animation* heartAnim = new Animation(10, true);
-        heartAnim->addFrame("gfx/shipanim/heart01.png");
-        heartAnim->addFrame("gfx/shipanim/heart02.png");
-        heartAnim->addFrame("gfx/shipanim/heart03.png");
-        heartAnim->addFrame("gfx/shipanim/heart04.png");
-        heartAnim->addFrame("gfx/shipanim/heart05.png");
+        heartAnim->addFrame("res/gfx/sprites/heart01.png");
+        heartAnim->addFrame("res/gfx/sprites/heart02.png");
+        heartAnim->addFrame("res/gfx/sprites/heart03.png");
+        heartAnim->addFrame("res/gfx/sprites/heart04.png");
+        heartAnim->addFrame("res/gfx/sprites/heart05.png");
         animLib->add("heart-anim", heartAnim);
     }
 
     if(!animLib->has("gameover")){
         Animation* gameOver = new Animation(1, true);
-        gameOver->addFrame("gfx/gameover.png");
+        gameOver->addFrame("res/gfx/static/gameover.png");
         animLib->add("game-over", gameOver);
     }
 

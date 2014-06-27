@@ -2,18 +2,21 @@ all: main
 
 CC=g++
 CFLAGS=-c -Wall -g -std=c++11
-LDFLAGS=-lSDL -lSDL_image -lSDL_ttf
+LDFLAGS=-lSDL -lSDL_image -lSDL_ttf -lSDL_mixer
 TARGET=spacefight
 TESTAPP=testapp
 
-main: clean main.o game.o gameobject.o player.o utils.o animation.o animationlibrary.o enemy.o collision.o fire.o explosion.o
-	 $(CC) game.o main.o gameobject.o player.o utils.o animation.o animationlibrary.o explosion.o enemy.o collision.o fire.o -o $(TARGET) $(LDFLAGS)
+main: main.o game.o gameobject.o player.o utils.o animation.o animationlibrary.o enemy.o collision.o fire.o explosion.o sound.o
+	 $(CC) game.o main.o gameobject.o player.o utils.o animation.o animationlibrary.o explosion.o enemy.o collision.o fire.o sound.o -o $(TARGET) $(LDFLAGS)
 
 main.o:
 	$(CC) $(CFLAGS) main.cpp
 
 enemy.o:
 	$(CC) $(CFLAGS) enemy.cpp
+
+sound.o:
+	$(CC) $(CFLAGS) sound.cpp
 
 utils.o:
 	$(CC) $(CFLAGS) utils.cpp
@@ -45,11 +48,8 @@ animationlibrary.o:
 fire.o:
 	$(CC) $(CFLAGS) fire.cpp
 
-testapp: clean utils.o animation.o animationlibrary.o testapp.o
-	$(CC) animationlibrary.o animation.o utils.o testapp.o -o $(TESTAPP) $(LDFLAGS)
-
 clean:
-	rm -f spacefight testapp *.o
+	rm -f spacefight *.o
 
 run:
-	./testapp
+	./spacefight

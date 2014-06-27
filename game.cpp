@@ -1,5 +1,6 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
+#include "SDL/SDL_mixer.h"
 #include <cstdlib>
 #include <cmath>
 #include "utils.h"
@@ -14,6 +15,7 @@
 #include <algorithm>
 
 #include "explosion.h"
+#include "sound.h"
 
 void Game::run(){
     try {
@@ -22,7 +24,6 @@ void Game::run(){
     } catch(int e){
         handleError(e);
     }
-
 }
 
 
@@ -79,6 +80,8 @@ Game::~Game(){
     gameObjectList.empty();
     gameObjectList.clear();
     printf("Qutting SDL\n");
+    Mix_Quit();
+    SDL_CloseAudio();
     SDL_Quit();
     printf("Returning to main!\n");
 }
@@ -102,6 +105,18 @@ void Game::init(){
         throw SDL_INIT_ERROR;
     }
 
+    int flags = MIX_INIT_OGG;
+    Mix_Init(flags);
+    int audio_rate = 22050;
+    Uint16 audio_format = AUDIO_S16; /* 16-bit stereo */
+    int audio_channels = 2;
+    int audio_buffers = 4096;
+
+    if(Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers)) {
+        printf("Unable to open audio!\n");
+        exit(1);
+    }
+
     screen = SDL_SetVideoMode(SCREEN_WIDTH,
                               SCREEN_HEIGHT,
                               SCREEN_BPP,
@@ -115,7 +130,7 @@ void Game::init(){
         throw SDL_FONT_ERROR;
     }
 
-    font = TTF_OpenFont("gfx/digifat.ttf", 20);
+    font = TTF_OpenFont("res/fonts/digifat.ttf", 20);
 
     if(font == NULL ){
         printf("Failed to open font");
@@ -157,17 +172,19 @@ void Game::initLevel(){
 
 void Game::runLevel(){
     initLevel();
-    setBackground("gfx/background2.jpg");
+    setBackground("res/gfx/static/background.jpg");
     gameLoop();
 }
 
 void Game::runMenu(){
+
+
     score = 0;
     level = 1;
     SDL_Surface* jumpBar = NULL;
     SDL_Surface* bottomBar = NULL;
-    jumpBar = loadImage("gfx/jumpbar.png", true);
-    bottomBar = loadImage("gfx/bottombar.png", false);
+    jumpBar = loadImage("res/gfx/static/jumpbar.png", true);
+    bottomBar = loadImage("res/gfx/static/bottombar.png", false);
 
     SDL_Rect r;
     r.w = screen->w;
@@ -181,6 +198,23 @@ void Game::runMenu(){
     Game::States state = Game::States::MENU;
 
     bool quit = false;
+    /**
+       TESTING SOUND
+     */
+    Sound* sound = NULL;
+    try {
+        sound = new Sound("res/audio/fire.ogg", Sound::Types::EFFECT, 65);
+        sound->play();
+    }
+    catch(int e){
+        printf("FAILED TO LOAD FILE...\n");
+        quit = true;
+        state = Game::States::QUIT;
+    }
+
+
+
+
     while(quit == false){
         while(r.y < 580){
             int red = rand()%255;
@@ -238,6 +272,8 @@ void Game::runMenu(){
 
     SDL_FreeSurface(jumpBar);
     SDL_FreeSurface(bottomBar);
+
+    delete sound;
 
     if(state == Game::States::LEVEL){
         runState(state);

@@ -141,33 +141,33 @@ void Enemy::init(){
     if(!animLib->has(animName)){
         if(t == (int) Enemy::Types::EATER){
             Animation* anim = new Animation(15, true);
-            anim->addFrame("gfx/enemies/ball01.png", 2);
-            anim->addFrame("gfx/enemies/ball02.png", 2);
-            anim->addFrame("gfx/enemies/ball01.png", 2);
-            anim->addFrame("gfx/enemies/ball02.png", 2);
-            anim->addFrame("gfx/enemies/ball01.png",2);
-            anim->addFrame("gfx/enemies/ball02.png", 2);
-            anim->addFrame("gfx/enemies/ball01.png", 2);
-            anim->addFrame("gfx/enemies/ball02.png");
-            anim->addFrame("gfx/enemies/ball03.png");
-            anim->addFrame("gfx/enemies/ball04.png");
-            anim->addFrame("gfx/enemies/ball05.png");
-            anim->addFrame("gfx/enemies/ball06.png");
-            anim->addFrame("gfx/enemies/ball07.png");
-            anim->addFrame("gfx/enemies/ball02.png");
+            anim->addFrame("res/gfx/sprites/ball01.png", 2);
+            anim->addFrame("res/gfx/sprites/ball02.png", 2);
+            anim->addFrame("res/gfx/sprites/ball01.png", 2);
+            anim->addFrame("res/gfx/sprites/ball02.png", 2);
+            anim->addFrame("res/gfx/sprites/ball01.png",2);
+            anim->addFrame("res/gfx/sprites/ball02.png", 2);
+            anim->addFrame("res/gfx/sprites/ball01.png", 2);
+            anim->addFrame("res/gfx/sprites/ball02.png");
+            anim->addFrame("res/gfx/sprites/ball03.png");
+            anim->addFrame("res/gfx/sprites/ball04.png");
+            anim->addFrame("res/gfx/sprites/ball05.png");
+            anim->addFrame("res/gfx/sprites/ball06.png");
+            anim->addFrame("res/gfx/sprites/ball07.png");
+            anim->addFrame("res/gfx/sprites/ball02.png");
             animLib->add(animName, anim);
         }
         else if(t == (int) Enemy::Types::DRUNK){
             Animation* anim = new Animation(10, true);
-            anim->addFrame("gfx/enemies/drunk01.png");
-            anim->addFrame("gfx/enemies/drunk02.png");
-            anim->addFrame("gfx/enemies/drunk03.png");
-            anim->addFrame("gfx/enemies/drunk04.png");
-            anim->addFrame("gfx/enemies/drunk05.png");
-            anim->addFrame("gfx/enemies/drunk06.png");
-            anim->addFrame("gfx/enemies/drunk07.png");
-            anim->addFrame("gfx/enemies/drunk08.png");
-            anim->addFrame("gfx/enemies/drunk09.png");
+            anim->addFrame("res/gfx/sprites/drunk01.png");
+            anim->addFrame("res/gfx/sprites/drunk02.png");
+            anim->addFrame("res/gfx/sprites/drunk03.png");
+            anim->addFrame("res/gfx/sprites/drunk04.png");
+            anim->addFrame("res/gfx/sprites/drunk05.png");
+            anim->addFrame("res/gfx/sprites/drunk06.png");
+            anim->addFrame("res/gfx/sprites/drunk07.png");
+            anim->addFrame("res/gfx/sprites/drunk08.png");
+            anim->addFrame("res/gfx/sprites/drunk09.png");
             animLib->add(animName, anim);
         }
     }
