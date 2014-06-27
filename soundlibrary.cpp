@@ -6,8 +6,12 @@ SoundLibrary::SoundLibrary(){
 
 
 SoundLibrary::~SoundLibrary(){
+    printf("Freeing all resources in the sound library..\n");
     purge();
-    Mix_Quit();
+    Mix_CloseAudio();
+    while(Mix_Init(0)){
+        Mix_Quit();
+    }
 }
 
 bool SoundLibrary::has(std::string key){
@@ -71,13 +75,14 @@ void SoundLibrary::purge(){
 void SoundLibrary::init(){
     int flags = MIX_INIT_OGG|MIX_INIT_MP3;
     Mix_Init(flags);
-    int audio_rate = 44100;
+    int audio_rate = 22050;
     Uint16 audio_format = AUDIO_S16; /* 16-bit stereo */
     int audio_channels = 2;
-    int audio_buffers = 4096;
+    int audio_buffers = 1024;
 
     if(Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers)) {
         printf("Unable to open audio!\n");
         exit(1);
     }
+    Mix_AllocateChannels(16);
 }

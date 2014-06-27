@@ -90,6 +90,7 @@ void Game::cleanResources(){
         it++){
         deleteObject((*it));
     }
+    player = NULL; // Risky??
     SDL_FreeSurface(background);
     gameObjectList.clear();
 }
@@ -140,7 +141,8 @@ void Game::initLevel(){
     gameObjectList.reserve(1000);
 
     if(player == NULL){
-        gameObjectList.push_back(new Player(400, 300, animLib));
+        player = new Player(400, 300, animLib);
+        gameObjectList.push_back(player);
     }
     // Add all start objects
 
@@ -170,7 +172,7 @@ void Game::runLevel(){
 }
 
 void Game::runMenu(){
-    soundLib->play("menu-music", 1000);
+    soundLib->play("menu-music");
 
     score = 0;
     level = 1;

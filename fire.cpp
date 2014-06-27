@@ -69,6 +69,10 @@ void Fire::startExplosion(GameObject* go, vector <GameObject*> &refObjects){
         static_cast<int>(r.y+(r.h/2))
     );
 
+    if(soundLib != NULL){
+        e->setSoundLibrary(soundLib);
+    }
+
     e->init();
     e->setSticky(go);
     terminate();
@@ -97,7 +101,7 @@ void Fire::init(){
     }
 
     if(soundLib != NULL){
-        if(soundLib->has("fire")){
+        if(!soundLib->has("fire")){
             soundLib->add("fire", new Sound("res/audio/fire.ogg", Sound::Types::EFFECT,60));
         }
         try {

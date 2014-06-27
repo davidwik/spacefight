@@ -71,7 +71,28 @@ void Explosion::init(){
             Animation* d = b->clone();
             d->flipHorizontal();
             animLib->add("mini-explosion-3", d);
+
+
+
         }
+        if(soundLib != NULL){
+            if(!soundLib->has("hit")){
+                soundLib->add(
+                    "hit",
+                    new Sound(
+                        "res/audio/hit.ogg",
+                        Sound::Types::EFFECT,
+                        20
+                    )
+                );
+            }
+            try {
+                soundLib->play("hit", 0);
+            } catch(int e){
+                ;
+            }
+        }
+
         if(!animLib->has("big-explosion")){
             Animation* q = new Animation(20, true);
             q->addFrame("res/gfx/sprites/explosion-big01.png");
@@ -83,8 +104,27 @@ void Explosion::init(){
             q->addFrame("res/gfx/sprites/explosion-big07.png");
             animLib->add("big-explosion", q);
         }
-
     }
+    else if(t == (int) Explosion::Types::BIG){
+        if(soundLib != NULL){
+            if(!soundLib->has("ship-explosion")){
+                soundLib->add("ship-explosion",
+                              new Sound(
+                                  "res/audio/explosion.ogg",
+                                  Sound::Types::EFFECT,
+                                  20
+                              )
+                );
+            }
+
+            try {
+                soundLib->play("ship-explosion", 0);
+            } catch(int e){
+                ;
+            }
+        }
+    }
+
 }
 
 Explosion::~Explosion(){

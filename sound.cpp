@@ -16,6 +16,7 @@ bool Sound::loadFile(std::string file){
         break;
     case Sound::Types::EFFECT:
         effect = Mix_LoadWAV(file.c_str());
+        Mix_VolumeChunk(effect, v);
         if(effect == NULL){
             printf("SOUND FAILED...\n");
         }
@@ -29,24 +30,15 @@ bool Sound::loadFile(std::string file){
 
 
 Sound::~Sound(){
-    switch((Sound::Types) type){
-    case Sound::Types::MUSIC:
-        if(music != NULL){
-            Mix_FreeMusic(music);
-        }
-        break;
-
-    case Sound::Types::EFFECT:
-        if(effect != NULL){
-            Mix_FreeChunk(effect);
-        }
-        break;
-
-    default:
-        break;
+    if(music != NULL){
+        Mix_FreeMusic(music);
+        printf("Free'd Music\n");
     }
-    music = NULL;
-    effect = NULL;
+    if(effect != NULL){
+        Mix_FreeChunk(effect);
+        printf("Free'd effect\n");
+    }
+
 }
 
 void Sound::play(int fade){
@@ -55,14 +47,10 @@ void Sound::play(int fade){
     }
     else {
         if((Sound::Types) type == Sound::Types::EFFECT){
-            if(effect == NULL){
-                printf("SERIOUSLY?!\n\n");
-            }
-            int ch = Mix_PlayChannel(-1, effect, 1);
+            int ch = Mix_PlayChannel(-1, effect, 0);
             if(ch == -1){
                 throw AUDIO_PLAYBACK_ERROR;
             }
-            Mix_Volume(ch, v);
         }
         else if((Sound::Types) type == Sound::Types::MUSIC){
             int res = 0;

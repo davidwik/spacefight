@@ -79,8 +79,19 @@ void Enemy::handleCollision(vector <GameObject*> gameObjectList, vector <GameObj
                     getX() + (int) (r.w/2),
                     getY() + (int) (r.h/2)
                 );
+                if(soundLib != NULL){
+                    ex->setSoundLibrary(soundLib);
+                    try {
+                        soundLib->play("point", 0);
+                    } catch(int e){
+                        ;
+                    }
+                }
+                ex->init();
                 refObjects.push_back(ex);
+
                 ex = NULL;
+
                 terminate();
             }
 
@@ -175,6 +186,21 @@ void Enemy::init(){
             animLib->add(animName, anim);
         }
     }
+
+    if(soundLib != NULL){
+        if(!soundLib->has("point")){
+            soundLib->add(
+                "point",
+                new Sound(
+                    "res/audio/point.ogg",
+                    Sound::Types::EFFECT,
+                    50
+                )
+            );
+        }
+
+    }
+
 
     switch((Enemy::Types) t){
     case Enemy::Types::DRUNK:
