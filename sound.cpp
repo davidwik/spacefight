@@ -59,7 +59,7 @@ void Sound::play(int fade){
             if(ch == -1){
                 throw AUDIO_PLAYBACK_ERROR;
             }
-            Mix_Volume(ch, 30);
+            Mix_Volume(ch, v);
         }
         else if((Sound::Types) type == Sound::Types::MUSIC){
             int res = 0;
@@ -69,11 +69,11 @@ void Sound::play(int fade){
             else {
                 res = Mix_PlayMusic(music, -1);
             }
-
             if(res == -1){
                 printf("Failed to open playback..\n");
                 throw AUDIO_PLAYBACK_ERROR;
             }
+            Mix_VolumeMusic(v);
         }
     }
 }

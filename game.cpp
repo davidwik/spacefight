@@ -73,10 +73,9 @@ Game::~Game(){
         it != gameObjectList.end();
         it++){
         deleteObject((*it));
-        (*it) = NULL;
     }
     delete animLib;
-    //delete soundLib;
+    delete soundLib;
     TTF_CloseFont(font);
     gameObjectList.empty();
     gameObjectList.clear();
@@ -92,9 +91,6 @@ void Game::cleanResources(){
         deleteObject((*it));
     }
     SDL_FreeSurface(background);
-    /*if(scoreBoard != NULL){
-        SDL_FreeSurface(scoreBoard);
-        }*/
     gameObjectList.clear();
 }
 
@@ -131,7 +127,7 @@ void Game::init(){
     animLib = new AnimationLibrary();
     soundLib = new SoundLibrary();
     try {
-        soundLib->add("menu-music", new Sound("res/audio/menu.ogg", Sound::Types::MUSIC, 40));
+        soundLib->add("menu-music", new Sound("res/audio/menu.ogg", Sound::Types::MUSIC, 10));
     }
     catch(int e){
         printf("Error loading music...\n");
@@ -162,6 +158,7 @@ void Game::initLevel(){
     for(vector <GameObject*>::iterator it = gameObjectList.begin();
         it != gameObjectList.end();
         it++){
+        (*it)->setSoundLibrary(soundLib);
         (*it)->init();
     }
 }
@@ -173,7 +170,7 @@ void Game::runLevel(){
 }
 
 void Game::runMenu(){
-    soundLib->play("menu-music", 0);
+    soundLib->play("menu-music", 1000);
 
     score = 0;
     level = 1;

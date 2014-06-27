@@ -6,9 +6,8 @@ SoundLibrary::SoundLibrary(){
 
 
 SoundLibrary::~SoundLibrary(){
-    printf("Freeing SoundLibrary");
-    Mix_Quit();
     purge();
+    Mix_Quit();
 }
 
 bool SoundLibrary::has(std::string key){
@@ -65,7 +64,6 @@ void SoundLibrary::purge(){
         it != library.end();
         it++){
         delete (it->second);
-
     }
     library.clear();
 }
