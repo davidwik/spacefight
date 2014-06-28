@@ -1,6 +1,7 @@
 #include "player.h"
 #include "utils.h"
 #include "animation.h"
+#define MOVESPEED 7
 
 Player::Player(int x,
                int y,
@@ -211,17 +212,17 @@ void Player::handleCollision(vector <GameObject*> gameObjectList, vector <GameOb
 
 
 void Player::moveLeft(){
-    setX(getX()-10);
+    setX(getX()-MOVESPEED);
 }
 
 void Player::moveRight(){
-    setX(getX()+10);
+    setX(getX()+MOVESPEED);
 }
 
 void Player::moveUp(){
-    setY(getY()-10);
+    setY(getY()-MOVESPEED);
 }
 
 void Player::moveDown(){
-    setY(getY()+10);
+    setY(getY()+MOVESPEED);
 }

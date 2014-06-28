@@ -5,7 +5,10 @@
  *  if something goes wrong.
  *
  */
+#define DIRECTORY_ERROR 7
+
 #define SDL_INIT_ERROR 10
+
 #define SDL_SCREEN_ERROR 20
 #define SDL_FONT_ERROR 29
 #define SDL_IMAGE_LOAD_ERROR 30

@@ -1,8 +1,21 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include "utils.h"
+#include "errorcodes.h"
 #include <cstdlib>
 #include <string>
+
+
+std::string getDirectory(){
+    char cCurrentPath[FILENAME_MAX];
+    if(!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath))){
+        throw DIRECTORY_ERROR;
+    }
+    cCurrentPath[sizeof(cCurrentPath) - 1] = 0;
+    std::string path(cCurrentPath);
+    return path;
+}
+
 
 SDL_Surface* loadImage(std::string filename, bool useAlpha){
     SDL_Surface* loadedImage = NULL;

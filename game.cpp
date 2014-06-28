@@ -127,7 +127,21 @@ void Game::init(){
     animLib = new AnimationLibrary();
     soundLib = new SoundLibrary();
     try {
-        soundLib->add("menu-music", new Sound("res/audio/menu.ogg", Sound::Types::MUSIC, 4));
+        soundLib->add(
+            "menu-music",
+            new Sound(
+                "res/audio/menu.ogg",
+                Sound::Types::MUSIC,
+                4
+            )
+        );
+        soundLib->add(
+            "game-music",
+            new Sound(
+                "res/audio/game.ogg",
+                Sound::Types::MUSIC, 20
+            )
+        );
     }
     catch(int e){
         printf("Error loading music...\n");
@@ -167,6 +181,9 @@ void Game::initLevel(){
 }
 
 void Game::runLevel(){
+    if(!soundLib->isPlayingMusic()){
+        soundLib->play("game-music", 1000);
+    }
     initLevel();
     setBackground("res/gfx/static/background.jpg");
     gameLoop();
@@ -408,6 +425,7 @@ void Game::gameLoop(){
         runState(state);
     }
     else {
+        soundLib->stopMusic();
         cleanResources();
         runState(state);
     }

@@ -5,6 +5,19 @@
 #include <cmath>
 #include "constants.h"
 
+#include <cstdio>  /* defines FILENAME_MAX */
+#ifdef WINDOWS
+   #include <direct.h>
+   #define GetCurrentDir _getcwd
+#else
+   #include <unistd.h>
+   #define GetCurrentDir getcwd
+#endif
+
+
+
+
+
 const int FLIP_VERTICAL = 1;
 const int FLIP_HORIZONTAL = 2;
 
@@ -21,6 +34,8 @@ SDL_Surface* copySurface(SDL_Surface* image);
 Uint32 getPixel32(SDL_Surface* surface, int x, int y);
 void putPixel32(SDL_Surface* surface, int x, int y, Uint32 pixel);
 std::string numberToString(int num);
+
+std::string getDirectory();
 
 void drawRect(SDL_Surface* surface, SDL_Rect rect, Uint32 color);
 void drawLine(SDL_Surface*, int x1, int x2, int y1, int y2, Uint32 color);

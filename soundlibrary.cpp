@@ -56,6 +56,10 @@ void SoundLibrary::resumeMusic(){
     }
 }
 
+bool SoundLibrary::isPlayingMusic(){
+    return (Mix_PlayingMusic() == 0) ? false : true;
+}
+
 void SoundLibrary::stopMusic(){
     if(Mix_PausedMusic() || Mix_PlayingMusic()){
         Mix_HaltMusic();

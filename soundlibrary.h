@@ -21,6 +21,7 @@ public:
 
     // Controlling the background music.
     void stopMusic();
+    bool isPlayingMusic();
     void pauseMusic();
     void setMusicVolume(int vol){
 
