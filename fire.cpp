@@ -102,7 +102,7 @@ void Fire::init(){
 
     if(soundLib != NULL){
         if(!soundLib->has("fire")){
-            soundLib->add("fire", new Sound("res/audio/fire.ogg", Sound::Types::EFFECT,60));
+            soundLib->add("fire", new Sound("res/audio/fire.ogg", Sound::Types::EFFECT, 10));
         }
         try {
             soundLib->play("fire", 0);

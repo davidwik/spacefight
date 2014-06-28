@@ -22,8 +22,10 @@ public:
     // Controlling the background music.
     void stopMusic();
     void pauseMusic();
-    void resumeMusic();
+    void setMusicVolume(int vol){
 
+    }
+    void resumeMusic();
     void stopAll();
     void muteAll();
     void unMuteAll();

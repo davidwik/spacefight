@@ -127,7 +127,7 @@ void Game::init(){
     animLib = new AnimationLibrary();
     soundLib = new SoundLibrary();
     try {
-        soundLib->add("menu-music", new Sound("res/audio/menu.ogg", Sound::Types::MUSIC, 10));
+        soundLib->add("menu-music", new Sound("res/audio/menu.ogg", Sound::Types::MUSIC, 4));
     }
     catch(int e){
         printf("Error loading music...\n");
@@ -158,7 +158,7 @@ void Game::initLevel(){
     }
 
     // initialize
-    for(vector <GameObject*>::iterator it = gameObjectList.begin();
+    for(auto it = gameObjectList.begin();
         it != gameObjectList.end();
         it++){
         (*it)->setSoundLibrary(soundLib);

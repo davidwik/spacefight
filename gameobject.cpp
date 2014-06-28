@@ -29,14 +29,19 @@ int GameObject::getWidth(){
         m = (SDL_Surface*) animLib->get(animName)->getFrame();
     }
     catch(int e){
+        m = NULL;
+    }
+    if(m == NULL){
         return 0;
     }
-    return m->w;
+    else {
+        return m->w;
+    }
 }
 
 void GameObject::setSoundLibrary(SoundLibrary* snd){
     // Attach the soundlib if it's not already attached
-    if(soundLib != NULL){
+    if(soundLib == NULL){
         soundLib = snd;
     }
 }

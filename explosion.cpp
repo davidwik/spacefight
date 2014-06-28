@@ -82,7 +82,7 @@ void Explosion::init(){
                     new Sound(
                         "res/audio/hit.ogg",
                         Sound::Types::EFFECT,
-                        20
+                        4
                     )
                 );
             }
@@ -112,7 +112,7 @@ void Explosion::init(){
                               new Sound(
                                   "res/audio/explosion.ogg",
                                   Sound::Types::EFFECT,
-                                  20
+                                  10
                               )
                 );
             }

@@ -194,7 +194,7 @@ void Enemy::init(){
                 new Sound(
                     "res/audio/point.ogg",
                     Sound::Types::EFFECT,
-                    50
+                    15
                 )
             );
         }

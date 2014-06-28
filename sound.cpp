@@ -48,12 +48,14 @@ void Sound::play(int fade){
     else {
         if((Sound::Types) type == Sound::Types::EFFECT){
             int ch = Mix_PlayChannel(-1, effect, 0);
+
             if(ch == -1){
                 throw AUDIO_PLAYBACK_ERROR;
             }
         }
         else if((Sound::Types) type == Sound::Types::MUSIC){
             int res = 0;
+            Mix_VolumeMusic(v);
             if(fade > 0){
                 res = Mix_FadeInMusic(music, -1, fade);
             }
@@ -64,7 +66,8 @@ void Sound::play(int fade){
                 printf("Failed to open playback..\n");
                 throw AUDIO_PLAYBACK_ERROR;
             }
-            Mix_VolumeMusic(v);
+            printf("Playing Music with volume: %d\n", v);
+
         }
     }
 }

@@ -102,6 +102,7 @@ void Player::fire(vector <GameObject*> &refObjects){
                            startX,
                            startY,
                            id);
+
         if(soundLib != NULL){
             f->setSoundLibrary(soundLib);
         }
