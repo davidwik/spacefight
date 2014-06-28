@@ -17,6 +17,17 @@
 #include "sound.h"
 #include "soundlibrary.h"
 
+
+Game::Game(){
+    std::string c = getFileContents("dog");
+    if( c == ""){
+        highscore = 0;
+    }
+    else {
+        highscore = std::stoi(c);
+    }
+}
+
 void Game::run(){
     try {
         init();
@@ -77,6 +88,10 @@ Game::~Game(){
     delete animLib;
     delete soundLib;
     TTF_CloseFont(font);
+    std::string s;
+    s = numberToString(highscore);
+    writeToFile(s, "dog");
+
     gameObjectList.empty();
     gameObjectList.clear();
     printf("Qutting SDL\n");
@@ -400,8 +415,12 @@ void Game::gameLoop(){
             }
         }
 
+        if(score > highscore){
+            highscore = score;
+        }
+
         scoreString = "Level: " + numberToString(level) + " Score: " + numberToString(score);
-        string highScoreString = "High score: 2000";
+        string highScoreString = "High score: " + numberToString(highscore);
         scoreBoard = TTF_RenderText_Solid(font, scoreString.c_str(), textColor);
         applySurface(screen->w-scoreBoard->w - 30, 10, scoreBoard, screen);
         SDL_FreeSurface(scoreBoard);

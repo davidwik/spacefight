@@ -27,6 +27,8 @@ private:
     void setBackground(std::string s);
     void gameLoop();
     int score = 0;
+    int highscore = 0;
+
     void handleError(int e);
     Uint32 TimeLeft();
     bool initialized = false;
@@ -34,8 +36,13 @@ private:
     Uint32 gameQuitsIn = 0;
 
 public:
-    enum class States { MENU, LEVEL, DEATH, WIN, QUIT };
+    enum class States{ MENU, LEVEL, DEATH, WIN, QUIT };
     ~Game();
+
+    Game();
+
+    void updateHighscore(int hs);
+    void getHighscore();
     void runState(Game::States t);
     void runMenu();
     void runLevel();

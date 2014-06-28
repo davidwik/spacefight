@@ -1,10 +1,4 @@
-#include "SDL/SDL.h"
-#include "SDL/SDL_image.h"
 #include "utils.h"
-#include "errorcodes.h"
-#include <cstdlib>
-#include <string>
-
 
 std::string getDirectory(){
     char cCurrentPath[FILENAME_MAX];
@@ -13,8 +7,39 @@ std::string getDirectory(){
     }
     cCurrentPath[sizeof(cCurrentPath) - 1] = 0;
     std::string path(cCurrentPath);
+    path += PATH_SEP;
     return path;
 }
+
+
+std::string getFileContents(std::string filename){
+    filename = getDirectory() + filename;
+    std::ifstream file(filename, ios::binary);
+    string returnData = "";
+    string line;
+    if(file.is_open()){
+        while(getline(file, line)){
+            returnData += line;
+        }
+        file.close();
+        return returnData;
+    }
+    else {
+        return "";
+    }
+}
+
+bool writeToFile(std::string data, std::string filename){
+    filename = getDirectory() + filename;
+    std::ofstream file(filename, ios::binary);
+    if(file.is_open()){
+        file << data;
+        file.close();
+        return true;
+    }
+    return false;
+}
+
 
 
 SDL_Surface* loadImage(std::string filename, bool useAlpha){
