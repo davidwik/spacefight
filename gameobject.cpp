@@ -3,8 +3,8 @@
 int GameObject::counter = 0;
 
 GameObject::~GameObject(){
-/*    animLib = NULL;
-      soundLib = NULL;*/
+/*    animLib = std::null_ptr;
+      soundLib = std::null_ptr;*/
 }
 
 GameObject::GameObject(int startPosX, int startPosY, AnimationLibrary* a){
@@ -35,7 +35,10 @@ int GameObject::getWidth(){
 }
 
 void GameObject::setSoundLibrary(SoundLibrary* snd){
-    soundLib = snd;
+    // Attach the soundlib if it's not already attached
+    if(soundLib != NULL){
+        soundLib = snd;
+    }
 }
 
 SDL_Rect GameObject::getRect(){

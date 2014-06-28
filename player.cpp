@@ -41,7 +41,7 @@ void Player::init(){
         animLib->add("heart-anim", heartAnim);
     }
 
-    if(!animLib->has("gameover")){
+    if(!animLib->has("game-over")){
         Animation* gameOver = new Animation(1, true);
         gameOver->addFrame("res/gfx/static/gameover.png");
         animLib->add("game-over", gameOver);

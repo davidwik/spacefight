@@ -91,7 +91,6 @@ void Game::cleanResources(){
         deleteObject((*it));
     }
     player = NULL; // Risky??
-    SDL_FreeSurface(background);
     gameObjectList.clear();
 }
 
@@ -139,6 +138,8 @@ void Game::init(){
 
 void Game::initLevel(){
     gameObjectList.reserve(1000);
+
+    // Re arrange here so Player init isn't called all the time..
 
     if(player == NULL){
         player = new Player(400, 300, animLib);
@@ -319,9 +320,8 @@ void Game::gameLoop(){
 
         }
 
-        vector <GameObject*>::iterator it;
         // Check update and draw!
-        for(vector <GameObject*>::iterator it = gameObjectList.begin();
+        for(auto it = gameObjectList.begin();
             it != gameObjectList.end();
             it++){
             (*it)->listen(event, gameObjectList);
@@ -382,11 +382,15 @@ void Game::gameLoop(){
                 }
             }
         }
+
         scoreString = "Level: " + numberToString(level) + " Score: " + numberToString(score);
-
-
+        string highScoreString = "High score: 2000";
         scoreBoard = TTF_RenderText_Solid(font, scoreString.c_str(), textColor);
         applySurface(screen->w-scoreBoard->w - 30, 10, scoreBoard, screen);
+        SDL_FreeSurface(scoreBoard);
+
+        scoreBoard = TTF_RenderText_Solid(font, highScoreString.c_str(), textColor);
+        applySurface(screen->w-scoreBoard->w -30, 40, scoreBoard, screen);
         SDL_FreeSurface(scoreBoard);
 
         sort(gameObjectList.begin(), gameObjectList.end());
@@ -396,6 +400,8 @@ void Game::gameLoop(){
             throw(SDL_SCREEN_ERROR);
         }
     }
+
+    SDL_FreeSurface(background);
 
     if(state == Game::States::LEVEL){
         level++;
