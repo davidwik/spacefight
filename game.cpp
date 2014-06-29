@@ -88,6 +88,7 @@ Game::~Game(){
     delete animLib;
     delete soundLib;
     TTF_CloseFont(font);
+    TTF_CloseFont(textFont);
     std::string s;
     s = numberToString(highscore);
     writeToFile(s, "dog");
@@ -132,8 +133,10 @@ void Game::init(){
     }
 
     font = TTF_OpenFont("res/fonts/digifat.ttf", 20);
+    textFont = TTF_OpenFont("res/fonts/zig.ttf", 15);
 
-    if(font == NULL ){
+
+    if(font == NULL || textFont == NULL){
         printf("Failed to open font");
     }
 
@@ -201,7 +204,68 @@ void Game::runLevel(){
     }
     initLevel();
     setBackground("res/gfx/static/background.jpg");
+    if(level > 1){
+        waitForNextLevel();
+    }
     gameLoop();
+}
+
+void Game::waitForNextLevel(){
+    bool continue_level = false;
+
+    SDL_Surface *sign = NULL;
+    sign = loadImage("res/gfx/static/next.png");
+    SDL_Surface *text = NULL;
+    string msg = "WELCOME TO LEVEL ";
+    msg += numberToString(level);
+    SDL_Color tc = {40, 40, 40 };
+    Uint8 redCounter = 0;
+    while(continue_level == false){
+
+        while(SDL_PollEvent(&event)){
+            if(event.type == SDL_KEYDOWN){
+                if(event.key.keysym.sym == SDLK_RETURN){
+                    continue_level = true;
+                }
+            }
+        }
+        SDL_Rect r;
+        r.w = 800;
+        r.h = sign->h -2;
+        r.x = 0;
+        r.y = 191;
+
+        Uint8 red = rand()%255;
+        Uint8 green = rand()%255;
+        Uint8 blue = rand()%255;
+        SDL_FillRect(
+            screen,
+            &r,
+            SDL_MapRGB(
+                screen->format,
+                red,
+                green,
+                blue
+            )
+        );
+        applySurface(0, 190, sign, screen);
+        text = TTF_RenderText_Solid(textFont, msg.c_str(), tc);
+        applySurface(73, 190+99, text, screen);
+        SDL_FreeSurface(text);
+        text = TTF_RenderText_Solid(textFont, "PRESS ENTER TO CONTINUE", SDL_Color { redCounter, 0, 0});
+        applySurface(73, 190+99+21, text, screen);
+        SDL_FreeSurface(text);
+        redCounter += 20;
+        if(redCounter > 255){
+            redCounter = 0;
+        }
+        SDL_Flip(screen);
+        SDL_Delay(static_cast<int>(1000/FRAMERATE));
+    }
+    SDL_FreeSurface(sign);
+
+
+
 }
 
 void Game::runMenu(){

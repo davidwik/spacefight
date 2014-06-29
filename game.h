@@ -15,7 +15,8 @@ private:
     SDL_Surface* screen = NULL;
     SDL_Surface* background = NULL;
     TTF_Font* font = NULL;
-    SDL_Color textColor = {255, 255, 255};
+    TTF_Font* textFont = NULL;
+        SDL_Color textColor = {255, 255, 255};
     SDL_Surface* scoreBoard = NULL;
     std::vector<GameObject*> gameObjectList;
     void init();
@@ -46,6 +47,7 @@ public:
     void runState(Game::States t);
     void runMenu();
     void runLevel();
+    void waitForNextLevel();
     void runDeath();
     void runWin();
     void initLevel();
