@@ -1,20 +1,27 @@
 all: main
 
 CC=g++
+PC=gcc
+PCFLAGS=-c -Wall -g -I/usr/local/include
 CFLAGS=-c -Wall -g -std=c++11
-LDFLAGS=-lSDL -lSDL_image -lSDL_ttf -lSDL_mixer
+LDFLAGS=-lSDL -lSDL_image -lSDL_ttf -lSDL_mixer -lphysfs
 TARGET=spacefight
-TESTAPP=testapp
+TEST=arch-test
 
-main: main.o game.o gameobject.o player.o utils.o animation.o \
+main: main.o physfsrwops.o game.o gameobject.o player.o utils.o animation.o \
 animationlibrary.o enemy.o collision.o fire.o explosion.o sound.o soundlibrary.o
 	$(CC) game.o main.o gameobject.o player.o utils.o animation.o \
-animationlibrary.o explosion.o enemy.o collision.o fire.o sound.o \
+animationlibrary.o physfsrwops.o explosion.o enemy.o collision.o fire.o sound.o \
 soundlibrary.o -o $(TARGET) $(LDFLAGS)
+
+physfsrwops.o:
+	$(CC) $(CFLAGS) physfsrwops.c
 
 main.o:
 	$(CC) $(CFLAGS) main.cpp
 
+archtest.o:
+	$(CC) $(CFLAGS) arch-test.o
 enemy.o:
 	$(CC) $(CFLAGS) enemy.cpp
 
@@ -54,8 +61,12 @@ sound.o:
 soundlibrary.o:
 	$(CC) $(CFLAGS) soundlibrary.cpp
 
+
+test: clean utils.o arch-test.o physfsrwops.o
+	$(CC) utils.o arch-test.o physfsrwops.o -o $(TEST) $(LDFLAGS)
+
 clean:
-	rm -f spacefight *.o
+	rm -f spacefight arch-test *.o
 
 run:
 	./spacefight

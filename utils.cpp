@@ -1,5 +1,6 @@
 #include "utils.h"
 
+
 std::string getDirectory(){
     char cCurrentPath[FILENAME_MAX];
     if(!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath))){
@@ -41,12 +42,16 @@ bool writeToFile(std::string data, std::string filename){
 }
 
 
-
 SDL_Surface* loadImage(std::string filename, bool useAlpha){
     SDL_Surface* loadedImage = NULL;
     SDL_Surface* optimizedImage = NULL;
+    SDL_RWops* rw = NULL;
+    if((rw=PHYSFSRWOPS_openRead(filename.c_str() + '\0')) == NULL){
+        printf("ERROR LOADING IMAGE %s\n", filename.c_str());
+        exit(1);
+    }
+    loadedImage = IMG_Load_RW(rw, 1);
 
-    loadedImage = IMG_Load(filename.c_str());
     if(loadedImage != NULL){
         if(useAlpha == true){
             optimizedImage = SDL_DisplayFormatAlpha(loadedImage);
@@ -56,6 +61,11 @@ SDL_Surface* loadImage(std::string filename, bool useAlpha){
         }
         SDL_FreeSurface(loadedImage);
     }
+    else {
+        printf("ERROR WITH IMAGE.. %s\n", filename.c_str());
+        exit(1);
+    }
+
     return optimizedImage;
 }
 

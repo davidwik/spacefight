@@ -16,6 +16,8 @@
 #include "explosion.h"
 #include "sound.h"
 #include "soundlibrary.h"
+#include <physfs.h>
+#include "physfsrwops.h"
 
 
 Game::Game(){
@@ -131,10 +133,20 @@ void Game::init(){
     if(TTF_Init() == -1){
         throw SDL_FONT_ERROR;
     }
+    SDL_RWops *font1;
+    SDL_RWops *font2;
 
-    font = TTF_OpenFont("res/fonts/digifat.ttf", 20);
-    textFont = TTF_OpenFont("res/fonts/zig.ttf", 15);
+    if((font1=PHYSFSRWOPS_openRead("res/fonts/digifat.ttf\0")) == NULL){
+        printf("Failed to load font1\n");
+        exit(1);
+    }
+    if((font2=PHYSFSRWOPS_openRead("res/fonts/zig.ttf\0")) == NULL){
+        printf("Failed to load font2\n");
+        exit(1);
+    }
 
+    font = TTF_OpenFontRW(font1, 1, 20);
+    textFont = TTF_OpenFontRW(font2, 1, 15);
 
     if(font == NULL || textFont == NULL){
         printf("Failed to open font");

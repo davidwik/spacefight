@@ -22,6 +22,10 @@
    #define GetCurrentDir getcwd
 #endif
 
+#include <physfs.h>
+#include "physfsrwops.h"
+
+
 using namespace std;
 
 const int FLIP_VERTICAL = 1;

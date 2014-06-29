@@ -9,13 +9,26 @@ Sound::Sound(std::string file, Sound::Types t, int volume){
 }
 
 bool Sound::loadFile(std::string file){
+    SDL_RWops* rw = NULL;
+    if((rw=PHYSFSRWOPS_openRead(file.c_str() + '\0')) == NULL){
+        printf("Failed to load %s", file.c_str());
+    }
+
     switch((Sound::Types) type){
     case Sound::Types::MUSIC:
-        music = Mix_LoadMUS(file.c_str());
+        music = Mix_LoadMUS_RW(rw);
+        //L_FreeRW(rw);
         return (music == NULL ) ? false : true;
         break;
     case Sound::Types::EFFECT:
-        effect = Mix_LoadWAV(file.c_str());
+
+
+        //effect = Mix_LoadWAV(file.c_str());
+        effect = Mix_LoadWAV_RW(rw, 1);
+        if(!effect){
+            printf("Failed loading effect from: %s\n", file.c_str());
+        }
+
         Mix_VolumeChunk(effect, v);
         if(effect == NULL){
             printf("SOUND FAILED...\n");
