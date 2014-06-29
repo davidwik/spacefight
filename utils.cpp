@@ -30,6 +30,8 @@ std::string getFileContents(std::string filename){
     }
 }
 
+
+
 bool writeToFile(std::string data, std::string filename){
     filename = getDirectory() + filename;
     std::ofstream file(filename, ios::binary);

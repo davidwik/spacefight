@@ -18,14 +18,16 @@
 #include "soundlibrary.h"
 #include <physfs.h>
 #include "physfsrwops.h"
-
+#include "base64.h"
 
 Game::Game(){
     std::string c = getFileContents("dog");
+    c = base64_decode(c);
     if( c == ""){
         highscore = 0;
     }
     else {
+
         highscore = std::stoi(c);
     }
 }
@@ -93,6 +95,7 @@ Game::~Game(){
     TTF_CloseFont(textFont);
     std::string s;
     s = numberToString(highscore);
+    s = base64_encode(reinterpret_cast<const unsigned char*>(s.c_str()), s.length());
     writeToFile(s, "dog");
 
     gameObjectList.empty();

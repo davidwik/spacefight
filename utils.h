@@ -11,6 +11,7 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include "errorcodes.h"
+#include "base64.h"
 
 #ifdef WINDOWS
    #include <direct.h>

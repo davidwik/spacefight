@@ -17,6 +17,6 @@ int main (int argc, char* argv[]){
     PHYSFS_addToSearchPath(ARCHIVE,1);
     Game g;
     g.runState(Game::States::MENU);
-    PHYSFS_deinit();
+
     return 0;
 }
