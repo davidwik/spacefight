@@ -18,8 +18,6 @@ physfsrwops.o:
 main.o:
 	$(CC) $(CFLAGS) main.cpp
 
-archtest.o:
-	$(CC) $(CFLAGS) arch-test.o
 enemy.o:
 	$(CC) $(CFLAGS) enemy.cpp
 
@@ -63,7 +61,7 @@ soundlibrary.o:
 	$(CC) $(CFLAGS) soundlibrary.cpp
 
 clean:
-	rm -f spacefight arch-test *.o
+	rm -f spacefight *.o
 
 run:
 	./spacefight
