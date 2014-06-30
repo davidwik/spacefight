@@ -9,10 +9,7 @@ Sound::Sound(std::string file, Sound::Types t, int volume){
 }
 
 bool Sound::loadFile(std::string file){
-    SDL_RWops* rw = NULL;
-    if((rw=PHYSFSRWOPS_openRead(file.c_str() + '\0')) == NULL){
-        printf("Failed to load %s", file.c_str());
-    }
+    SDL_RWops* rw = getResource(file);
 
     switch((Sound::Types) type){
     case Sound::Types::MUSIC:

@@ -1,5 +1,6 @@
 #include "utils.h"
 
+bool static PhysFSInit = false;
 
 std::string getDirectory(){
     char cCurrentPath[FILENAME_MAX];
@@ -30,6 +31,19 @@ std::string getFileContents(std::string filename){
     }
 }
 
+SDL_RWops* getResource(std::string filename){
+    if(PhysFSInit == false){
+        PHYSFS_init(NULL);
+        PHYSFS_addToSearchPath(ARCHIVE,1);
+        PhysFSInit = true;
+    }
+
+    SDL_RWops* rw = NULL;
+    if((rw=PHYSFSRWOPS_openRead(filename.c_str() + '\0')) == NULL){
+        throw MISSING_RESOURCE;
+    }
+    return rw;
+}
 
 
 bool writeToFile(std::string data, std::string filename){

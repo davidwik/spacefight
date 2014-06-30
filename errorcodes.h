@@ -18,4 +18,5 @@
 #define MISSING_INDEX 166
 #define AUDIO_PLAYBACK_ERROR 199
 
+#define MISSING_RESOURCE 655
 #endif /* __ERRORCODES_H__ */

@@ -2,9 +2,8 @@
 #define __SOUND_H__
 #include "SDL/SDL.h"
 #include "SDL/SDL_mixer.h"
-#include <physfs.h>
-#include "physfsrwops.h"
 #include "errorcodes.h"
+#include "utils.h"
 #include <string>
 class Sound {
 private:
