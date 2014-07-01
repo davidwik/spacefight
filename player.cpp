@@ -247,7 +247,9 @@ void Player::shieldOn(){
         shieldActive = true;
     }
     else {
-        shieldCoolDown = SDL_GetTicks() + 1000;
+        if(shieldCoolDown <= SDL_GetTicks()){
+            shieldCoolDown = SDL_GetTicks() + 1000;
+        }
         shieldActive = false;
     }
 }
