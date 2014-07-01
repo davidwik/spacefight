@@ -59,14 +59,20 @@ void Fire::handleCollision(
 }
 
 void Fire::startExplosion(GameObject* go, vector <GameObject*> &refObjects){
+    int y = getY();
     go->posUpdate();
+    if((Fire::Types) t == Fire::Types::ENEMY_BULLET){
+        y -= (dy*5);
+    }
+    else {
+        y = go->getY();
+    }
 
-    SDL_Rect r = go->getRect();
     Explosion* e = new Explosion(
         Explosion::Types::MINI,
         animLib,
-        static_cast<int>(r.x+(r.w/2)),
-        static_cast<int>(r.y+(r.h/2))
+        getX(),
+        y
     );
 
     if(soundLib != NULL){
@@ -74,7 +80,6 @@ void Fire::startExplosion(GameObject* go, vector <GameObject*> &refObjects){
     }
 
     e->init();
-    e->setSticky(go);
     terminate();
     refObjects.push_back(e);
 }

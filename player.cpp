@@ -66,9 +66,9 @@ void Player::init(){
 
     animName = "player-wait";
 
-    health = totalHealth;
-
 }
+
+
 
 void Player::listen(SDL_Event &event, vector <GameObject*> &refObjects){
     Uint8 *keystates = SDL_GetKeyState(NULL);
@@ -90,7 +90,7 @@ void Player::listen(SDL_Event &event, vector <GameObject*> &refObjects){
     }
 
     if(keystates[SDLK_LCTRL]){
-        shieldActive = true;
+        shieldOn();
     }
     else {
         shieldActive = false;
@@ -104,7 +104,9 @@ void Player::listen(SDL_Event &event, vector <GameObject*> &refObjects){
     }
 
     if(event.key.keysym.sym == SDLK_SPACE && event.type == SDL_KEYDOWN){
-        fire(refObjects);
+        if(!shieldActive){
+            fire(refObjects);
+        }
     }
 }
 
@@ -154,6 +156,12 @@ void Player::update(vector <GameObject*> &refObjects){
         setY(SCREEN_HEIGHT -(int) (rect.h/2));
     }
 
+    if(!shieldActive && shieldCoolDown < SDL_GetTicks()){
+        if(shieldHealth < 100){
+            shieldHealth += 2;
+        }
+    }
+
 }
 
 void Player::drawHeartBar(SDL_Surface* surface){
@@ -169,13 +177,22 @@ void Player::drawHeartBar(SDL_Surface* surface){
 }
 
 void Player::drawShield(SDL_Surface* surface){
+    SDL_Surface* frame = animLib->get("player-shield")->getFrame();
+
     applySurface(
-        rect.x-33,
-        rect.y-24,
+        getX()-33,
+        getY()-24,
         animLib->get("player-shield")->getFrame(),
         surface,
             NULL
     );
+    SDL_Rect r;
+    r.x = rect.x-33;
+    r.y = rect.y-24;
+    r.w = frame->w;
+    r.h = frame->h;
+    rect = r;
+
 }
 
 void Player::drawHP(SDL_Surface* screen){
@@ -201,6 +218,40 @@ void Player::drawHP(SDL_Surface* screen){
     drawRect(screen, barBorder, SDL_MapRGB(screen->format, 0, 255, 0));
 }
 
+void Player::drawShieldBar(SDL_Surface* screen){
+    SDL_Rect shieldBar;
+    shieldBar.w = 130;
+    shieldBar.h = 4;
+    shieldBar.x = 10;
+    shieldBar.y = screen->h - (shieldBar.h+32);
+
+    float percentShield = ((float) shieldHealth / (float) 100.00);
+    int length = static_cast<int>(percentShield*shieldBar.w);
+
+    SDL_Rect shieldBarBorder = shieldBar;
+    shieldBar.w = length;
+    SDL_FillRect(
+        screen,
+        &shieldBar,
+        SDL_MapRGB(
+            screen->format, 30, 30, 200
+        )
+    );
+    drawRect(screen, shieldBarBorder, SDL_MapRGB(screen->format, 150, 150, 150));
+}
+
+void Player::shieldOn(){
+
+    if(shieldHealth > 0 && SDL_GetTicks() > shieldCoolDown){
+        shieldHealth -= 2;
+        shieldActive = true;
+    }
+    else {
+        shieldCoolDown = SDL_GetTicks() + 1000;
+        shieldActive = false;
+    }
+}
+
 void Player::draw(SDL_Surface *screen){
     applySurface(getX(), getY(), animLib->get(animName)->getFrame(), screen, NULL);
     if(shieldActive){
@@ -209,7 +260,7 @@ void Player::draw(SDL_Surface *screen){
     drawBorder(screen);
     drawHP(screen);
     drawHeartBar(screen);
-
+    drawShieldBar(screen);
 
 }
 
@@ -220,25 +271,30 @@ void Player::handleCollision(vector <GameObject*> gameObjectList, vector <GameOb
 
         // Is it fire?!
         if((*it)->objectType() == "fire" && static_cast<Fire*>(*it)->getType() == Fire::Types::ENEMY_BULLET){
-
-            loseHealth(static_cast<Fire*>(*it)->getDamage());
-            if(health <= 0){
-                if(lives > 1){
-                    lives--;
-                    health = totalHealth;
-                }
-                else {
-                    SDL_Rect r = getRect();
-                    Explosion* ex = new Explosion(
-                        Explosion::Types::BIG,
-                        animLib,
-                        getX() + (int) (r.w/2),
-                        getY() + (int) (r.h/2)
-                    );
-                    refObjects.push_back(ex);
-                    terminate();
+            if(!shieldActive){
+                loseHealth(static_cast<Fire*>(*it)->getDamage());
+                if(health <= 0){
+                    if(lives > 1){
+                        lives--;
+                        health = totalHealth;
+                    }
+                    else {
+                        SDL_Rect r = getRect();
+                        Explosion* ex = new Explosion(
+                            Explosion::Types::BIG,
+                            animLib,
+                            getX() + (int) (r.w/2),
+                            getY() + (int) (r.h/2)
+                        );
+                        refObjects.push_back(ex);
+                        terminate();
+                    }
                 }
             }
+            if(shieldHealth > 25){
+                shieldHealth -= 20;
+            }
+
         }
     }
 }

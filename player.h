@@ -14,11 +14,17 @@ private:
     string name;
     int totalHealth = 100;
     int health;
+    int shieldHealth = 100;
+    Uint32 shieldCoolDown = 0;
     bool shieldActive = false;
     bool fired = false;
     Uint32 lastFired = 0;
     int lives = 5;
     void drawHP(SDL_Surface* surface);
+    void drawHeartBar(SDL_Surface* surface);
+    void drawShield(SDL_Surface* surface);
+    void drawShieldBar(SDL_Surface* surface);
+    void shieldOn();
 
 public:
     Player(int x, int y, AnimationLibrary* a);
@@ -28,11 +34,11 @@ public:
     void update(vector <GameObject*> &refObjects);
     void draw(SDL_Surface* surface);
     void moveLeft();
+    void loseShield(int x);
     void moveRight();
     void moveUp();
 
-    void drawHeartBar(SDL_Surface* surface);
-    void drawShield(SDL_Surface* surface);
+
 
     void loseHealth(int d){
         health -= d;
