@@ -51,14 +51,20 @@ Sound::~Sound(){
 
 }
 
-void Sound::play(int fade){
+
+int Sound::playLoopedEffect(){
+    return Mix_PlayChannel(-1, effect, -1);
+}
+
+int Sound::play(int fade){
     if(!loaded){
         printf("Sound not loaded!");
+        return -1;
     }
     else {
         if((Sound::Types) type == Sound::Types::EFFECT){
             int ch = Mix_PlayChannel(-1, effect, 0);
-
+            return ch;
             if(ch == -1){
                 throw AUDIO_PLAYBACK_ERROR;
             }
@@ -77,9 +83,10 @@ void Sound::play(int fade){
                 throw AUDIO_PLAYBACK_ERROR;
             }
             printf("Playing Music with volume: %d\n", v);
-
+            return res;
         }
     }
+    return -1;
 }
 
 bool Sound::isPlaying(){

@@ -15,7 +15,6 @@ Explosion::Explosion(Explosion::Types type,
         int r = rand()%3;
         if(r > 3){
             r = 2;
-            printf("BUU wrong\n");
         }
         animName = "mini-explosion-" + numberToString(r);
         ticksToLive = SDL_GetTicks() + 500;

@@ -6,11 +6,9 @@ AnimationLibrary::AnimationLibrary(){
 }
 
 AnimationLibrary::~AnimationLibrary(){
-    printf("Freeing AnimationLibrary..\n");
     for(unordered_map <string, Animation*>::iterator it = library.begin();
         it != library.end();
         it++){
-        printf("Freeing animation \"%s\"\n", it->first.c_str());
         delete (it->second);
     }
     library.clear();
@@ -22,7 +20,6 @@ void AnimationLibrary::purge(){
     for(unordered_map <string, Animation*>::iterator it = library.begin();
         it != library.end();
         it++){
-        printf("Freeing animation \"%s\"\n", it->first.c_str());
         delete (it->second);
     }
     library.clear();
@@ -43,7 +40,6 @@ void AnimationLibrary::remove(string key){
     if(has(key)){
         unordered_map <string, Animation*>::iterator it;
         it = library.find(key);
-        printf("Freeing animation \"%s\"\n", it->first.c_str());
         delete (it->second);
         library.erase(it);
     }

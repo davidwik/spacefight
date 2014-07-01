@@ -21,7 +21,8 @@ public:
     Sound(std::string file, Sound::Types t, int volume);
     ~Sound();
     bool isPlaying();
-    void play(int fade = 0);
+    int play(int fade = 0);
+    int playLoopedEffect();
 
 };
 

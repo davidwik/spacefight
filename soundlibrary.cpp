@@ -40,6 +40,10 @@ void SoundLibrary::remove(std::string key){
     }
 }
 
+void SoundLibrary::stopChannel(int c){
+    Mix_HaltChannel(c);
+}
+
 void SoundLibrary::play(std::string key, int fadeIn){
     get(key)->play(fadeIn);
 }
@@ -88,5 +92,5 @@ void SoundLibrary::init(){
         printf("Unable to open audio!\n");
         exit(1);
     }
-    Mix_AllocateChannels(16);
+    Mix_AllocateChannels(24);
 }

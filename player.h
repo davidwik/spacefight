@@ -1,11 +1,11 @@
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
 #include <string>
+#include <vector>
 #include "SDL/SDL.h"
 #include "gameobject.h"
 #include "fire.h"
 #include "constants.h"
-
 using namespace std;
 
 class Player: public GameObject {
@@ -20,6 +20,8 @@ private:
     bool fired = false;
     Uint32 lastFired = 0;
     int lives = 5;
+    int ch = -1;
+    //0vector <int> channelsInUse;
     void drawHP(SDL_Surface* surface);
     void drawHeartBar(SDL_Surface* surface);
     void drawShield(SDL_Surface* surface);

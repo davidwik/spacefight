@@ -63,8 +63,16 @@ void Player::init(){
         gameOver->addFrame("res/gfx/static/gameover.png");
         animLib->add("game-over", gameOver);
     }
-
     animName = "player-wait";
+
+    if(soundLib != NULL){
+        soundLib->add("shields-active",
+                      new Sound(
+                          "res/audio/shields-on.ogg",
+                          Sound::Types::EFFECT,
+                      4)
+        );
+    }
 
 }
 
@@ -157,6 +165,10 @@ void Player::update(vector <GameObject*> &refObjects){
     }
 
     if(!shieldActive && shieldCoolDown < SDL_GetTicks()){
+        if(ch != -1){
+            soundLib->stopChannel(ch);
+            ch = -1;
+        }
         if(shieldHealth < 100){
             shieldHealth += 2;
         }
@@ -241,12 +253,18 @@ void Player::drawShieldBar(SDL_Surface* screen){
 }
 
 void Player::shieldOn(){
-
     if(shieldHealth > 0 && SDL_GetTicks() > shieldCoolDown){
         shieldHealth -= 2;
         shieldActive = true;
+        if(ch == -1){
+            ch = soundLib->get("shields-active")->playLoopedEffect();
+        }
     }
     else {
+        if(ch != -1){
+            soundLib->stopChannel(ch);
+            ch = -1;
+        }
         if(shieldCoolDown <= SDL_GetTicks()){
             shieldCoolDown = SDL_GetTicks() + 1000;
         }
@@ -263,7 +281,6 @@ void Player::draw(SDL_Surface *screen){
     drawHP(screen);
     drawHeartBar(screen);
     drawShieldBar(screen);
-
 }
 
 void Player::handleCollision(vector <GameObject*> gameObjectList, vector <GameObject*> &refObjects){

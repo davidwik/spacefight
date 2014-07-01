@@ -16,6 +16,7 @@ public:
     bool has(std::string key);
     void add(std::string key, Sound* s);
     Sound* get(std::string key);
+    void stopChannel(int c);
     void play(std::string key, int fadeIn = 0);
     void purge();
 

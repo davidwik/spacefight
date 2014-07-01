@@ -17,8 +17,6 @@ Enemy::Enemy(Enemy::Types type,
         dx = (rand()%20)+3;
         dy = 0;
         zIndex = 0;
-        printf("EnemyType: %d\n", t);
-        printf("ObjectId: %d\n", id);
 
 }
 
