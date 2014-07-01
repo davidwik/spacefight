@@ -25,7 +25,6 @@ Game::Game(){
         highscore = 0;
     }
     else {
-
         highscore = std::stoi(c);
     }
 }
@@ -148,6 +147,14 @@ void Game::init(){
     SDL_WM_SetCaption("Spaaace Fight!", NULL);
     initialized = true;
     animLib = new AnimationLibrary();
+    if(!animLib->has("instructions")){
+        Animation* inst = new Animation(1);
+        inst->addFrame("res/gfx/static/inst01.png");
+        inst->addFrame("res/gfx/static/inst02.png");
+        inst->addFrame("res/gfx/static/inst03.png");
+        animLib->add("instructions", inst);
+    }
+
     soundLib = new SoundLibrary();
     try {
         soundLib->add(
@@ -387,6 +394,7 @@ void Game::handleError(int e){
 }
 
 void Game::gameLoop(){
+    Uint32 instTick = SDL_GetTicks() + 10000;
     gameQuitsIn = 0;
     bool quit = false;
     Game::States state;
@@ -499,6 +507,15 @@ void Game::gameLoop(){
         SDL_FreeSurface(scoreBoard);
 
         sort(gameObjectList.begin(), gameObjectList.end());
+
+        if(SDL_GetTicks() < instTick && level == 1){
+            SDL_Surface* g = animLib->get("instructions")->getFrame();
+            applySurface(
+                screen->w - (g->w + 10),
+                screen->h - (g->h + 10),
+                g,
+                screen);
+        }
 
         SDL_Delay(static_cast<int>(1000/FRAMERATE));
         if(SDL_Flip(screen) == -1){
