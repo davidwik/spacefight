@@ -32,6 +32,22 @@ void Player::init(){
         animLib->add("player-thrust", thrustAnim);
     }
 
+    if(!animLib->has("player-shield")){
+        Animation* shield = new Animation(50, true);
+        shield->addFrame("res/gfx/sprites/shield01.png");
+        shield->addFrame("res/gfx/sprites/shield02.png");
+        shield->addFrame("res/gfx/sprites/shield03.png");
+        shield->addFrame("res/gfx/sprites/shield04.png");
+        shield->addFrame("res/gfx/sprites/shield01.png");
+        shield->addFrame("res/gfx/sprites/shield02.png");
+        shield->addFrame("res/gfx/sprites/shield03.png");
+        shield->addFrame("res/gfx/sprites/shield04.png");
+        shield->addFrame("res/gfx/sprites/shield05.png");
+        shield->addFrame("res/gfx/sprites/shield06.png");
+
+        animLib->add("player-shield", shield);
+    }
+
     if(!animLib->has("heart-anim")){
         Animation* heartAnim = new Animation(10, true);
         heartAnim->addFrame("res/gfx/sprites/heart01.png");
@@ -66,15 +82,18 @@ void Player::listen(SDL_Event &event, vector <GameObject*> &refObjects){
     }
     if(keystates[SDLK_DOWN]){
         animName = "player-thrust";
-        if(!keystates[SDLK_LCTRL]){
-            moveDown();
-        }
+        moveDown();
     }
     if(keystates[SDLK_UP]){
         animName = "player-thrust";
-        if(!keystates[SDLK_LCTRL]){
-            moveUp();
-        }
+        moveUp();
+    }
+
+    if(keystates[SDLK_LCTRL]){
+        shieldActive = true;
+    }
+    else {
+        shieldActive = false;
     }
 
     if(!keystates[SDLK_UP] &&
@@ -149,6 +168,16 @@ void Player::drawHeartBar(SDL_Surface* surface){
 
 }
 
+void Player::drawShield(SDL_Surface* surface){
+    applySurface(
+        rect.x-33,
+        rect.y-24,
+        animLib->get("player-shield")->getFrame(),
+        surface,
+            NULL
+    );
+}
+
 void Player::drawHP(SDL_Surface* screen){
     SDL_Rect healthBar;
     healthBar.w = 130;
@@ -174,9 +203,13 @@ void Player::drawHP(SDL_Surface* screen){
 
 void Player::draw(SDL_Surface *screen){
     applySurface(getX(), getY(), animLib->get(animName)->getFrame(), screen, NULL);
+    if(shieldActive){
+        drawShield(screen);
+    }
     drawBorder(screen);
     drawHP(screen);
     drawHeartBar(screen);
+
 
 }
 

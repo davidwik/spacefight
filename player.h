@@ -14,6 +14,7 @@ private:
     string name;
     int totalHealth = 100;
     int health;
+    bool shieldActive = false;
     bool fired = false;
     Uint32 lastFired = 0;
     int lives = 5;
@@ -31,6 +32,7 @@ public:
     void moveUp();
 
     void drawHeartBar(SDL_Surface* surface);
+    void drawShield(SDL_Surface* surface);
 
     void loseHealth(int d){
         health -= d;
