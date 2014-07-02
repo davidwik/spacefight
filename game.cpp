@@ -399,6 +399,7 @@ void Game::handleError(int e){
 void Game::gameLoop(){
     Uint32 instTick = SDL_GetTicks() + 10000;
     gameQuitsIn = 0;
+    Uint32 nextRoundIn = 0;
     bool quit = false;
     Game::States state;
     string scoreString = "Score: ";
@@ -468,9 +469,16 @@ void Game::gameLoop(){
             }
         }
 
-        if(enemies == 0){
-            state = Game::States::LEVEL;
+
+        if(nextRoundIn != 0 && SDL_GetTicks() > nextRoundIn){
             quit = true;
+        }
+
+        if(enemies == 0){
+            if(nextRoundIn == 0){
+                state = Game::States::LEVEL;
+                nextRoundIn = SDL_GetTicks() + 2000;
+            }
         }
 
 
