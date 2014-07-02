@@ -17,7 +17,6 @@ Player::Player(int x,
     totalHealth = 100;
     health = totalHealth;
     shieldCoolDown = 0;
-    ch = -1;
     lives = 5;
     lastFired = 0;
     fired = false;
@@ -175,9 +174,9 @@ void Player::update(vector <GameObject*> &refObjects){
     }
 
     if(!shieldActive && shieldCoolDown < SDL_GetTicks()){
+        int ch = soundLib->getReservedChannel("shield-noise");
         if(ch != -1){
-            soundLib->stopChannel(ch);
-            ch = -1;
+            soundLib->stopReservedChannel("shield-noise");
         }
         if(shieldHealth < shieldHealthTotal){
             shieldHealth += 2;
@@ -266,14 +265,16 @@ void Player::shieldOn(){
     if(shieldHealth > 0 && SDL_GetTicks() > shieldCoolDown){
         shieldHealth -= 2;
         shieldActive = true;
-        if(ch == -1){
-            ch = soundLib->get("shields-active")->playLoopedEffect();
+
+        if(soundLib->getReservedChannel("shield-noise") == -1){
+            int ch = soundLib->get("shields-active")->playLoopedEffect();
+            soundLib->addReservedChannel("shield-noise", ch);
         }
     }
     else {
+        int ch = soundLib->getReservedChannel("shield-noise");
         if(ch != -1){
-            soundLib->stopChannel(ch);
-            ch = -1;
+            soundLib->stopReservedChannel("shield-noise");
         }
         if(shieldCoolDown <= SDL_GetTicks()){
             shieldCoolDown = SDL_GetTicks() + 1000;

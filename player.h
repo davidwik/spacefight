@@ -21,7 +21,6 @@ private:
     bool fired;
     Uint32 lastFired;
     int lives;
-    int ch;
     //0vector <int> channelsInUse;
     void drawHP(SDL_Surface* surface);
     void drawHeartBar(SDL_Surface* surface);

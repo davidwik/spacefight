@@ -2,12 +2,15 @@
 
 SoundLibrary::SoundLibrary(){
     init();
+    library.reserve(100);
+    reservedChannels.reserve(20);
 }
-
 
 SoundLibrary::~SoundLibrary(){
     printf("Freeing all resources in the sound library..\n");
     purge();
+    reservedChannels.clear();
+
     Mix_CloseAudio();
     while(Mix_Init(0)){
         Mix_Quit();
@@ -40,9 +43,32 @@ void SoundLibrary::remove(std::string key){
     }
 }
 
+
+void SoundLibrary::stopReservedChannel(std::string key){
+    int ch = getReservedChannel(key);
+    if(ch != -1){
+        Mix_HaltChannel(ch);
+    }
+    reservedChannels.erase(key);
+}
+
+void SoundLibrary::addReservedChannel(std::string key, int channel){
+    if(getReservedChannel(key) == -1){
+        reservedChannels[key] = channel;
+    }
+}
+
+int SoundLibrary::getReservedChannel(std::string key){
+    if(reservedChannels.count(key) > 0){
+        return reservedChannels[key];
+    }
+    return -1;
+}
+
+/*
 void SoundLibrary::stopChannel(int c){
     Mix_HaltChannel(c);
-}
+    }*/
 
 void SoundLibrary::play(std::string key, int fadeIn){
     get(key)->play(fadeIn);
