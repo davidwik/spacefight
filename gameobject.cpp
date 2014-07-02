@@ -51,7 +51,7 @@ SDL_Rect GameObject::getRect(){
 }
 
 void GameObject::drawBorder(SDL_Surface* screen){
-    if(DRAW_BORDERS && colliding){
+    if(DRAW_BORDERS){
         SDL_Rect topBar = {
             static_cast<Sint16>(rect.x),
             static_cast<Sint16>(rect.y),

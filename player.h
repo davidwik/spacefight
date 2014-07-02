@@ -12,15 +12,16 @@ class Player: public GameObject {
 private:
     int score;
     string name;
-    int totalHealth = 100;
+    int totalHealth;
     int health;
-    int shieldHealth = 100;
-    Uint32 shieldCoolDown = 0;
-    bool shieldActive = false;
-    bool fired = false;
-    Uint32 lastFired = 0;
-    int lives = 5;
-    int ch = -1;
+    int shieldHealth;
+    int shieldHealthTotal;
+    Uint32 shieldCoolDown;
+    bool shieldActive;
+    bool fired;
+    Uint32 lastFired;
+    int lives;
+    int ch;
     //0vector <int> channelsInUse;
     void drawHP(SDL_Surface* surface);
     void drawHeartBar(SDL_Surface* surface);

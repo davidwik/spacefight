@@ -12,6 +12,17 @@ Player::Player(int x,
     animLib = a;
     objType = "player";
     printf("ObjectId: %d\n", id);
+    shieldHealth = 0;
+    shieldHealthTotal = 180;
+    totalHealth = 100;
+    health = totalHealth;
+    shieldCoolDown = 0;
+    ch = -1;
+    lives = 5;
+    lastFired = 0;
+    fired = false;
+    shieldActive = false;
+
 }
 
 
@@ -44,7 +55,6 @@ void Player::init(){
         shield->addFrame("res/gfx/sprites/shield04.png");
         shield->addFrame("res/gfx/sprites/shield05.png");
         shield->addFrame("res/gfx/sprites/shield06.png");
-
         animLib->add("player-shield", shield);
     }
 
@@ -63,6 +73,7 @@ void Player::init(){
         gameOver->addFrame("res/gfx/static/gameover.png");
         animLib->add("game-over", gameOver);
     }
+
     animName = "player-wait";
 
     if(soundLib != NULL){
@@ -73,7 +84,6 @@ void Player::init(){
                       4)
         );
     }
-
 }
 
 
@@ -169,7 +179,7 @@ void Player::update(vector <GameObject*> &refObjects){
             soundLib->stopChannel(ch);
             ch = -1;
         }
-        if(shieldHealth < 100){
+        if(shieldHealth < shieldHealthTotal){
             shieldHealth += 2;
         }
     }
@@ -237,7 +247,7 @@ void Player::drawShieldBar(SDL_Surface* screen){
     shieldBar.x = 10;
     shieldBar.y = screen->h - (shieldBar.h+32);
 
-    float percentShield = ((float) shieldHealth / (float) 100.00);
+    float percentShield = ((float) shieldHealth / (float) shieldHealthTotal);
     int length = static_cast<int>(percentShield*shieldBar.w);
 
     SDL_Rect shieldBarBorder = shieldBar;
@@ -246,10 +256,10 @@ void Player::drawShieldBar(SDL_Surface* screen){
         screen,
         &shieldBar,
         SDL_MapRGB(
-            screen->format, 30, 30, 200
+            screen->format, 101, 199, 224
         )
     );
-    drawRect(screen, shieldBarBorder, SDL_MapRGB(screen->format, 150, 150, 150));
+    drawRect(screen, shieldBarBorder, SDL_MapRGB(screen->format, 64, 110, 121));
 }
 
 void Player::shieldOn(){
