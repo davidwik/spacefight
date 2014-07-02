@@ -2,16 +2,19 @@
 #include "utils.h"
 #include <string>
 #include <cstdlib>
+#include <ctime>
 #include <cmath>
 using namespace std;
 
 Enemy::Enemy(Enemy::Types type,
-      AnimationLibrary* a,
-      int x,
-      int y): GameObject(x, y, a){
+             AnimationLibrary* a,
+             SoundLibrary* snd,
+             int x,
+             int y): GameObject(x, y, a, snd){
         position.x = x;
         position.y = y;
         animLib = a;
+        soundLib = snd;
         objType = "enemy";
         t = (int) type;
         dx = (rand()%20)+3;
@@ -70,15 +73,16 @@ void Enemy::handleCollision(vector <GameObject*> gameObjectList, vector <GameObj
             loseHealth(static_cast<Fire*>(*it)->getDamage());
 
             if(health <= 0){
+
                 SDL_Rect r = getRect();
                 Explosion* ex = new Explosion(
                     Explosion::Types::BIG,
                     animLib,
+                    soundLib,
                     getX() + (int) (r.w/2),
                     getY() + (int) (r.h/2)
                 );
                 if(soundLib != NULL){
-                    ex->setSoundLibrary(soundLib);
                     try {
                         soundLib->play("point", 0);
                     } catch(int e){
@@ -89,10 +93,16 @@ void Enemy::handleCollision(vector <GameObject*> gameObjectList, vector <GameObj
                 refObjects.push_back(ex);
 
                 ex = NULL;
+                srand(time(0));
+                int chance = rand()%10;
 
+                if(chance == 5){
+                    Bonus* b = new Bonus(animLib, soundLib, getX(), getY());
+                    b->init();
+                    refObjects.push_back(b);
+                }
                 terminate();
             }
-
         }
     }
 }
@@ -136,12 +146,10 @@ void Enemy::fire(vector <GameObject*> &refObjects){
     if(diff > limit){
         Fire* f = new Fire(Fire::Types::ENEMY_BULLET,
                            animLib,
+                           soundLib,
                            startX,
                            startY,
                            id);
-        if(soundLib != NULL){
-            f->setSoundLibrary(soundLib);
-        }
 
         f->init();
         refObjects.insert(refObjects.begin(), f);

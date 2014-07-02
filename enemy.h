@@ -5,6 +5,7 @@
 #include "gameobject.h"
 #include "utils.h"
 #include "fire.h"
+#include "bonus.h"
 #include <string>
 
 using namespace std;
@@ -27,6 +28,7 @@ public:
 
     Enemy(Enemy::Types type,
           AnimationLibrary* a,
+          SoundLibrary* snd,
           int x=0,
           int y=0
     );

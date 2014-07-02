@@ -5,6 +5,7 @@
 #include "SDL/SDL.h"
 #include "gameobject.h"
 #include "fire.h"
+#include "bonus.h"
 #include "constants.h"
 using namespace std;
 
@@ -21,6 +22,9 @@ private:
     bool fired;
     Uint32 lastFired;
     int lives;
+    int ammoType;
+    Uint32 specialAmmoUntil;
+
     //0vector <int> channelsInUse;
     void drawHP(SDL_Surface* surface);
     void drawHeartBar(SDL_Surface* surface);
@@ -29,7 +33,9 @@ private:
     void shieldOn();
 
 public:
-    Player(int x, int y, AnimationLibrary* a);
+    Player(int x, int y, AnimationLibrary* a, SoundLibrary* snd);
+    enum class AmmoTypes { SINGLE, TRIPLE};
+
     virtual ~Player();
     void addScore(int sc){ score += sc;}
     int getScore(){return score;}

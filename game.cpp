@@ -73,6 +73,9 @@ void Game::deleteObject(GameObject* go){
     else if(go->objectType() == "explosion"){
         delete static_cast<Explosion*>(go);
     }
+    else if(go->objectType() == "bonus"){
+        delete static_cast<Bonus*>(go);
+    }
     else {
         printf("WHAT?!");
     }
@@ -94,9 +97,10 @@ Game::~Game(){
     s = numberToString(highscore);
     s = base64_encode(reinterpret_cast<const unsigned char*>(s.c_str()), s.length());
     writeToFile(s, "dog");
-
+    closePhysFS();
     gameObjectList.empty();
     gameObjectList.clear();
+
     printf("Qutting SDL\n");
     SDL_Quit();
     printf("Returning to main!\n");
@@ -186,7 +190,7 @@ void Game::initLevel(){
     // Re arrange here so Player init isn't called all the time..
 
     if(player == NULL){
-        player = new Player(400, 300, animLib);
+        player = new Player(400, 300, animLib, soundLib);
         gameObjectList.push_back(player);
     }
     // Add all start objects
@@ -194,18 +198,17 @@ void Game::initLevel(){
     int drunk = level*2;
     int eat = static_cast<int>(floor(level*1.5));
     for(int i = 0; i < drunk; i++){
-        gameObjectList.push_back(new Enemy(Enemy::Types::DRUNK, animLib, 100, 40));
+        gameObjectList.push_back(new Enemy(Enemy::Types::DRUNK, animLib, soundLib, 100, 40));
     }
 
     for(int i = 0; i < eat; i++){
-        gameObjectList.push_back(new Enemy(Enemy::Types::EATER, animLib, 200, 40));
+        gameObjectList.push_back(new Enemy(Enemy::Types::EATER, animLib, soundLib, 200, 40));
     }
 
     // initialize
     for(auto it = gameObjectList.begin();
         it != gameObjectList.end();
         it++){
-        (*it)->setSoundLibrary(soundLib);
         (*it)->init();
     }
 }

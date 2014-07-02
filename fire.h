@@ -23,6 +23,7 @@ public:
 
     Fire(Fire::Types type,
          AnimationLibrary* a,
+         SoundLibrary* snd,
          int x=0,
          int y=0,
          int parent=-1

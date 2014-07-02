@@ -3,15 +3,18 @@ using namespace std;
 
 Fire::Fire(Fire::Types type,
            AnimationLibrary* a,
+           SoundLibrary* snd,
            int x,
            int y,
-           int parent) : GameObject (x, y, a){
+           int parent) : GameObject (x, y, a, snd){
     position.x = x;
     position.y = y;
     animLib = a;
+    soundLib = snd;
     objType = "fire";
     t = (int) type;
     parentId = parent;
+    dx = 0;
 
     if(type == Fire::Types::PLAYER_BULLET){
         animName ="bullet-player";
@@ -34,6 +37,7 @@ void Fire::update(vector <GameObject*> &refObjects){
     if(getY() > SCREEN_HEIGHT+100){
         terminate();
     }
+    setX(getX()+dx);
     setY(getY()+dy);
     posUpdate();
 }
@@ -71,13 +75,10 @@ void Fire::startExplosion(GameObject* go, vector <GameObject*> &refObjects){
     Explosion* e = new Explosion(
         Explosion::Types::MINI,
         animLib,
+        soundLib,
         getX(),
         y
     );
-
-    if(soundLib != NULL){
-        e->setSoundLibrary(soundLib);
-    }
 
     e->init();
     terminate();

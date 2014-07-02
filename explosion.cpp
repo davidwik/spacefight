@@ -2,12 +2,14 @@
 using namespace std;
 
 Explosion::Explosion(Explosion::Types type,
-           AnimationLibrary* a,
-           int x,
-           int y) : GameObject (x, y, a){
+                     AnimationLibrary* a,
+                     SoundLibrary* snd,
+                     int x,
+                     int y) : GameObject (x, y, a, snd){
     position.x = x;
     position.y = y;
     animLib = a;
+    soundLib = snd;
     objType = "explosion";
     t = (int) type;
 

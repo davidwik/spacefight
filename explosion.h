@@ -19,9 +19,10 @@ public:
     enum class Types { BIG, MINI };
 
     Explosion(Explosion::Types type,
-         AnimationLibrary* a,
-         int x=0,
-         int y=0
+              AnimationLibrary* a,
+              SoundLibrary* snd,
+              int x=0,
+              int y=0
     );
 
 

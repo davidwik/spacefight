@@ -6,10 +6,10 @@ LDFLAGS=-lSDL -lSDL_image -lSDL_ttf -lSDL_mixer -lphysfs
 TARGET=spacefight
 
 main: main.o physfsrwops.o game.o gameobject.o player.o utils.o animation.o \
-animationlibrary.o enemy.o collision.o fire.o explosion.o sound.o soundlibrary.o \
+animationlibrary.o enemy.o collision.o fire.o bonus.o explosion.o sound.o soundlibrary.o \
 base64.o
 	$(CC) game.o main.o gameobject.o player.o utils.o animation.o \
-animationlibrary.o physfsrwops.o explosion.o enemy.o collision.o fire.o sound.o \
+animationlibrary.o physfsrwops.o explosion.o enemy.o bonus.o collision.o fire.o sound.o \
 soundlibrary.o base64.o -o $(TARGET) $(LDFLAGS)
 
 physfsrwops.o:
@@ -29,6 +29,9 @@ game.o:
 
 gameobject.o:
 	$(CC) $(CFLAGS) gameobject.cpp
+
+bonus.o:
+	$(CC) $(CFLAGS) bonus.cpp
 
 fire.o:
 	$(CC) $(CFLAGS) fire.cpp

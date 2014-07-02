@@ -47,7 +47,7 @@ void putPixel32(SDL_Surface* surface, int x, int y, Uint32 pixel);
 std::string numberToString(int num);
 
 SDL_RWops* getResource(std::string filename);
-
+int closePhysFS();
 
 std::string getDirectory();
 

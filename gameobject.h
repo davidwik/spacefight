@@ -46,12 +46,11 @@ public:
         position.y = y;
     }
 
-    GameObject(int startPosX, int startPosY, AnimationLibrary* a);
+    GameObject(int startPosX, int startPosY, AnimationLibrary* a, SoundLibrary* snd);
 
     int getZIndex(){
         return zIndex;
     }
-    void setSoundLibrary(SoundLibrary* snd);
 
     void setX(int x){position.x = x;}
     void setY(int y){position.y = y;}

@@ -2,14 +2,17 @@
 #include "utils.h"
 #include "animation.h"
 #define MOVESPEED 7
+#define AMMO_SPECIAL_DURATION 30000
 
 Player::Player(int x,
                int y,
-               AnimationLibrary* a) : GameObject(x, y, a){
+               AnimationLibrary* a,
+               SoundLibrary* snd) : GameObject(x, y, a, snd){
     position.x = x;
     position.y = y;
     zIndex = 0;
     animLib = a;
+    soundLib = snd;
     objType = "player";
     printf("ObjectId: %d\n", id);
     shieldHealth = 0;
@@ -17,13 +20,16 @@ Player::Player(int x,
     totalHealth = 100;
     health = totalHealth;
     shieldCoolDown = 0;
+
     lives = 5;
+    ammoType = (int) Player::AmmoTypes::SINGLE;
+    specialAmmoUntil = 0;
+
     lastFired = 0;
     fired = false;
     shieldActive = false;
 
 }
-
 
 void Player::init(){
     if(!animLib->has("player-wait")){
@@ -76,12 +82,14 @@ void Player::init(){
     animName = "player-wait";
 
     if(soundLib != NULL){
-        soundLib->add("shields-active",
-                      new Sound(
-                          "res/audio/shields-on.ogg",
-                          Sound::Types::EFFECT,
-                      4)
-        );
+        if(!soundLib->has("shields-active")){
+            soundLib->add("shields-active",
+                          new Sound(
+                              "res/audio/shields-on.ogg",
+                              Sound::Types::EFFECT,
+                              4)
+            );
+        }
     }
 }
 
@@ -136,18 +144,49 @@ void Player::fire(vector <GameObject*> &refObjects){
 
     if(diff > limit){
 
-        Fire* f = new Fire(Fire::Types::PLAYER_BULLET,
-                           animLib,
-                           startX,
-                           startY,
-                           id);
+        if(ammoType == (int) Player::AmmoTypes::SINGLE){
+            Fire* f = new Fire(Fire::Types::PLAYER_BULLET,
+                               animLib,
+                               soundLib,
+                               startX,
+                               startY,
+                               id);
 
-        if(soundLib != NULL){
-            f->setSoundLibrary(soundLib);
+            f->init();
+
+            refObjects.insert(refObjects.begin(),f);
         }
-        f->init();
+        else if(ammoType == (int) Player::AmmoTypes::TRIPLE){
+            Fire* a = new Fire(Fire::Types::PLAYER_BULLET,
+                               animLib,
+                               soundLib,
+                               startX,
+                               startY,
+                               id);
 
-        refObjects.insert(refObjects.begin(),f);
+            Fire* b = new Fire(Fire::Types::PLAYER_BULLET,
+                               animLib,
+                               soundLib,
+                               startX,
+                               startY,
+                               id);
+            Fire* c = new Fire(Fire::Types::PLAYER_BULLET,
+                               animLib,
+                               soundLib,
+                               startX,
+                               startY,
+                               id);
+            a->setDX(-2);
+            b->setDX(2);
+            a->init();
+            b->init();
+            c->init();
+            refObjects.insert(refObjects.begin(), a);
+            refObjects.insert(refObjects.begin(), b);
+            refObjects.insert(refObjects.begin(), c);
+        }
+
+
         lastFired = SDL_GetTicks();
     }
 }
@@ -158,6 +197,10 @@ Player::~Player(){
 
 void Player::update(vector <GameObject*> &refObjects){
     posUpdate();
+
+    if(specialAmmoUntil < SDL_GetTicks()){
+        ammoType = (int) Player::AmmoTypes::SINGLE;
+    }
 
     // Make sure the player doesn't leave..
     if(getX() + rect.w > SCREEN_WIDTH){
@@ -189,7 +232,7 @@ void Player::drawHeartBar(SDL_Surface* surface){
     Animation* an = animLib->get("heart-anim");
     for(int i = 0; i < lives; i++){
         applySurface(10+(23*i),
-                     surface->h-60,
+                     surface->h-64,
                      an->getFrame(),
                      surface,
                      NULL);
@@ -199,7 +242,6 @@ void Player::drawHeartBar(SDL_Surface* surface){
 
 void Player::drawShield(SDL_Surface* surface){
     SDL_Surface* frame = animLib->get("player-shield")->getFrame();
-
     applySurface(
         getX()-33,
         getY()-24,
@@ -221,7 +263,7 @@ void Player::drawHP(SDL_Surface* screen){
     healthBar.w = 130;
     healthBar.h = 20;
     healthBar.x = 10;
-    healthBar.y = screen->h - (healthBar.h+10);
+    healthBar.y = screen->h - (healthBar.h+20);
 
     float percentHP = ((float) health / (float) totalHealth);
     int barLenght = static_cast<int>(percentHP*healthBar.w);
@@ -241,15 +283,17 @@ void Player::drawHP(SDL_Surface* screen){
 
 void Player::drawShieldBar(SDL_Surface* screen){
     SDL_Rect shieldBar;
-    shieldBar.w = 130;
+    int sLenght = shieldHealthTotal-50;
+    shieldBar.w = sLenght;
     shieldBar.h = 4;
     shieldBar.x = 10;
-    shieldBar.y = screen->h - (shieldBar.h+32);
+    shieldBar.y = screen->h - (shieldBar.h+10);
 
     float percentShield = ((float) shieldHealth / (float) shieldHealthTotal);
-    int length = static_cast<int>(percentShield*shieldBar.w);
+    int length = static_cast<int>(percentShield*sLenght);
 
     SDL_Rect shieldBarBorder = shieldBar;
+    shieldBarBorder.w = sLenght;
     shieldBar.w = length;
     SDL_FillRect(
         screen,
@@ -313,6 +357,7 @@ void Player::handleCollision(vector <GameObject*> gameObjectList, vector <GameOb
                         Explosion* ex = new Explosion(
                             Explosion::Types::BIG,
                             animLib,
+                            soundLib,
                             getX() + (int) (r.w/2),
                             getY() + (int) (r.h/2)
                         );
@@ -325,6 +370,32 @@ void Player::handleCollision(vector <GameObject*> gameObjectList, vector <GameOb
                 shieldHealth -= 20;
             }
 
+        }
+
+        if((*it)->objectType() == "bonus"){
+            soundLib->play("bonus", 0);
+            Bonus* b = static_cast<Bonus*>(*it);
+
+            switch(b->getType()){
+
+            case Bonus::Types::HEART:
+                lives++;
+                break;
+
+            case Bonus::Types::SHIELD:
+                shieldHealthTotal += 50;
+                break;
+
+            case Bonus::Types::AMMO:
+                ammoType = (int) Player::AmmoTypes::TRIPLE;
+                specialAmmoUntil = SDL_GetTicks() + AMMO_SPECIAL_DURATION;
+                break;
+
+            default:
+                break;
+            }
+
+            (*it)->terminate();
         }
     }
 }

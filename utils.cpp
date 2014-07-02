@@ -45,6 +45,9 @@ SDL_RWops* getResource(std::string filename){
     return rw;
 }
 
+int closePhysFS(){
+    return PHYSFS_deinit();
+}
 
 bool writeToFile(std::string data, std::string filename){
     filename = getDirectory() + filename;
