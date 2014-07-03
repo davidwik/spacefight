@@ -151,6 +151,8 @@ void Game::cleanResources(){
     );
     gameObjectList.erase(new_end, gameObjectList.end());
     gameObjectList.clear();
+    // Indicate that the player is not alive any more!
+    player = NULL;
 }
 
 
@@ -456,7 +458,7 @@ void Game::gameLoop(){
     gameQuitsIn = 0;
     Uint32 nextRoundIn = 0;
     bool quit = false;
-    Game::States state;
+    Game::States state = Game::States::LEVEL;
     string scoreString = "Score: ";
 
     while(quit == false){

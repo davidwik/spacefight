@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-c -Wall -g -std=c++11
+CFLAGS=-c -Wall -std=c++11 -O3
 LDFLAGS=-lSDL -lSDL_image -lSDL_ttf -lSDL_mixer -lphysfs
 TARGET=spacefight
 
@@ -10,7 +10,7 @@ OBJECTS=$(SOURCES:.cpp=.o)
 all: $(SOURCES) $(TARGET)
 
 $(TARGET): $(OBJECTS)
-	$(CC)  $(OBJECTS) $(LDFLAGS) -o $@
+	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 
 .cpp.o:
 	$(CC) $(CFLAGS) $<
