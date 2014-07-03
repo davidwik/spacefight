@@ -511,7 +511,7 @@ void Game::gameLoop(){
         Collision::runCollisionCheck(gameObjectList);
         int enemies = 0;
 
-        // Remove dying objects.
+        // Who is a live and isn't?
         bool playerIsAlive = false;
         for(auto it = gameObjectList.begin();
             it != gameObjectList.end();
@@ -520,7 +520,12 @@ void Game::gameLoop(){
                 playerIsAlive = true;
             }
             else if((*it)->objectType() == "enemy"){
+                // If enemy is about to die, get the points!
+                if((*it)->killMe()){
+                    score += static_cast<Enemy*>(*it)->getPoints();
+                }
                 enemies++;
+
             }
 
         }
