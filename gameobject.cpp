@@ -23,7 +23,6 @@ void GameObject::posUpdate(){
     rect.y = getY();
 }
 
-
 int GameObject::getWidth(){
     SDL_Surface* m = NULL;
     try {
@@ -111,4 +110,9 @@ int GameObject::getHeight(){
         return 0;
     }
     return m->h;
+}
+
+
+bool gameObjectSort(const GameObject* s1, const GameObject* s2){
+    return ((*s1).zIndex >= (*s2).zIndex) ? false : true;
 }

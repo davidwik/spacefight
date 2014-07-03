@@ -10,7 +10,7 @@ Player::Player(int x,
                SoundLibrary* snd) : GameObject(x, y, a, snd){
     position.x = x;
     position.y = y;
-    zIndex = 0;
+    zIndex = 5;
     animLib = a;
     soundLib = snd;
     objType = "player";
@@ -114,7 +114,7 @@ void Player::listen(SDL_Event &event, vector <GameObject*> &refObjects){
         moveUp();
     }
 
-    if(keystates[SDLK_LCTRL]){
+    if(keystates[SDLK_LCTRL] || keystates[SDLK_RCTRL]){
         shieldOn();
     }
     else {

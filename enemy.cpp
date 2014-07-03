@@ -19,7 +19,7 @@ Enemy::Enemy(Enemy::Types type,
         t = (int) type;
         dx = (rand()%20)+3;
         dy = 0;
-        zIndex = 0;
+        zIndex = 2;
 
 }
 

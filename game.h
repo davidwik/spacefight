@@ -16,7 +16,7 @@ private:
     SDL_Surface* background = NULL;
     TTF_Font* font = NULL;
     TTF_Font* textFont = NULL;
-        SDL_Color textColor = {255, 255, 255};
+    SDL_Color textColor = {255, 255, 255};
     SDL_Surface* scoreBoard = NULL;
     std::vector<GameObject*> gameObjectList;
     void init();
@@ -52,7 +52,6 @@ public:
     void runWin();
     void initLevel();
     void switchState(Game::States t);
-    void deleteObject(GameObject* go);
     SDL_Event event;
     void run();
 };

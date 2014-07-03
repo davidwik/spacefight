@@ -10,6 +10,7 @@
 #include "gameobject.h"
 #include "animation.h"
 #include "animationlibrary.h"
+#define I_AM_PI 3.14159265359
 
 using namespace std;
 

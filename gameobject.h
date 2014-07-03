@@ -26,12 +26,12 @@ protected:
     bool colliding = false;
     int stopForMs = 0;
     int parentId = -1;
-    int zIndex = 0;
     SDL_Rect rect;
     AnimationLibrary* animLib = NULL;
     SoundLibrary* soundLib = NULL;
 
 public:
+    int zIndex = 0;
     static int counter;
     std::string objectType(void){
         return objType;
@@ -90,7 +90,11 @@ public:
     int getY(){ return position.y;}
     int getParentId(){return parentId;}
     pos getPosition(){return position;}
+
+
     ~GameObject();
 };
+
+bool gameObjectSort(const GameObject* s1, const GameObject* s2);
 
 #endif /* __GAMEOBJECT_H__ */

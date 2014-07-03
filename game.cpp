@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <functional>
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include "SDL/SDL_mixer.h"
@@ -17,6 +18,67 @@
 #include "sound.h"
 #include "soundlibrary.h"
 #include "base64.h"
+
+
+struct gameobject_deleter{
+    void operator()(GameObject*& e){
+        if(e->killMe() == true){
+            if(e->objectType() == "player"){
+                delete static_cast<Player*>(e);
+                e = NULL;
+            }
+            else if(e->objectType() == "enemy"){
+                delete static_cast<Enemy*>(e);
+                e = NULL;
+            }
+            else if(e->objectType() == "fire"){
+                delete static_cast<Fire*>(e);
+                e = NULL;
+            }
+            else if(e->objectType() == "explosion"){
+                delete static_cast<Explosion*>(e);
+                e = NULL;
+            }
+            else if(e->objectType() == "bonus"){
+                delete static_cast<Bonus*>(e);
+                e = NULL;
+            }
+            else {
+                printf("THIS SHOULD NOT HAPPEN! INVALID GAMEOBJECT\n");
+            }
+        }
+    }
+};
+
+struct gameobject_purge{
+    void operator()(GameObject*& e){
+        if(e->objectType() == "player"){
+            delete static_cast<Player*>(e);
+            e = NULL;
+        }
+        else if(e->objectType() == "enemy"){
+            delete static_cast<Enemy*>(e);
+            e = NULL;
+        }
+        else if(e->objectType() == "fire"){
+            delete static_cast<Fire*>(e);
+            e = NULL;
+        }
+        else if(e->objectType() == "explosion"){
+            delete static_cast<Explosion*>(e);
+            e = NULL;
+        }
+        else if(e->objectType() == "bonus"){
+            delete static_cast<Bonus*>(e);
+            e = NULL;
+        }
+        else {
+            printf("THIS SHOULD NOT HAPPEN! INVALID GAMEOBJECT\n");
+        }
+    }
+};
+
+
 
 Game::Game(){
     std::string c = getFileContents("dog");
@@ -60,35 +122,9 @@ void Game::runState(Game::States t){
     }
 }
 
-void Game::deleteObject(GameObject* go){
-    if(go->objectType() == "player"){
-        delete static_cast<Player*>(go);
-    }
-    else if(go->objectType() == "enemy"){
-        delete static_cast<Enemy*>(go);
-    }
-    else if(go->objectType() == "fire"){
-        delete static_cast<Fire*>(go);
-    }
-    else if(go->objectType() == "explosion"){
-        delete static_cast<Explosion*>(go);
-    }
-    else if(go->objectType() == "bonus"){
-        delete static_cast<Bonus*>(go);
-    }
-    else {
-        printf("WHAT?!");
-    }
-    go = NULL;
-}
-
 Game::~Game(){
     printf("Running Game deconstructor!\n");
-    for(vector <GameObject*>::iterator it = gameObjectList.begin();
-        it != gameObjectList.end();
-        it++){
-        deleteObject((*it));
-    }
+    cleanResources();
     delete animLib;
     delete soundLib;
     TTF_CloseFont(font);
@@ -107,12 +143,13 @@ Game::~Game(){
 }
 
 void Game::cleanResources(){
-    for(vector <GameObject*>::iterator it = gameObjectList.begin();
-        it != gameObjectList.end();
-        it++){
-        deleteObject((*it));
-    }
-    player = NULL; // Risky??
+    for_each(gameObjectList.begin(), gameObjectList.end(), gameobject_purge());
+    auto new_end = remove(
+        gameObjectList.begin(),
+        gameObjectList.end(),
+        static_cast<GameObject*> (NULL)
+    );
+    gameObjectList.erase(new_end, gameObjectList.end());
     gameObjectList.clear();
 }
 
@@ -285,13 +322,17 @@ void Game::waitForNextLevel(){
 
 void Game::runMenu(){
     soundLib->play("menu-music");
-
+    bool showCredits = false;
     score = 0;
     level = 1;
     SDL_Surface* jumpBar = NULL;
     SDL_Surface* bottomBar = NULL;
+    SDL_Surface* creditScreen = NULL;
     jumpBar = loadImage("res/gfx/static/jumpbar.png", true);
     bottomBar = loadImage("res/gfx/static/bottombar.png", false);
+
+    creditScreen = loadImage("res/gfx/static/credits.png", true);
+
 
     SDL_Rect r;
     r.w = screen->w;
@@ -324,17 +365,23 @@ void Game::runMenu(){
         }
         r.y = 0;
 
+        if(!showCredits){
+            applySurface(0, jumpBarY, jumpBar, screen);
+            jumpBarY += jumpBarDY;
+            if(jumpBarY+jumpBar->h > screen->h){
+                jumpBarDY = ~jumpBarDY;
+            }
+            if(jumpBarY < 0){
+                jumpBarDY = ~jumpBarDY;
+            }
 
-        applySurface(0, jumpBarY, jumpBar, screen);
-        jumpBarY += jumpBarDY;
-        if(jumpBarY+jumpBar->h > screen->h){
-            jumpBarDY = ~jumpBarDY;
+            applySurface(0, (int) (screen->h - bottomBar->h), bottomBar, screen);
         }
-        if(jumpBarY < 0){
-            jumpBarDY = ~jumpBarDY;
+        else {
+            applySurface(50, 45, creditScreen, screen);
         }
 
-        applySurface(0, (int) (screen->h - bottomBar->h), bottomBar, screen);
+
         while(SDL_PollEvent(&event)){
             if(event.type == SDL_KEYDOWN){
                 switch(event.key.keysym.sym){
@@ -342,11 +389,17 @@ void Game::runMenu(){
                     state = Game::States::LEVEL;
                     quit = true;
                     break;
+
+                case 99:
+                    showCredits = (showCredits) ? false : true;
+                    break;
+
                 case SDLK_ESCAPE:
                     state = Game::States::QUIT;
                     quit = true;
                     break;
                 default:
+                    printf("Key: %d\n", event.key.keysym.sym);
                     break;
                 }
 
@@ -363,6 +416,7 @@ void Game::runMenu(){
     soundLib->stopMusic();
 
     SDL_FreeSurface(jumpBar);
+    SDL_FreeSurface(creditScreen);
     SDL_FreeSurface(bottomBar);
 
     if(state == Game::States::LEVEL){
@@ -397,6 +451,7 @@ void Game::handleError(int e){
 }
 
 void Game::gameLoop(){
+    Uint32 frameNum = 0;
     Uint32 instTick = SDL_GetTicks() + 10000;
     gameQuitsIn = 0;
     Uint32 nextRoundIn = 0;
@@ -430,9 +485,12 @@ void Game::gameLoop(){
                     break;
                 }
             }
-
         }
 
+        // Sort the order of the sprites every 10th frame.
+        if(frameNum%10 == 0){
+            sort(gameObjectList.begin(), gameObjectList.end(), gameObjectSort);
+        }
         // Check update and draw!
         for(auto it = gameObjectList.begin();
             it != gameObjectList.end();
@@ -442,6 +500,7 @@ void Game::gameLoop(){
             (*it)->draw(screen);
         }
 
+
         if(gameQuitsIn != 0 && gameQuitsIn < SDL_GetTicks()){
             applySurface(0, 130, animLib->get("game-over")->getFrame(), screen, NULL);
         }
@@ -449,8 +508,8 @@ void Game::gameLoop(){
         // Run the collision check
         Collision::runCollisionCheck(gameObjectList);
         int enemies = 0;
+
         // Remove dying objects.
-        int numDying = 0;
         bool playerIsAlive = false;
         for(auto it = gameObjectList.begin();
             it != gameObjectList.end();
@@ -461,12 +520,7 @@ void Game::gameLoop(){
             else if((*it)->objectType() == "enemy"){
                 enemies++;
             }
-            if((*it)->killMe()){
-                if((*it)->objectType() == "enemy"){
-                    score += static_cast<Enemy*>(*it)->getPoints();
-                }
-                numDying++;
-            }
+
         }
 
 
@@ -490,18 +544,14 @@ void Game::gameLoop(){
 
         // Clean up vector of dying objects
 
-        while(numDying > 0){
-            for(vector <GameObject*>::iterator iter = gameObjectList.begin();
-                iter != gameObjectList.end();
-                iter++){
-                if((*iter)->killMe()){
-                    deleteObject((*iter));
-                    iter = gameObjectList.erase(iter);
-                    numDying--;
-                    break;
-                }
-            }
-        }
+        // cLEAN UP
+        for_each(gameObjectList.begin(), gameObjectList.end(), gameobject_deleter());
+        auto new_end = remove(
+            gameObjectList.begin(),
+            gameObjectList.end(),
+            static_cast<GameObject*> (NULL)
+        );
+        gameObjectList.erase(new_end, gameObjectList.end());
 
         if(score > highscore){
             highscore = score;
@@ -517,7 +567,7 @@ void Game::gameLoop(){
         applySurface(screen->w-scoreBoard->w -30, 40, scoreBoard, screen);
         SDL_FreeSurface(scoreBoard);
 
-        sort(gameObjectList.begin(), gameObjectList.end());
+
 
         if(SDL_GetTicks() < instTick && level == 1){
             SDL_Surface* g = animLib->get("instructions")->getFrame();
@@ -532,6 +582,7 @@ void Game::gameLoop(){
         if(SDL_Flip(screen) == -1){
             throw(SDL_SCREEN_ERROR);
         }
+        frameNum++;
     }
 
     SDL_FreeSurface(background);

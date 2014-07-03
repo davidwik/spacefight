@@ -11,11 +11,12 @@ Bonus::Bonus(AnimationLibrary* a,
     soundLib = snd;
     objType = "bonus";
     counter = 0.00f;
-    increase = M_PI / 50;
+    increase = I_AM_PI / 50;
     srand(time(0));
     int chance = rand()%3;
     chance++;
     setupType(chance);
+    zIndex = 3;
 }
 
 

@@ -16,6 +16,7 @@ Fire::Fire(Fire::Types type,
     parentId = parent;
     dx = 0;
 
+    zIndex = 0;
     if(type == Fire::Types::PLAYER_BULLET){
         animName ="bullet-player";
         dy = -13;

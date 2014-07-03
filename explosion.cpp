@@ -12,6 +12,7 @@ Explosion::Explosion(Explosion::Types type,
     soundLib = snd;
     objType = "explosion";
     t = (int) type;
+    zIndex = 3;
 
     if(t == (int) Explosion::Types::MINI){
         int r = rand()%3;
