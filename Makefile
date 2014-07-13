@@ -9,11 +9,20 @@ OBJECTS=$(SOURCES:.cpp=.o)
 
 all: $(SOURCES) $(TARGET)
 
+# pull inn dependency info for *existing* .o files
+DEPS := $(OBJECTS:.o=.d)
+-include $(DEPS)
+
 $(TARGET): $(OBJECTS)
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 
-.cpp.o:
+%.o: %.cpp
 	$(CC) $(CFLAGS) $<
+	@$(CC) -MM -MT $@ $(CFLAGS) $< > $*.d
+	@cp -f $*.d $*.d.tmp
+	@sed -e 's/.*://' -e 's/\\$$//' < $*.d.tmp | fmt -1 | \
+	  sed -e 's/^ *//' -e 's/$$/:/' >> $*.d
+	@rm -f $*.d.tmp
 
 clean:
-	rm -f $(OBJECTS) $(TARGET)
+	rm -f $(TARGET) *.d *.o
