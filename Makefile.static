@@ -1,0 +1,38 @@
+CC=g++
+CFLAGS=-c -Wall -std=c++11 -O2
+LIBDIR=/usr/lib/x86_64-linux-gnu
+STATIC=-lSDL -lSDL_image -lSDL_ttf -lsmpeg -lphysfs -lXxf86vm -lXi -lpng -lz -lstdc++ \
+-ljpeg -lmikmod -lFLAC -lfreetype -lwebp -lXau -lvorbisfile -lvorbis -lvorbisidec -logg -lmad -lSDL_mixer
+
+DYN=-lpthread -lX11 -lXext -lcaca -lm -lpulse -lasound -lpulse-simple -ldl \
+-ltiff -lfluidsynth
+
+TARGET=spacefight
+
+LDFLAGS=-L/usr/lib -L/usr/lib/x86_64-linux-gnu \
+-Wl,-rpath,/usr/lib/x86_64-linux-gnu,-Bstatic $(STATIC) \
+-Wl,-Bdynamic $(DYN)
+
+SOURCES=$(wildcard *.cpp)
+SOURCES+=$(wildcard *.c)
+OBJECTS=$(SOURCES:.cpp=.o)
+
+all: $(SOURCES) $(TARGET)
+
+# pull inn dependency info for *existing* .o files
+DEPS := $(OBJECTS:.o=.d)
+-include $(DEPS)
+
+$(TARGET): $(OBJECTS)
+	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+
+%.o: %.cpp
+	$(CC) $(CFLAGS) $<
+	@$(CC) -MM -MT $@ $(CFLAGS) $< > $*.d
+	@cp -f $*.d $*.d.tmp
+	@sed -e 's/.*://' -e 's/\\$$//' < $*.d.tmp | fmt -1 | \
+	  sed -e 's/^ *//' -e 's/$$/:/' >> $*.d
+	@rm -f $*.d.tmp
+
+clean:
+	rm -f $(TARGET) *.d *.o
