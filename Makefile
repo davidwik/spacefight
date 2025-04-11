@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-c -Wall -std=c++11 -O2
+CFLAGS=-c -Wall -Werror -std=c++11 -O2
 LDFLAGS=-lSDL -lSDL_image -lSDL_ttf -lSDL_mixer -lphysfs
 TARGET=spacefight
 

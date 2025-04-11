@@ -34,7 +34,7 @@ std::string getFileContents(std::string filename){
 SDL_RWops* getResource(std::string filename){
     if(PhysFSInit == false){
         PHYSFS_init(NULL);
-        PHYSFS_addToSearchPath(ARCHIVE,1);
+        PHYSFS_mount(ARCHIVE,NULL, 1);
         PhysFSInit = true;
     }
 
@@ -277,8 +277,7 @@ SDL_Surface* flipImage(SDL_Surface* surface, int flags){
 }
 
 std::string numberToString(int num){
-    std::string s = static_cast<std::ostringstream*>( &(std::ostringstream() << num) )->str();
-    return s;
+	return std::to_string(num);
 }
 
 int floatToInt(float n){
