@@ -3,9 +3,10 @@
 ![](spacefight.png)
 
 This was my first attempt creating a very simple game, it ended out ok
-as a neat little highscore game.
+as a neat little highscore game. And now after 11 years it got some
+minor fixes so it builds without warnings and a README file!
 
-In order for you to build it, you will need a C++11 compiler and the
+In order for you to build it, you will need a C++ compiler and the
 following libraries. (see instructions.)
 
 -   SDL-1.2
@@ -14,7 +15,7 @@ following libraries. (see instructions.)
 -   SDL-ttf1.2
 -   libPhysFS
 
-Build instructions (debian/ubuntu)
+Build instructions for debian/ubuntu/mint etc.
 
 ``` shell
 sudo apt install build-essential libphysfs-dev \
@@ -23,9 +24,9 @@ sudo apt install build-essential libphysfs-dev \
      libsdl-ttf2.0-dev
 
 # Get the code
-git clone git@github.com:davidwik/spacefight.git
+git clone  git@github.com:davidwik/spacefight.git
 
-cd spacefight
+cd spacefight/
 # Compile and link
 make
 
