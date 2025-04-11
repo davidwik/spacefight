@@ -1,0 +1,37 @@
+#+TITLE:Spacefight
+#+OPTIONS: toc:nil
+
+* Spacefight
+
+[[file:spacefight.png]]
+
+This was my first attempt creating a very simple game, it ended out ok as a neat little highscore game.
+
+In order for you to build it, you will need a C++11 compiler and the following libraries. (see instructions.)
+
+    * SDL-1.2
+    * SDL-image1.2
+    * SDL-mixer1.2
+    * SDL-ttf1.2
+    * libPhysFS
+
+Build instructions (debian/ubuntu)
+
+#+BEGIN_SRC shell :tangle yes
+
+  sudo apt install build-essential libphysfs-dev \
+       libsdl1.2-dev libsdl-mixer1.2-dev  \
+       libsdl-image1.2-dev libsdl-gfx1.2-dev \
+       libsdl-ttf2.0-dev
+
+  # Get the code
+  git clone git@github.com:davidwik/spacefight.git
+
+  cd spacefight
+  # Compile and link
+  make
+
+  # Enjoy
+  ./spacefight
+
+#+END_SRC
